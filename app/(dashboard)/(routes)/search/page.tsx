@@ -9,13 +9,14 @@ import { getCourses } from "@/actions/get-courses";
 import { CoursesList } from "@/components/courses-list";
 
 interface SearchPageProps {
-  searchParams: {
+  searchParams: Promise<{
     title: string;
     categoryId: string;
-  };
+  }>;
 }
 
 const SearchPage = async ({ searchParams }: SearchPageProps) => {
+  const resolvedSearchParams = await searchParams;
   const { userId } = auth();
 
   if (!userId) {
@@ -30,7 +31,7 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
 
   const courses = await getCourses({
     userId,
-    ...searchParams,
+    ...resolvedSearchParams,
   });
 
   return (

@@ -1,0 +1,18 @@
+E-mail: professor@lms.com
+Senha: ProfLMS@2026_Secure! (Ao logar com essa conta, como o ID dela está no 
+.env, você deverá ver no menu ou poder acessar a rota do modo Professor).
+
+
+
+👨‍🎓 Alunos / Usuários normais (Para testar compra, player do curso, etc)
+Aluno 1:
+
+E-mail: aluno1@lms.com
+Senha: AlunoApp@2026_Secure1!
+
+
+
+Aluno 2:
+
+E-mail: aluno2@lms.com
+Senha: AlunoApp@2026_Secure2!
