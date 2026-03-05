@@ -1,17 +1,13 @@
 import { isTeacher } from "@/lib/teacher";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
-const TeacherLayout = ({
-  children
-}: {
-  children: React.ReactNode;
-}) => {
+const TeacherLayout = ({ children }: { children: React.ReactNode }) => {
   const { userId } = auth();
-  if (!isTeacher(userId)){
-    return redirect("/")
+  if (!isTeacher(userId)) {
+    return redirect("/");
   }
-  return <>{children}</>
-}
- 
+  return <>{children}</>;
+};
+
 export default TeacherLayout;

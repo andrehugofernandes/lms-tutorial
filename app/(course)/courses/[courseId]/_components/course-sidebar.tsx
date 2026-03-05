@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs";
-import { Chapter, Course, UserProgress } from "@prisma/client";
+import { auth } from "@/lib/auth";
+import { Chapter, Course, UserProgress } from "@/lib/types";
 import { redirect } from "next/navigation";
 import { CourseSidebarItem } from "./course-sidebar-item";
 import { CourseProgress } from "@/components/course-progress";
@@ -36,15 +36,10 @@ export const CourseSidebar = async ({
   return (
     <div className="h-full border-r flex flex-col overflow-y-auto shadow-xl">
       <div className="p-8 flex flex-col border-b">
-        <h1 className="font-semibold">
-          {course.title}
-        </h1>
+        <h1 className="font-semibold">{course.title}</h1>
         {purchase && (
           <div className="mt-10">
-            <CourseProgress 
-             variant="success"
-             value={progressCount}
-            />
+            <CourseProgress variant="success" value={progressCount} />
           </div>
         )}
       </div>

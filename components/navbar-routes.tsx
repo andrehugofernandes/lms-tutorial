@@ -1,8 +1,7 @@
 "use client";
 
-import { UserButton, useAuth } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
-import { LogOut } from "lucide-react";
+import { LogOut, UserIcon } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
@@ -11,7 +10,8 @@ import { isTeacher } from "@/lib/teacher";
 import { SearchInput } from "./search-input";
 
 export const NavbarRoutes = () => {
-  const { userId } = useAuth();
+  // Temporary mock until Firebase Auth is implemented
+  const userId = "mock-user-id";
   const pathname = usePathname();
 
   const isTeacherPage = pathname?.startsWith("/teacher");
@@ -40,10 +40,10 @@ export const NavbarRoutes = () => {
             </Button>
           </Link>
         ) : null}
-        <UserButton
-          afterSignOutUrl="/"
-        />
+        <Button variant="ghost" size="icon">
+          <UserIcon className="h-5 w-5" />
+        </Button>
       </div>
     </>
-  )
-}
+  );
+};

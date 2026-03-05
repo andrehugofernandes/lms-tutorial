@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Banner } from "@/components/banner";
@@ -37,11 +37,7 @@ const ChapterIdPage = async ({
     return redirect("/");
   }
 
-  const requiredFields = [
-    chapter.title, 
-    chapter.description, 
-    chapter.videoUrl
-  ];
+  const requiredFields = [chapter.title, chapter.description, chapter.videoUrl];
 
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length;
@@ -49,12 +45,11 @@ const ChapterIdPage = async ({
   const completionText = `(${completedFields}/${totalFields})`;
 
   const isComplete = requiredFields.every(Boolean);
-  
 
   return (
     <>
       {!chapter.isPublished && (
-        <Banner 
+        <Banner
           variant="warning"
           label="This chapter is unblished. It will 
           not be visable in the course."
@@ -83,11 +78,11 @@ const ChapterIdPage = async ({
                   Complete all fields {completionText}
                 </span>
               </div>
-              <ChapterActions 
-               disabled={!isComplete} 
-               chapterId={params.chapterId}
-               courseId={params.courseId}
-               isPublished={chapter.isPublished}               
+              <ChapterActions
+                disabled={!isComplete}
+                chapterId={params.chapterId}
+                courseId={params.courseId}
+                isPublished={chapter.isPublished}
               />
             </div>
           </div>

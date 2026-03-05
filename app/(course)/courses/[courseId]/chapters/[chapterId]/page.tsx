@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs";
+import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { File } from "lucide-react";
 
@@ -12,17 +12,17 @@ import { CourseEnrollButton } from "./_components/course-enroll-button";
 import { CourseProgressButton } from "./_components/course-progress-button";
 
 const ChapterIdPage = async ({
-  params, 
+  params,
 }: {
-  params: { courseId: string; chapterId: string; }
+  params: { courseId: string; chapterId: string };
 }) => {
-  const { userId }= auth();
+  const { userId } = auth();
   if (!userId) {
     return redirect("/");
   }
 
   const {
-    chapter, 
+    chapter,
     course,
     muxData,
     attachments,
@@ -42,23 +42,20 @@ const ChapterIdPage = async ({
   const isLocked = !chapter.isFree && !purchase;
   const completeOnEnd = !!purchase && !userProgress?.isCompleted;
 
-  return ( 
+  return (
     <div>
       {userProgress?.isCompleted && (
-        <Banner 
-          variant="success"
-          label="You already completed this chapter."
-        />
+        <Banner variant="success" label="You already completed this chapter." />
       )}
       {isLocked && (
-        <Banner 
+        <Banner
           variant="warning"
           label="You need to purchase this course to watch this chapter."
         />
       )}
       <div className="flex flex-col max-w-4xl mx-auto pb-20">
         <div className="p-4">
-          <VideoPlayer 
+          <VideoPlayer
             chapterId={params.chapterId}
             title={chapter.title}
             courseId={params.courseId}
@@ -70,18 +67,16 @@ const ChapterIdPage = async ({
         </div>
         <div>
           <div className="p-4 flex flex-col items-center justify-between md:flex-row">
-            <h2 className="text-2xl font-semibold mb-2">
-              {chapter.title}
-            </h2>
+            <h2 className="text-2xl font-semibold mb-2">{chapter.title}</h2>
             {purchase ? (
-              <CourseProgressButton 
+              <CourseProgressButton
                 chapterId={params.chapterId}
                 courseId={params.courseId}
                 nextChapterId={nextChapter?.id}
                 isCompleted={!!userProgress?.isCompleted}
               />
-            ): (
-              <CourseEnrollButton 
+            ) : (
+              <CourseEnrollButton
                 courseId={params.courseId}
                 price={course.price!}
               />
@@ -89,37 +84,31 @@ const ChapterIdPage = async ({
           </div>
           <Separator />
           <div>
-            <Preview 
-              value={chapter.description!}
-            />
+            <Preview value={chapter.description!} />
           </div>
           {!!attachments.length && (
             <>
-            <Separator />
-            <div className="p-4">
-              {attachments.map((attachment) => (
-                <a 
-                  href=""
-                  target="_blank"
-                  key={attachment.id}
-                  className="flex items-center p-2 w-full bg-sky-200 border
+              <Separator />
+              <div className="p-4">
+                {attachments.map((attachment) => (
+                  <a
+                    href=""
+                    target="_blank"
+                    key={attachment.id}
+                    className="flex items-center p-2 w-full bg-sky-200 border
                    text-sky-700 rounded-md hover:underline"
-                >
-                  
-                  <File />
-                  <p className="line-clamp-1">
-                    {attachment.name}
-                  </p>
-
+                  >
+                    <File />
+                    <p className="line-clamp-1">{attachment.name}</p>
                   </a>
-              ))}
-            </div>
+                ))}
+              </div>
             </>
           )}
         </div>
       </div>
     </div>
-   );
-}
- 
+  );
+};
+
 export default ChapterIdPage;
