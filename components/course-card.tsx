@@ -9,7 +9,7 @@ import { CourseProgress } from "@/components/course-progress";
 interface CourseCardProps {
   id: string;
   title: string;
-  imageUrl: string;
+  imageUrl: string | null;
   chaptersLength: number;
   price: number;
   progress: number | null;
@@ -29,13 +29,20 @@ export const CourseCard = ({
     <Link href={`/courses/${id}`}>
       <div className="group hover:shadow-lg transition overflow-hidden border 
       hover:border-2 rounded-lg p-3 h-full">
-        <div className="relative w-full aspect-video rounded-md overflow-hidden">
-          <Image
-            fill
-            className="object-cover"
-            alt={title}
-            src={imageUrl}
-          />
+        <div className="relative w-full aspect-video rounded-md overflow-hidden bg-slate-100 flex items-center justify-center">
+          {imageUrl ? (
+            <Image
+              fill
+              className="object-cover"
+              alt={title}
+              src={imageUrl}
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center text-slate-500 gap-y-2">
+              <BookOpen className="h-10 w-10" />
+              <span className="text-xs">Sem Imagem</span>
+            </div>
+          )}
         </div>
         <div className="flex flex-col pt-2">
           <div className="text-lg md:text-base font-medium group-hover:text-sky-700 transition line-clamp-2">
