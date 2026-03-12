@@ -14,7 +14,7 @@ export default async function Home() {
         const profile = await getProfile(userId);
         
         if (profile?.role === Role.STUDENT) {
-            return redirect("/search");
+            return redirect("/dashboard");
         }
 
         if (profile?.role === Role.TEACHER || profile?.role === Role.ADMIN) {

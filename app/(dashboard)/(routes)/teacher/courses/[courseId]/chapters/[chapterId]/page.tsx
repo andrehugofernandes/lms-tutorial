@@ -11,6 +11,7 @@ import { ChapterTitleForm } from "./_components/chapter-title-form";
 import { ChapterDescriptionForm } from "./_components/chapter-description-form";
 import { ChapterAccessForm } from "./_components/chapter-access-form";
 import { ChapterVideoForm } from "./_components/chapter-video-form";
+import { ChapterDurationForm } from "./_components/chapter-duration-form";
 
 const ChapterIdPage = async (props: {
   params: Promise<{ courseId: string; chapterId: string }>;
@@ -102,6 +103,11 @@ const ChapterIdPage = async (props: {
                 chapterId={params.chapterId}
               />
               <ChapterDescriptionForm
+                initialData={chapter}
+                courseId={params.courseId}
+                chapterId={params.chapterId}
+              />
+              <ChapterDurationForm
                 initialData={chapter}
                 courseId={params.courseId}
                 chapterId={params.chapterId}

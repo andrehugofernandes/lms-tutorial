@@ -76,6 +76,7 @@ model Chapter {
   title String
   description String? @db.Text
   videoUrl String? @db.Text
+  duration Int? @default(0)
   position Int
   isPublished Boolean @default(false)
   isFree Boolean @default(false)
@@ -87,6 +88,7 @@ model Chapter {
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)  
 
   userProgress UserProgress[]
+  notes        UserNote[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -126,6 +128,8 @@ model Chapter {
 
     courseId String
     course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+    lastChapterId String?
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -201,3 +205,43 @@ model Answer {
   @@index([optionId])
   @@unique([userId, questionId])
 }
+
+model Achievement {
+  id String @id @default(uuid())
+  userId String
+  courseId String
+  title String
+  icon String?
+  description String? @db.Text
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, courseId])
+  @@index([userId])
+}
+
+model UserStreak {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  count     Int      @default(0)
+  lastVisit DateTime @default(now())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model UserNote {
+  id        String   @id @default(uuid())
+  userId    String
+  chapterId String
+  content   String   @db.Text
+  timestamp Float?   // Tempo do vídeo em segundos onde a nota foi feita
+
+  chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([userId])
+  @@index([chapterId])
+}

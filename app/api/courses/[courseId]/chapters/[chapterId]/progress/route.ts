@@ -31,6 +31,64 @@ export async function PUT(
       }
     })
 
+    // Update Checkpoint (where the user last was)
+    if (isCompleted) {
+      await db.purchase.update({
+        where: {
+          userId_courseId: {
+            userId,
+            courseId: params.courseId,
+          }
+        },
+        data: {
+          lastChapterId: params.chapterId,
+        }
+      });
+    }
+
+    // Check for Achievement (Course Completion)
+    if (isCompleted) {
+      const publishedChapters = await db.chapter.findMany({
+        where: {
+          courseId: params.courseId,
+          isPublished: true,
+        }
+      });
+
+      const completedChapters = await db.userProgress.findMany({
+        where: {
+          userId,
+          chapterId: {
+            in: publishedChapters.map((c) => c.id),
+          },
+          isCompleted: true,
+        }
+      });
+
+      if (publishedChapters.length === completedChapters.length) {
+        const course = await db.course.findUnique({
+          where: { id: params.courseId }
+        });
+
+        await db.achievement.upsert({
+          where: {
+            userId_courseId: {
+              userId,
+              courseId: params.courseId,
+            }
+          },
+          update: {},
+          create: {
+            userId,
+            courseId: params.courseId,
+            title: `Especialista em ${course?.title}`,
+            description: `Completou todas as aulas do curso ${course?.title}.`,
+            icon: "Trophy",
+          }
+        });
+      }
+    }
+
     return NextResponse.json(userProgress);
 
   } catch (error) {

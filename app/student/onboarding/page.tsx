@@ -27,6 +27,14 @@ export default async function StudentOnboardingPage() {
         });
     }
 
-    // Always redirect to the course catalog
-    redirect("/search");
+    // Update Student Streak on access
+    try {
+        const { updateUserStreak } = await import("@/actions/update-user-streak");
+        await updateUserStreak(userId);
+    } catch (error) {
+        console.log("Onboarding Streak Error:", error);
+    }
+
+    // Always redirect to the student dashboard
+    redirect("/dashboard");
 }

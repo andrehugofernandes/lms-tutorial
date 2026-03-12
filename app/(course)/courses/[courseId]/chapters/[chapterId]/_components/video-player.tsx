@@ -18,6 +18,7 @@ interface VideoPlayerProps {
   isLocked: boolean;
   completeOnEnd: boolean;
   title: string;
+  onPlayerReady?: (player: any) => void;
 };
 
 export const VideoPlayer = ({
@@ -28,6 +29,7 @@ export const VideoPlayer = ({
   isLocked,
   completeOnEnd,
   title,
+  onPlayerReady,
 }: VideoPlayerProps) => {
   const [isReady, setIsReady] = useState(false);
   const router = useRouter();
@@ -81,6 +83,7 @@ export const VideoPlayer = ({
           onEnded={onEnd}
           autoPlay
           playbackId={playbackId}
+          ref={onPlayerReady}
         />
       )}
     </div>
