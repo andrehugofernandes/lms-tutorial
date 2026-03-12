@@ -10,8 +10,6 @@ Aluno 1:
 E-mail: aluno1@lms.com
 Senha: AlunoApp@2026_Secure1!
 
-
-
 Aluno 2:
 
 E-mail: aluno2@lms.com

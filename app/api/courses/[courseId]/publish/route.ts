@@ -4,10 +4,11 @@ import { db } from "@/lib/db";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { courseId: string } }
+  props: { params: Promise<{ courseId: string }> }
 ) {
   try {
-    const { userId } = auth();
+    const params = await props.params;
+    const { userId } = await auth();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -41,7 +42,7 @@ export async function PATCH(
       !course.imageUrl ||
       !course.categoryId ||
       !hasPublishedChapter ||
-      !course.price      
+      !course.price
     ) {
       return new NextResponse("Missing required fields", { status: 401 });
     }
@@ -51,12 +52,12 @@ export async function PATCH(
         id: params.courseId,
         userId,
       },
-      data:{
+      data: {
         isPublished: true,
       }
-      });
+    });
 
-      return NextResponse.json(publishedCourse);
+    return NextResponse.json(publishedCourse);
 
   } catch (error) {
 

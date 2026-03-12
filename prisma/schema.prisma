@@ -10,6 +10,23 @@ generator client {
   previewFeatures = ["fullTextSearch"]
 }
 
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+}
+
+model Profile {
+  id String @id @default(uuid())
+  userId String @unique
+  name String?
+  email String? @db.Text
+  role Role @default(STUDENT)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Course {
   id String @id @default(uuid())
   userId String
@@ -64,6 +81,7 @@ model Chapter {
   isFree Boolean @default(false)
 
   muxData MuxData? 
+  quiz Quiz?
 
   courseId String
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)  
@@ -124,3 +142,62 @@ model Chapter {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
   }
+
+model Quiz {
+  id String @id @default(uuid())
+  chapterId String @unique
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  isPublished Boolean @default(false)
+  
+  questions Question[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Question {
+  id String @id @default(uuid())
+  quizId String
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  prompt String @db.Text
+  position Int
+
+  options Option[]
+  answers Answer[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([quizId])
+}
+
+model Option {
+  id String @id @default(uuid())
+  questionId String
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  text String @db.Text
+  isCorrect Boolean @default(false)
+
+  answers Answer[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([questionId])
+}
+
+model Answer {
+  id String @id @default(uuid())
+  userId String
+  questionId String
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  optionId String
+  option Option @relation(fields: [optionId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([questionId])
+  @@index([optionId])
+  @@unique([userId, questionId])
+}

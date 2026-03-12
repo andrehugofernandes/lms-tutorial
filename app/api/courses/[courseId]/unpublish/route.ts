@@ -4,10 +4,11 @@ import { db } from "@/lib/db";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { courseId: string } }
+  props: { params: Promise<{ courseId: string }> }
 ) {
   try {
-    const { userId } = auth();
+    const params = await props.params;
+    const { userId } = await auth();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -17,7 +18,7 @@ export async function PATCH(
       where: {
         id: params.courseId,
         userId: userId,
-      },   
+      },
     });
 
     if (!course) {
@@ -29,12 +30,12 @@ export async function PATCH(
         id: params.courseId,
         userId,
       },
-      data:{
+      data: {
         isPublished: false,
       }
-      });
+    });
 
-      return NextResponse.json(unpublishedCourse);
+    return NextResponse.json(unpublishedCourse);
 
   } catch (error) {
 

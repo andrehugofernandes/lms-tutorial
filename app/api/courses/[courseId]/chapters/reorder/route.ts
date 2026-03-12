@@ -5,10 +5,11 @@ import { db } from "@/lib/db";
 
 export async function PUT(
   req: Request,
-  { params }: { params: { courseId: string; } }
+  props: { params: Promise<{ courseId: string; }> }
 ) {
   try {
-    const { userId } = auth();
+    const params = await props.params;
+    const { userId } = await auth();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -37,6 +38,6 @@ export async function PUT(
     return new NextResponse("Success", { status: 200 });
   } catch (error) {
     console.log("[REORDER]", error);
-    return new NextResponse("Internal Error", { status: 500 }); 
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }

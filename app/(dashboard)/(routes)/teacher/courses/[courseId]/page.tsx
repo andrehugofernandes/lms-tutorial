@@ -20,13 +20,12 @@ import { AttachmentForm } from "./_components/attachment-form";
 import { ChaptersForm } from "./_components/chapters-form";
 import { Actions } from "./_components/actions";
 
-const CourseIdPage = async ({
-  params,
-}: {
-  params: {
+const CourseIdPage = async (props: {
+  params: Promise<{
     courseId: string;
-  };
+  }>;
 }) => {
+  const params = await props.params;
   const { userId } = auth();
   if (!userId) {
     return redirect("/");

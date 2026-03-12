@@ -5,10 +5,11 @@ import { db } from "@/lib/db";
 
 export async function POST(
   req: Request,
-  { params }: { params: { courseId: string } }
+  props: { params: Promise<{ courseId: string }> }
 ) {
   try {
-    const { userId } = auth();
+    const params = await props.params;
+    const { userId } = await auth();
     const { title } = await req.json();
 
     if (!userId) {

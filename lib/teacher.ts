@@ -1,3 +1,12 @@
-export const isTeacher = (userId?: string | null) => {
-  return userId === process.env.NEXT_PUBLIC_TEACHER_ID;
-}
+import { hasRole } from "./rbac";
+import { Role } from "@prisma/client";
+
+export const isTeacher = async (userId?: string | null) => {
+  if (!userId) return false;
+  return await hasRole(userId, [Role.TEACHER, Role.ADMIN]);
+};
+
+export const isAdmin = async (userId?: string | null) => {
+  if (!userId) return false;
+  return await hasRole(userId, [Role.ADMIN]);
+};

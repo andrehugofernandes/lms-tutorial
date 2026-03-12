@@ -11,12 +11,11 @@ import { VideoPlayer } from "./_components/video-player";
 import { CourseEnrollButton } from "./_components/course-enroll-button";
 import { CourseProgressButton } from "./_components/course-progress-button";
 
-const ChapterIdPage = async ({
-  params,
-}: {
-  params: { courseId: string; chapterId: string };
+const ChapterIdPage = async (props: {
+  params: Promise<{ courseId: string; chapterId: string }>;
 }) => {
-  const { userId } = auth();
+  const params = await props.params;
+  const { userId } = await auth();
   if (!userId) {
     return redirect("/");
   }

@@ -11,14 +11,14 @@ interface FileUploadProps {
 };
 
 
- const FileUpload  = ({
+const FileUpload = ({
   onChange,
   endpoint
 }: FileUploadProps) => {
   return (
-    <UploadDropzone 
+    <UploadDropzone
       endpoint={endpoint}
-      onClientUploadComplete={(res) => {
+      onClientUploadComplete={(res: any) => {
         onChange(res?.[0].url);
       }}
       onUploadError={(error: Error) => {

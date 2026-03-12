@@ -12,11 +12,10 @@ import { ChapterDescriptionForm } from "./_components/chapter-description-form";
 import { ChapterAccessForm } from "./_components/chapter-access-form";
 import { ChapterVideoForm } from "./_components/chapter-video-form";
 
-const ChapterIdPage = async ({
-  params,
-}: {
-  params: { courseId: string; chapterId: string };
+const ChapterIdPage = async (props: {
+  params: Promise<{ courseId: string; chapterId: string }>;
 }) => {
+  const params = await props.params;
   const { userId } = auth();
 
   if (!userId) {

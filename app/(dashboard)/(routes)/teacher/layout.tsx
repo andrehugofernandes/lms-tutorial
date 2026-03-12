@@ -2,11 +2,15 @@ import { isTeacher } from "@/lib/teacher";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
-const TeacherLayout = ({ children }: { children: React.ReactNode }) => {
-  const { userId } = auth();
-  if (!isTeacher(userId)) {
+const TeacherLayout = async ({ children }: { children: React.ReactNode }) => {
+  const { userId } = await auth();
+
+  const isAuthorized = await isTeacher(userId);
+
+  if (!isAuthorized) {
     return redirect("/");
   }
+
   return <>{children}</>;
 };
 

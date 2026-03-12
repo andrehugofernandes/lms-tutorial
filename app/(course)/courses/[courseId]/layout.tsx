@@ -6,14 +6,13 @@ import { getProgress } from "@/actions/get-progress";
 import { CourseSidebar } from "./_components/course-sidebar";
 import { CourseNavbar } from "./_components/course-navbar";
 
-const CourseLayout = async ({
-  children,
-  params,
-}: {
+const CourseLayout = async (props: {
   children: React.ReactNode;
-  params: { courseId: string };
+  params: Promise<{ courseId: string }>;
 }) => {
-  const { userId } = auth();
+  const { children } = props;
+  const params = await props.params;
+  const { userId } = await auth();
 
   if (!userId) {
     return redirect("/");

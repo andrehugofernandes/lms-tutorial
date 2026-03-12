@@ -42,7 +42,7 @@ const CreatePage = () => {
       const response = await axios.post("/api/courses", values);
       router.push(`/teacher/courses/${response.data.id}`);
       toast.success("Course created")
-      
+
     } catch {
       toast.error("Something went wrong");
 
@@ -56,16 +56,16 @@ const CreatePage = () => {
     >
       <div>
         <h1 className="text-2xl">Name your course</h1>
-        <p  className="text-sm text-slate-600">
-          What would you like to name your couse? Don&apos;t worry, 
+        <p className="text-sm text-slate-600">
+          What would you like to name your couse? Don&apos;t worry,
           you can change this later.
         </p>
         <Form {...form}>
-          <form 
+          <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-8 mt-8"
-           >
-            <FormField 
+          >
+            <FormField
               control={form.control}
               name="title"
               render={({ field }) => (
@@ -74,39 +74,39 @@ const CreatePage = () => {
                     Course title
                   </FormLabel>
                   <FormControl>
-                    <Input 
+                    <Input
                       disabled={isSubmitting}
                       placeholder="e.g 'Advanced web development'"
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    What will you teach in this course?  
+                    What will you teach in this course?
                   </FormDescription>
-                  <FormMessage 
+                  <FormMessage
 
                   />
                 </FormItem>
-              )} 
+              )}
             />
             <div className="flex items-center gap-x-2">
-                <Link href="/">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                  >
-                    Cancel
-                  </Button>
-                </Link>
+              <Link href="/teacher/courses">
                 <Button
+                  type="button"
+                  variant="outline"
                   size="sm"
-                  variant="default"
-                  type="submit"
-                  disabled={!isValid || isSubmitting}
                 >
-                  Continue
+                  Cancel
                 </Button>
+              </Link>
+              <Button
+                size="sm"
+                variant="default"
+                type="submit"
+                disabled={!isValid || isSubmitting}
+              >
+                Continue
+              </Button>
             </div>
 
           </form>

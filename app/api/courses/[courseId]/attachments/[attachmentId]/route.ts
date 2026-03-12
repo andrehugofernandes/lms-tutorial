@@ -5,12 +5,13 @@ import { db } from "@/lib//db"
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { courseId: string, attachmentId: string }}
-){
+  props: { params: Promise<{ courseId: string, attachmentId: string }> }
+) {
   try {
+    const params = await props.params;
     const { userId } = auth();
 
-    if (!userId){
+    if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -21,7 +22,7 @@ export async function DELETE(
       },
     });
 
-    if (!courseOwner){
+    if (!courseOwner) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -31,10 +32,10 @@ export async function DELETE(
         id: params.attachmentId,
       },
     });
-    return NextResponse.json(attachment); 
+    return NextResponse.json(attachment);
 
   } catch (error) {
     console.log("ATTACHMENT_ID", error)
-    return new NextResponse("Internal Error", {status: 500 });
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }

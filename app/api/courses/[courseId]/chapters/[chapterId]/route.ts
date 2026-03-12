@@ -1,20 +1,23 @@
-import  Mux  from "@mux/mux-node";
+import Mux from "@mux/mux-node";
 import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
 
-const { Video } = new Mux(
-  process.env.MUX_TOKEN_ID!,
-  process.env.MUX_TOKEN_SECRET!,
-);
+const mux = new Mux({
+  tokenId: process.env.MUX_TOKEN_ID!,
+  tokenSecret: process.env.MUX_TOKEN_SECRET!,
+});
+
+const { video } = mux;
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { courseId: string; chapterId: string } }
+  props: { params: Promise<{ courseId: string; chapterId: string }> }
 ) {
   try {
-    const { userId } = auth();
+    const params = await props.params;
+    const { userId } = await auth();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -50,7 +53,7 @@ export async function DELETE(
       });
 
       if (existingMuxData) {
-        await Video.Assets.del(existingMuxData.assetId);
+        await video.assets.delete(existingMuxData.assetId);
         await db.muxData.delete({
           where: {
             id: existingMuxData.id,
@@ -92,10 +95,11 @@ export async function DELETE(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { courseId: string; chapterId: string } }
+  props: { params: Promise<{ courseId: string; chapterId: string }> }
 ) {
   try {
-    const { userId } = auth();
+    const params = await props.params;
+    const { userId } = await auth();
     const { isPublished, ...values } = await req.json();
 
     if (!userId) {
@@ -131,7 +135,7 @@ export async function PATCH(
       });
 
       if (existingMuxData) {
-        await Video.Assets.del(existingMuxData.assetId);
+        await video.assets.delete(existingMuxData.assetId);
         await db.muxData.delete({
           where: {
             id: existingMuxData.id,
@@ -139,9 +143,9 @@ export async function PATCH(
         });
       }
 
-      const asset = await Video.Assets.create({
-        input: values.videoUrl,
-        playback_policy: "public",
+      const asset = await video.assets.create({
+        inputs: [{ url: values.videoUrl }],
+        playback_policy: ["public"],
         test: false,
       });
 
@@ -157,6 +161,6 @@ export async function PATCH(
     return NextResponse.json(chapter);
   } catch (error) {
     console.log("[COURSES_CHAPTER_ID]", error);
-    return new NextResponse("Internal Error", { status: 500 }); 
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }

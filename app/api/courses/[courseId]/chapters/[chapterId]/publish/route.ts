@@ -5,10 +5,11 @@ import { db } from "@/lib/db";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { courseId: string; chapterId: string } }
+  props: { params: Promise<{ courseId: string; chapterId: string }> }
 ) {
   try {
-    const { userId } = auth();
+    const params = await props.params;
+    const { userId } = await auth();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -55,6 +56,6 @@ export async function PATCH(
     return NextResponse.json(publishedChapter);
   } catch (error) {
     console.log("[CHAPTER_PUBLISH]", error);
-    return new NextResponse("Internal Error", { status: 500 }); 
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }

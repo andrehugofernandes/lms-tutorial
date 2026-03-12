@@ -17,22 +17,23 @@ interface SearchPageProps {
 
 const SearchPage = async ({ searchParams }: SearchPageProps) => {
   const resolvedSearchParams = await searchParams;
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     return redirect("/");
   }
 
-  const categories = await db.category.findMany({
-    orderBy: {
-      name: "asc",
-    },
-  });
-
-  const courses = await getCourses({
-    userId,
-    ...resolvedSearchParams,
-  });
+  const [categories, courses] = await Promise.all([
+    db.category.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    }),
+    getCourses({
+      userId,
+      ...resolvedSearchParams,
+    })
+  ]);
 
   return (
     <>
