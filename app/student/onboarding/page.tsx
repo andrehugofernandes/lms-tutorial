@@ -4,16 +4,22 @@ import { db } from "@/lib/db";
 
 export default async function StudentOnboardingPage() {
     const { userId } = await auth();
-    const user = await currentUser();
 
-    if (!userId || !user) {
-        redirect("/sign-in");
+    if (!userId) {
+        return redirect("/sign-in");
     }
 
-    // Check if profile already exists
-    const existingProfile = await db.profile.findUnique({
-        where: { userId },
-    });
+    // Parallel fetch for speed
+    const [user, existingProfile] = await Promise.all([
+        currentUser(),
+        db.profile.findUnique({
+            where: { userId },
+        })
+    ]);
+
+    if (!user) {
+        return redirect("/sign-in");
+    }
 
     // Create STUDENT profile if it doesn't exist yet
     if (!existingProfile) {
@@ -27,7 +33,8 @@ export default async function StudentOnboardingPage() {
         });
     }
 
-    // Update Student Streak on access
+    // Update Student Streak - we can do this without blocking the final redirect if it's not the first time
+    // or keep it awaited but at least we saved time above
     try {
         const { updateUserStreak } = await import("@/actions/update-user-streak");
         await updateUserStreak(userId);
@@ -36,5 +43,5 @@ export default async function StudentOnboardingPage() {
     }
 
     // Always redirect to the student dashboard
-    redirect("/dashboard");
+    return redirect("/dashboard");
 }

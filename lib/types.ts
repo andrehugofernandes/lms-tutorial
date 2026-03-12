@@ -21,6 +21,7 @@ export type Chapter = {
   title: string;
   description: string | null;
   videoUrl: string | null;
+  duration: number | null;
   position: number;
   isPublished: boolean;
   isFree: boolean;
@@ -51,6 +52,7 @@ export type Purchase = {
   id: string;
   userId: string;
   courseId: string;
+  lastChapterId: string | null;
   createdAt: Date;
   updatedAt: Date;
 };
