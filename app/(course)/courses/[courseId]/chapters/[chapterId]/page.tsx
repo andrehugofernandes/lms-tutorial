@@ -62,6 +62,8 @@ const ChapterIdPage = async (props: {
             playbackId={muxData?.playbackId!}
             isLocked={isLocked}
             completeOnEnd={completeOnEnd}
+            videoSourceType={chapter.videoSourceType as "UPLOAD" | "EXTERNAL"}
+            embedUrl={chapter.embedUrl}
           />
         </div>
         <div>

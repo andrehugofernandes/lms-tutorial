@@ -7,6 +7,8 @@ import { getDashboardCourses } from "@/actions/get-dashboard-courses";
 import { CoursesList } from "@/components/courses-list";
 import { InfoCard } from "./_components/info-card";
 import { Button } from "@/components/ui/button";
+import { db } from "@/lib/db";
+import { TeacherDashboard } from "./_components/teacher-dashboard";
 
 export default async function Dashboard() {
   const { userId } = await auth();
@@ -15,14 +17,46 @@ export default async function Dashboard() {
     return redirect("/");
   }
 
-  const { coursesInProgress, completedCourses } =
-    await getDashboardCourses(userId);
+  // Check user profile for role
+  const profile = await db.profile.findUnique({
+    where: { userId }
+  });
 
+  const isTeacher = profile?.role === "TEACHER" || profile?.role === "ADMIN";
+
+  if (isTeacher) {
+    const courses = await db.course.findMany({
+      where: { userId },
+      include: {
+        category: true,
+        chapters: {
+          select: { id: true, isPublished: true, videoSourceType: true }
+        }
+      },
+      orderBy: { updatedAt: "desc" }
+    });
+
+    const stats = {
+      totalCourses: courses.length,
+      publishedCourses: courses.filter(c => c.isPublished).length,
+      draftCourses: courses.filter(c => !c.isPublished).length,
+      pendingChapters: courses.reduce((acc, c) => acc + c.chapters.filter(ch => !ch.videoSourceType).length, 0)
+    };
+
+    return (
+      <TeacherDashboard 
+        courses={courses}
+        stats={stats}
+      />
+    );
+  }
+
+  // Student Dashboard logic
+  const { coursesInProgress, completedCourses } = await getDashboardCourses(userId);
   const hasAnyCourse = coursesInProgress.length > 0 || completedCourses.length > 0;
 
   return (
     <div className="p-6 space-y-6">
-      {/* Stats Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <InfoCard
           icon={Clock}
@@ -40,8 +74,6 @@ export default async function Dashboard() {
       {hasAnyCourse ? (
         <>
           <CoursesList items={[...coursesInProgress, ...completedCourses]} />
-
-          {/* Explore more */}
           <div className="flex justify-center pt-4">
             <Link href="/search">
               <Button variant="outline" className="gap-x-2">
@@ -52,7 +84,6 @@ export default async function Dashboard() {
           </div>
         </>
       ) : (
-        /* Empty State */
         <div className="flex flex-col items-center justify-center min-h-[40vh] text-center gap-y-4">
           <div className="bg-sky-100 p-6 rounded-full">
             <Compass className="h-12 w-12 text-sky-700" />

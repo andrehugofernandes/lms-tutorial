@@ -20,8 +20,8 @@ export default async function StudentOnboardingPage() {
         await db.profile.create({
             data: {
                 userId,
-                name: `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || "Aluno",
-                email: user.emailAddresses[0]?.emailAddress ?? "",
+                name: user.name ?? "Aluno",
+                email: user.email ?? "",
                 role: "STUDENT",
             },
         });

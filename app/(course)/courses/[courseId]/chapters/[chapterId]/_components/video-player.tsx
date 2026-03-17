@@ -18,6 +18,8 @@ interface VideoPlayerProps {
   isLocked: boolean;
   completeOnEnd: boolean;
   title: string;
+  videoSourceType?: "UPLOAD" | "EXTERNAL";
+  embedUrl?: string | null;
 };
 
 export const VideoPlayer = ({
@@ -28,6 +30,8 @@ export const VideoPlayer = ({
   isLocked,
   completeOnEnd,
   title,
+  videoSourceType = "UPLOAD",
+  embedUrl,
 }: VideoPlayerProps) => {
   const [isReady, setIsReady] = useState(false);
   const router = useRouter();
@@ -67,21 +71,34 @@ export const VideoPlayer = ({
         <div className="absolute inset-0 flex items-center justify-center bg-slate-800 flex-col gap-y-2 text-secondary">
           <Lock className="h-8 w-8" />
           <p className="text-sm">
-            This chapter is locked
+            Este capítulo está bloqueado
           </p>
         </div>
       )}
       {!isLocked && (
-        <MuxPlayer
-          title={title}
-          className={cn(
-            !isReady && "hidden"
+        <>
+          {videoSourceType === "UPLOAD" ? (
+            <MuxPlayer
+              title={title}
+              className={cn(
+                !isReady && "hidden"
+              )}
+              onCanPlay={() => setIsReady(true)}
+              onEnded={onEnd}
+              autoPlay
+              playbackId={playbackId}
+            />
+          ) : (
+            <iframe
+              src={embedUrl || ""}
+              title={title}
+              className="w-full h-full rounded-md"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              onLoad={() => setIsReady(true)}
+            />
           )}
-          onCanPlay={() => setIsReady(true)}
-          onEnded={onEnd}
-          autoPlay
-          playbackId={playbackId}
-        />
+        </>
       )}
     </div>
   )

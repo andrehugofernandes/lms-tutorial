@@ -46,8 +46,13 @@ const adminRoutes = [
 
 const teacherRoutes = [
   {
+    icon: Layout,
+    label: "Painel do Professor",
+    href: "/dashboard",
+  },
+  {
     icon: List,
-    label: "Cursos",
+    label: "Cursos Criados",
     href: "/teacher/courses",
   },
   {

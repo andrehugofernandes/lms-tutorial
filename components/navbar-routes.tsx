@@ -3,7 +3,8 @@
 import { usePathname } from "next/navigation";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
-import { useAuth, UserButton } from "@clerk/nextjs";
+import { useAuth } from "@/components/auth-provider";
+import { UserButton } from "@/components/auth/user-button";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -66,6 +67,13 @@ export const NavbarRoutes = () => {
               <Link href="/teacher/courses">
                 <Button size="sm" variant="outline">
                   Teacher mode
+                </Button>
+              </Link>
+            )}
+            {!isTeacherUser && !isAdminUser && (
+               <Link href="/student/become-teacher">
+                <Button size="sm" variant="ghost">
+                  Seja um Professor
                 </Button>
               </Link>
             )}

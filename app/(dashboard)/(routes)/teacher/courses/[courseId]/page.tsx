@@ -26,7 +26,7 @@ const CourseIdPage = async (props: {
   }>;
 }) => {
   const params = await props.params;
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) {
     return redirect("/");
   }
