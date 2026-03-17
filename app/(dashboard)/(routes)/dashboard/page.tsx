@@ -11,6 +11,7 @@ import { CheckpointCard } from "./_components/checkpoint-card";
 import { StreakCard } from "./_components/streak-card";
 
 export default async function Dashboard() {
+  console.time("📊 [DASHBOARD_PAGE_RENDER]");
   const { userId } = await auth();
 
   if (!userId) {
@@ -25,6 +26,7 @@ export default async function Dashboard() {
     achievements,
     streakCount 
   } = await getStudentMetrics(userId);
+  console.timeEnd("📊 [DASHBOARD_PAGE_RENDER]");
 
   return (
     <div className="p-6 space-y-8 max-w-7xl mx-auto">

@@ -13,6 +13,7 @@ import { VideoPlayer } from "./_components/video-player";
 import { CourseEnrollButton } from "./_components/course-enroll-button";
 import { CourseProgressButton } from "./_components/course-progress-button";
 import { ChapterNotes } from "./_components/chapter-notes";
+import { ZenModeToggle } from "./_components/zen-mode-toggle";
 import axios from "axios";
 
 const ChapterIdPage = (props: {
@@ -97,28 +98,32 @@ const ChapterIdPage = (props: {
             title={chapter.title}
             courseId={params.courseId}
             nextChapterId={nextChapter?.id}
-            playbackId={muxData?.playbackId!}
+            playbackId={muxData?.playbackId}
+            videoUrl={chapter.videoUrl}
             isLocked={isLocked}
             completeOnEnd={completeOnEnd}
             onPlayerReady={setPlayerRef}
           />
         </div>
         <div>
-          <div className="p-4 flex flex-col items-center justify-between md:flex-row">
+          <div className="p-4 flex flex-col items-center justify-between md:flex-row gap-y-4 md:gap-y-0">
             <h2 className="text-2xl font-semibold mb-2">{chapter.title}</h2>
-            {purchase ? (
-              <CourseProgressButton
-                chapterId={params.chapterId}
-                courseId={params.courseId}
-                nextChapterId={nextChapter?.id}
-                isCompleted={!!userProgress?.isCompleted}
-              />
-            ) : (
-              <CourseEnrollButton
-                courseId={params.courseId}
-                price={course.price!}
-              />
-            )}
+            <div className="flex items-center gap-x-2">
+              <ZenModeToggle />
+              {purchase ? (
+                <CourseProgressButton
+                  chapterId={params.chapterId}
+                  courseId={params.courseId}
+                  nextChapterId={nextChapter?.id}
+                  isCompleted={!!userProgress?.isCompleted}
+                />
+              ) : (
+                <CourseEnrollButton
+                  courseId={params.courseId}
+                  price={course.price!}
+                />
+              )}
+            </div>
           </div>
           <Separator />
           <div>

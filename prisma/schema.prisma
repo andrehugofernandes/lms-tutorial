@@ -1,3 +1,8 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
 datasource db {
   provider     = "postgresql"
   url          = env("DATABASE_URL")
@@ -5,9 +10,204 @@ datasource db {
   relationMode = "prisma"
 }
 
-generator client {
-  provider = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"]
+model Profile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  name      String?
+  email     String?
+  role      Role     @default(STUDENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Course {
+  id          String       @id @default(uuid())
+  userId      String
+  title       String
+  description String?
+  imageUrl    String?
+  price       Float?
+  isPublished Boolean      @default(false)
+  categoryId  String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  category    Category?    @relation(fields: [categoryId], references: [id])
+  chapters    Chapter[]
+  attachments Attachment[]
+  purchases   Purchase[]
+
+  @@index([categoryId])
+}
+
+model Category {
+  id      String   @id @default(uuid())
+  name    String   @unique
+  courses Course[]
+}
+
+model Attachment {
+  id        String   @id @default(uuid())
+  name      String
+  url       String
+  courseId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+}
+
+model Chapter {
+  id           String         @id @default(uuid())
+  title        String
+  description  String?
+  videoUrl     String?
+  position     Int
+  isPublished  Boolean        @default(false)
+  isFree       Boolean        @default(false)
+  courseId     String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  muxData      MuxData?
+  quiz         Quiz?
+  course       Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  userProgress UserProgress[]
+
+  @@index([courseId])
+}
+
+model MuxData {
+  id         String  @id @default(uuid())
+  assetId    String
+  playbackId String?
+  chapterId  String  @unique
+  chapter    Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+}
+
+model UserProgress {
+  id          String   @id @default(uuid())
+  userId      String
+  chapterId   String
+  isCompleted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  chapter     Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, chapterId])
+  @@index([chapterId])
+}
+
+model Purchase {
+  id        String   @id @default(uuid())
+  userId    String
+  courseId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@index([courseId])
+}
+
+model StripeCustomer {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  stripeCustomerId String   @unique
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Quiz {
+  id          String     @id @default(uuid())
+  chapterId   String     @unique
+  isPublished Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  chapter     Chapter    @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  questions   Question[]
+}
+
+model Question {
+  id        String   @id @default(uuid())
+  quizId    String
+  prompt    String
+  position  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  options   Option[]
+  answers   Answer[]
+
+  @@index([quizId])
+}
+
+model Option {
+  id         String   @id @default(uuid())
+  questionId String
+  text       String
+  isCorrect  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  answers    Answer[]
+
+  @@index([questionId])
+}
+
+model Answer {
+  id         String   @id @default(uuid())
+  userId     String
+  questionId String
+  optionId   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  option     Option   @relation(fields: [optionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+  @@index([questionId])
+  @@index([optionId])
+}
+
+model Account {
+  id                String  @id
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+}
+
+model User {
+  id            String    @id
+  name          String?
+  email         String?   @unique
+  password      String?
+  emailVerified DateTime?
+  image         String?
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
 
 enum Role {
@@ -15,233 +215,3 @@ enum Role {
   TEACHER
   STUDENT
 }
-
-model Profile {
-  id String @id @default(uuid())
-  userId String @unique
-  name String?
-  email String? @db.Text
-  role Role @default(STUDENT)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Course {
-  id String @id @default(uuid())
-  userId String
-  title String @db.Text
-  description String? @db.Text
-  imageUrl String? @db.Text
-  price Float?
-  isPublished Boolean @default(false)
-
-  categoryId String?
-  category Category? @relation(fields: [categoryId], references: [id])
-
-  chapters Chapter[]
-  attachments Attachment[]
-  purchases Purchase[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([categoryId])
-}
-
-model Category {
-  id String @id @default(uuid())
-  name String @unique()
-  courses Course[]
- // createdAt DateTime @default(now())
- // updatedAt DateTime @updatedAt
-}
-
-model Attachment {
-  id String @id @default(uuid())
-  name String
-  url String
-
-  courseId String
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([courseId])
-}
-
-model Chapter {
-  id String @id @default(uuid())
-  title String
-  description String? @db.Text
-  videoUrl String? @db.Text
-  duration Int? @default(0)
-  position Int
-  isPublished Boolean @default(false)
-  isFree Boolean @default(false)
-
-  muxData MuxData? 
-  quiz Quiz?
-
-  courseId String
-  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)  
-
-  userProgress UserProgress[]
-  notes        UserNote[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([courseId])
-  
-  }
-
-  model MuxData {
-    id String @id @default(uuid())
-    assetId String
-    playbackId String?
-
-    chapterId String @unique
-    chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-  }
-
-  model UserProgress{
-    id String @id @default(uuid())
-    userId String
-
-    chapterId String
-    chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-    
-    isCompleted Boolean @default(false)
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@index([chapterId])
-    @@unique([userId, chapterId])
-  }
-
-  model Purchase {
-    id String @id @default(uuid())
-    userId String
-
-    courseId String
-    course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-
-    lastChapterId String?
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@unique([userId, courseId])  
-    @@index([courseId])
-  }
-
-  model StripeCustomer {
-    id String @id @default(uuid())
-    userId String @unique
-    stripeCustomerId String @unique
-    
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-  }
-
-model Quiz {
-  id String @id @default(uuid())
-  chapterId String @unique
-  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-  isPublished Boolean @default(false)
-  
-  questions Question[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Question {
-  id String @id @default(uuid())
-  quizId String
-  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  prompt String @db.Text
-  position Int
-
-  options Option[]
-  answers Answer[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([quizId])
-}
-
-model Option {
-  id String @id @default(uuid())
-  questionId String
-  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  text String @db.Text
-  isCorrect Boolean @default(false)
-
-  answers Answer[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([questionId])
-}
-
-model Answer {
-  id String @id @default(uuid())
-  userId String
-  questionId String
-  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  optionId String
-  option Option @relation(fields: [optionId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([questionId])
-  @@index([optionId])
-  @@unique([userId, questionId])
-}
-
-model Achievement {
-  id String @id @default(uuid())
-  userId String
-  courseId String
-  title String
-  icon String?
-  description String? @db.Text
-
-  createdAt DateTime @default(now())
-
-  @@unique([userId, courseId])
-  @@index([userId])
-}
-
-model UserStreak {
-  id        String   @id @default(uuid())
-  userId    String   @unique
-  count     Int      @default(0)
-  lastVisit DateTime @default(now())
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-}
-
-model UserNote {
-  id        String   @id @default(uuid())
-  userId    String
-  chapterId String
-  content   String   @db.Text
-  timestamp Float?   // Tempo do vídeo em segundos onde a nota foi feita
-
-  chapter   Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-
-  @@index([userId])
-  @@index([chapterId])
-}

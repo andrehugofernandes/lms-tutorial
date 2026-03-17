@@ -67,6 +67,7 @@ export const getStudentMetrics = async (userId: string): Promise<StudentMetrics>
     const coursesInProgress: (CourseWithProgressWithChapters & { lastChapter?: Chapter | null })[] = [];
 
     // 4. Process metrics in-memory
+    console.time("📊 [METRICS_MEMORY_PROCESSING]");
     for (const purchase of purchasedCourses) {
       const course = purchase.course;
       const publishedChapters = course.chapters;
@@ -89,6 +90,8 @@ export const getStudentMetrics = async (userId: string): Promise<StudentMetrics>
 
       const courseWithMetadata = {
         ...course,
+        category: course.category, // Ensure category is passed down
+        chapters: course.chapters, // Ensure chapters is passed down
         progress,
         lastChapter: publishedChapters.find((c) => c.id === purchase.lastChapterId) || publishedChapters[0],
       };
@@ -99,6 +102,7 @@ export const getStudentMetrics = async (userId: string): Promise<StudentMetrics>
         coursesInProgress.push(courseWithMetadata as any);
       }
     }
+    console.timeEnd("📊 [METRICS_MEMORY_PROCESSING]");
 
     return {
       totalHoursWatched: Math.round(totalMinutesWatched / 60 * 10) / 10,

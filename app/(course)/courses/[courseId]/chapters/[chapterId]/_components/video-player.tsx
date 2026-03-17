@@ -2,6 +2,9 @@
 
 import axios from "axios";
 import MuxPlayer from "@mux/mux-player-react";
+import dynamic from "next/dynamic";
+// @ts-ignore
+const ReactPlayer = dynamic(() => import("react-player"), { ssr: false }) as any;
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -11,7 +14,8 @@ import { cn } from "@/lib/utils";
 import { useConfettiStore } from "@/hooks/use-confetti-store";
 
 interface VideoPlayerProps {
-  playbackId: string;
+  playbackId?: string | null;
+  videoUrl?: string | null;
   courseId: string;
   chapterId: string;
   nextChapterId?: string;
@@ -23,6 +27,7 @@ interface VideoPlayerProps {
 
 export const VideoPlayer = ({
   playbackId,
+  videoUrl,
   courseId,
   chapterId,
   nextChapterId,
@@ -58,6 +63,9 @@ export const VideoPlayer = ({
     }
   }
 
+  const isMux = !!playbackId;
+  const isExternal = !playbackId && !!videoUrl;
+
   return (
     <div className="relative aspect-video">
       {!isReady && !isLocked && (
@@ -73,7 +81,7 @@ export const VideoPlayer = ({
           </p>
         </div>
       )}
-      {!isLocked && (
+      {!isLocked && isMux && (
         <MuxPlayer
           title={title}
           className={cn(
@@ -86,6 +94,19 @@ export const VideoPlayer = ({
           ref={onPlayerReady}
         />
       )}
+      {!isLocked && isExternal && (
+        <div className={cn("w-full h-full", !isReady && "hidden")}>
+           <ReactPlayer
+            url={videoUrl!}
+            width="100%"
+            height="100%"
+            controls
+            onReady={() => setIsReady(true)}
+            onEnded={onEnd}
+            playing={true}
+          />
+        </div>
+      )}
     </div>
   )
-}
+}

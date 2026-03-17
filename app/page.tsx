@@ -8,18 +8,25 @@ import { forcePromoteToAdmin } from "@/actions/promote-admin";
 import { Role } from "@prisma/client";
 
 export default async function Home() {
+    console.time("🏠 [HOME_AUTH]");
     const { userId } = await auth();
+    console.timeEnd("🏠 [HOME_AUTH]");
 
     if (userId) {
+        console.time("🏠 [HOME_PROFILE]");
         const profile = await getProfile(userId);
+        console.timeEnd("🏠 [HOME_PROFILE]");
         
         if (profile?.role === Role.STUDENT) {
+            console.log("🏠 [HOME_REDIRECT] -> /dashboard");
             return redirect("/dashboard");
         }
 
         if (profile?.role === Role.TEACHER || profile?.role === Role.ADMIN) {
+            console.log("🏠 [HOME_REDIRECT] -> /teacher/courses");
             return redirect("/teacher/courses");
         }
+        console.log("🏠 [HOME_NO_ROLE] or no profile found for userId:", userId);
     }
 
     return (
