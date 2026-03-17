@@ -15,3 +15,4 @@ const TeacherLayout = async ({ children }: { children: React.ReactNode }) => {
 };
 
 export default TeacherLayout;
+

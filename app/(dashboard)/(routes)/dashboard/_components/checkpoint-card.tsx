@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { PlayCircle } from "lucide-react";
-import { Course, Chapter } from "@prisma/client";
+import { Course, Chapter } from "@/lib/generated/db";
 import { IconBadge } from "@/components/icon-badge";
 
 interface CheckpointCardProps {
@@ -38,3 +38,4 @@ export const CheckpointCard = ({
     </Link>
   );
 };
+

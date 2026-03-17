@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { Attachment, Chapter } from "@prisma/client";
+import { Attachment, Chapter } from "@/lib/generated/db";
 
 interface GetChapterProps {
   userId: string;
@@ -109,3 +109,4 @@ export const getChapter = async ({
     };
   }
 };
+

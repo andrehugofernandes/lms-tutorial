@@ -4,7 +4,7 @@ import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { Attachment, Course } from "@prisma/client";
+import { Attachment, Course } from "@/lib/generated/db";
 
 import { Button } from "@/components/ui/button";
 import { PlusCircle, File, X } from "lucide-react";

@@ -1,6 +1,6 @@
 "use client"
 
-import { Course } from "@prisma/client";
+import { Course } from "@/lib/generated/db";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -103,4 +103,5 @@ export const columns: ColumnDef<Course>[] = [
     }
   }
 ];
+
 

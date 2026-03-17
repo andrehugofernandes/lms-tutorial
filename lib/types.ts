@@ -63,3 +63,4 @@ export type MuxData = {
   playbackId: string | null;
   chapterId: string;
 };
+

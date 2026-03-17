@@ -29,3 +29,4 @@ export async function createStudentProfile() {
 
     redirect("/search");
 }
+

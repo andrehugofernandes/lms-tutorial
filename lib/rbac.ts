@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { Role } from "@prisma/client";
+import { Role } from "@/lib/generated/db";
 
 export const getProfile = async (userId: string | null) => {
     if (!userId) return null;
@@ -28,3 +28,4 @@ export const hasRole = async (userId: string | null, allowedRoles: Role[]) => {
 
     return allowedRoles.includes(profile.role);
 };
+

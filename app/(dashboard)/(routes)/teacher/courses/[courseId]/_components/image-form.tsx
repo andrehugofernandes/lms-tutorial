@@ -4,7 +4,7 @@ import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { Course } from "@prisma/client";
+import { Course } from "@/lib/generated/db";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";

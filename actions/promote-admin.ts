@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
-import { Role } from "@prisma/client";
+import { Role } from "@/lib/generated/db";
 
 export async function forcePromoteToAdmin() {
     const { userId } = await auth();
@@ -29,3 +29,4 @@ export async function forcePromoteToAdmin() {
         return { error: "Failed to promote user" };
     }
 }
+

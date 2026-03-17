@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { Chapter } from "@prisma/client";
+import { Chapter } from "@/lib/generated/db";
 
 import {
   Form,
@@ -125,4 +125,5 @@ const formSchema = z.object({
      </div>
   )
 }
+
 

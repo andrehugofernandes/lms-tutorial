@@ -53,3 +53,4 @@ export default async function StudentOnboardingPage() {
     // Always redirect to the student dashboard
     return redirect("/dashboard");
 }
+

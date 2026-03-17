@@ -1,5 +1,5 @@
 import { hasRole } from "./rbac";
-import { Role } from "@prisma/client";
+import { Role } from "@/lib/generated/db";
 
 export const isTeacher = async (userId?: string | null) => {
   if (!userId) return false;

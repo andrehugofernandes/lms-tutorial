@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
-import { Role } from "@prisma/client";
+import { Role } from "@/lib/generated/db";
 import { revalidatePath } from "next/cache";
 
 export async function becomeTeacher() {
@@ -41,3 +41,4 @@ export async function becomeTeacher() {
         return { error: "Erro interno ao processar a solicitação" };
     }
 }
+

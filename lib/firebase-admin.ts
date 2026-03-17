@@ -22,3 +22,4 @@ if (!admin.apps.length) {
 // Fallback to null if not initialized so we don't crash on import
 export const adminAuth = admin.apps.length > 0 ? admin.auth() : null;
 export const adminDb = admin.apps.length > 0 ? admin.firestore() : null;
+

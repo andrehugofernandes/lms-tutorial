@@ -54,3 +54,4 @@ export const updateUserStreak = async (userId: string) => {
     return null;
   }
 };
+

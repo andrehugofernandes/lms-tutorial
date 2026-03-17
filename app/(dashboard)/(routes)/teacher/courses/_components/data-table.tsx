@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 
-import { Course } from "@prisma/client";
+import { Course } from "@/lib/generated/db";
 
 
 import {
@@ -148,3 +148,4 @@ export function DataTable<TData, TValue>({
     </div>
   );
 }
+

@@ -51,3 +51,4 @@ export const auth = async () => {
 export const currentUser = async () => {
     return await getCurrentUser();
 };
+

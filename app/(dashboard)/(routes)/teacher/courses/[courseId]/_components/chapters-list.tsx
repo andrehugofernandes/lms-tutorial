@@ -1,6 +1,6 @@
 "use client";
 
-import { Chapter } from "@prisma/client";
+import { Chapter } from "@/lib/generated/db";
 import { useEffect, useState } from "react";
 import {
   DragDropContext,
@@ -123,3 +123,4 @@ export const ChaptersList = ({
     </DragDropContext>
   )
 }
+

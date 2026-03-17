@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 
-import { Category, Chapter, Course } from "@prisma/client";
+import { Category, Chapter, Course } from "@/lib/generated/db";
 import { getProgress } from "@/actions/get-progress";
 
 type CourseWithProgressWithCategory = Course & {
@@ -62,3 +62,4 @@ export const getDashboardCourses = async (
     };
   }
 };
+

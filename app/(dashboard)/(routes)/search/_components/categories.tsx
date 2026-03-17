@@ -41,3 +41,4 @@ export const Categories = ({ items }: CategoriesProps) => {
     </div>
   );
 };
+

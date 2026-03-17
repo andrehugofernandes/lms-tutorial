@@ -5,13 +5,14 @@ import { auth } from "@/lib/auth";
 import { getProfile } from "@/lib/rbac";
 import { Button } from "@/components/ui/button";
 import { forcePromoteToAdmin } from "@/actions/promote-admin";
-import { Role } from "@prisma/client";
+import { Role } from "@/lib/generated/db";
 
 export default async function Home() {
     console.time("🏠 [HOME_AUTH]");
     const { userId } = await auth();
     console.timeEnd("🏠 [HOME_AUTH]");
 
+    /* 
     if (userId) {
         console.time("🏠 [HOME_PROFILE]");
         const profile = await getProfile(userId);
@@ -28,6 +29,7 @@ export default async function Home() {
         }
         console.log("🏠 [HOME_NO_ROLE] or no profile found for userId:", userId);
     }
+    */
 
     return (
         <div className="h-full flex flex-col items-center justify-center bg-slate-100/50">
@@ -112,3 +114,4 @@ export default async function Home() {
         </div>
     );
 }
+

@@ -14,3 +14,9 @@ Aluno 2:
 
 E-mail: aluno2@lms.com
 Senha: AlunoApp@2026_Secure2!
+
+
+Admin/Professor:
+
+📧 Email: professor@diego.com
+🔑 Senha: diego123

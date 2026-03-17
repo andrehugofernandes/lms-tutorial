@@ -39,3 +39,4 @@ export const CoursesList = ({ items }: CoursesListProps) => {
     </div>
   );
 };
+

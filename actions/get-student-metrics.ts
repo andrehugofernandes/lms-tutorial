@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { Achievement, Chapter, Course, Purchase } from "@prisma/client";
+import { Achievement, Chapter, Course, Purchase } from "@/lib/generated/db";
 import { getProgress } from "@/actions/get-progress"; // This can be removed if not used elsewhere, but keeping for now as it might be used in other files. Actually, I will remove it from here.
 
 type CourseWithProgressWithChapters = Course & {
@@ -124,3 +124,4 @@ export const getStudentMetrics = async (userId: string): Promise<StudentMetrics>
     };
   }
 };
+
