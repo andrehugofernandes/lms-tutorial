@@ -1,6 +1,6 @@
 "use server";
 
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 
@@ -20,8 +20,8 @@ export async function createStudentProfile() {
         await db.profile.create({
             data: {
                 userId,
-                name: `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim(),
-                email: user.emailAddresses[0]?.emailAddress,
+                name: user.name ?? "Aluno",
+                email: user.email ?? "",
                 role: "STUDENT",
             },
         });

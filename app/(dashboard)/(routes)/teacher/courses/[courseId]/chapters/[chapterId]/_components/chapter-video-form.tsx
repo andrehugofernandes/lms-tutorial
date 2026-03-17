@@ -3,14 +3,30 @@
 import * as z from "zod";
 import axios from "axios";
 import MuxPlayer from "@mux/mux-player-react";
-import { Pencil, PlusCircle, Video } from "lucide-react";
+import { 
+  Pencil, 
+  PlusCircle, 
+  Video, 
+  Youtube, 
+  Upload, 
+  Link as LinkIcon,
+  CheckCircle,
+  ExternalLink
+} from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { Chapter, MuxData } from "@prisma/client";
+import { Chapter, MuxData, VideoSourceType, VideoProvider } from "@prisma/client";
 
 import { Button } from "@/components/ui/button";
-import  FileUpload  from "@/components/file-upload";
+import FileUpload from "@/components/file-upload";
+import { Input } from "@/components/ui/input";
+import { 
+  Tabs, 
+  TabsContent, 
+  TabsList, 
+  TabsTrigger 
+} from "@/components/ui/tabs";
 
 interface ChapterVideoFormProps {
   initialData: Chapter & { muxData?: MuxData | null };
@@ -19,7 +35,9 @@ interface ChapterVideoFormProps {
 };
 
 const formSchema = z.object({
-  videoUrl: z.string().min(1),
+  videoUrl: z.string().optional(),
+  videoSourceType: z.nativeEnum(VideoSourceType).optional(),
+  externalUrl: z.string().optional(),
 });
 
 export const ChapterVideoForm = ({
@@ -28,6 +46,9 @@ export const ChapterVideoForm = ({
   chapterId,
 }: ChapterVideoFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>(initialData.videoSourceType || "UPLOAD");
+  const [urlInput, setUrlInput] = useState(initialData.externalUrl || "");
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
@@ -35,70 +56,142 @@ export const ChapterVideoForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      setIsUpdating(true);
       await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values);
       toast.success("Chapter updated");
-      toggleEdit();
+      setIsEditing(false);
       router.refresh();
     } catch {
       toast.error("Something went wrong");
+    } finally {
+      setIsUpdating(false);
     }
+  }
+
+  const onExternalUrlSubmit = () => {
+    if (!urlInput) return;
+    onSubmit({
+      videoSourceType: "EXTERNAL",
+      externalUrl: urlInput,
+    });
   }
 
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between mb-4">
-        Chapter video
-        <Button onClick={toggleEdit} variant="outline">
+        Vídeo do Capítulo
+        <Button onClick={toggleEdit} variant="outline" disabled={isUpdating}>
           {isEditing && (
-            <>Cancel</>
+            <>Cancelar</>
           )}
-          {!isEditing && !initialData.videoUrl && (
+          {!isEditing && !initialData.videoUrl && !initialData.externalUrl && (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
-              Add a video
+              Adicionar vídeo
             </>
           )}
-          {!isEditing && initialData.videoUrl && (
+          {!isEditing && (initialData.videoUrl || initialData.externalUrl) && (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit video
+              Alterar mídia
             </>
           )}
         </Button>
       </div>
       {!isEditing && (
-        !initialData.videoUrl ? (
+        (!initialData.videoUrl && !initialData.externalUrl) ? (
           <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
             <Video className="h-10 w-10 text-slate-500" />
           </div>
         ) : (
           <div className="relative aspect-video mt-2">
-            <MuxPlayer
-              playbackId={initialData?.muxData?.playbackId || ""}
-            />
+            {initialData.videoSourceType === "UPLOAD" ? (
+              <MuxPlayer
+                playbackId={initialData?.muxData?.playbackId || ""}
+              />
+            ) : (
+              <div className="w-full h-full bg-slate-900 rounded-md flex flex-col items-center justify-center text-white p-4 text-center gap-y-2">
+                 {initialData.videoProvider === "YOUTUBE" ? (
+                    <Youtube className="h-12 w-12 text-rose-500" />
+                 ) : (
+                    <ExternalLink className="h-12 w-12 text-sky-400" />
+                 )}
+                 <div className="space-y-1">
+                    <p className="font-bold text-sm">Vídeo Externo Configurado</p>
+                    <p className="text-xs text-slate-400 truncate max-w-[250px]">{initialData.externalUrl}</p>
+                 </div>
+                 <Badge variant="success" className="bg-emerald-500/10 text-emerald-500 border-none">
+                    <CheckCircle className="h-3 w-3 mr-1" /> Pronto para o aluno
+                 </Badge>
+              </div>
+            )}
           </div>
         )
       )}
       {isEditing && (
-        <div>
-          <FileUpload
-            endpoint="chapterVideo"
-            onChange={(url) => {
-              if (url) {
-                onSubmit({ videoUrl: url });
-              }
-            }}
-          />
-          <div className="text-xs text-muted-foreground mt-4">
-           Upload this chapter&apos;s video
-          </div>
-        </div>
+        <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full">
+           <TabsList className="grid w-full grid-cols-2 mb-4">
+              <TabsTrigger value="UPLOAD" className="gap-x-2">
+                 <Upload className="h-4 w-4" /> Upload Local
+              </TabsTrigger>
+              <TabsTrigger value="EXTERNAL" className="gap-x-2">
+                 <LinkIcon className="h-4 w-4" /> Link Externo
+              </TabsTrigger>
+           </TabsList>
+           
+           <TabsContent value="UPLOAD" className="space-y-4">
+              <FileUpload
+                endpoint="chapterVideo"
+                onChange={(url) => {
+                  if (url) {
+                    onSubmit({ 
+                      videoUrl: url,
+                      videoSourceType: "UPLOAD" 
+                    });
+                  }
+                }}
+              />
+              <div className="text-xs text-muted-foreground mt-4">
+                Envie um arquivo de vídeo do seu computador (Mux Storage).
+              </div>
+           </TabsContent>
+
+           <TabsContent value="EXTERNAL" className="space-y-4">
+              <div className="space-y-2">
+                 <Input 
+                   placeholder="Cole aqui o link do YouTube ou Vimeo"
+                   value={urlInput}
+                   onChange={(e) => setUrlInput(e.target.value)}
+                   disabled={isUpdating}
+                 />
+                 <Button 
+                   onClick={onExternalUrlSubmit} 
+                   disabled={isUpdating || !urlInput}
+                   className="w-full bg-sky-700 hover:bg-sky-800"
+                 >
+                   Salvar Link Externo
+                 </Button>
+              </div>
+              <div className="text-xs text-muted-foreground mt-4">
+                 Suporte nativo para YouTube e Vimeo. Converção automática para Iframe.
+              </div>
+           </TabsContent>
+        </Tabs>
       )}
-      {initialData.videoUrl && !isEditing && (
+      {(initialData.videoUrl || initialData.externalUrl) && !isEditing && (
         <div className="text-xs text-muted-foreground mt-2">
-          Videos can take a few minutes to process. Refresh the page if video does not appear.
+          {initialData.videoSourceType === "UPLOAD" 
+            ? "O processamento do vídeo pode levar alguns minutos." 
+            : "Vídeo externo configurado com sucesso."}
         </div>
       )}
     </div>
   )
 }
+
+// Minimal Badge helper since it might not be exported from components/ui
+const Badge = ({ children, variant, className }: any) => (
+  <div className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${className}`}>
+    {children}
+  </div>
+)

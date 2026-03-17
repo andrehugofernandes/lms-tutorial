@@ -17,7 +17,7 @@ const ChapterIdPage = async (props: {
   params: Promise<{ courseId: string; chapterId: string }>;
 }) => {
   const params = await props.params;
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     return redirect("/");

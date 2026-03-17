@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { File, Clock, PlusCircle } from "lucide-react";
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 import { Banner } from "@/components/banner";
 import { Separator } from "@/components/ui/separator";
@@ -14,7 +15,6 @@ import { CourseEnrollButton } from "./_components/course-enroll-button";
 import { CourseProgressButton } from "./_components/course-progress-button";
 import { ChapterNotes } from "./_components/chapter-notes";
 import { ZenModeToggle } from "./_components/zen-mode-toggle";
-import axios from "axios";
 
 const ChapterIdPage = (props: {
   params: Promise<{ courseId: string; chapterId: string }>;
@@ -102,6 +102,8 @@ const ChapterIdPage = (props: {
             videoUrl={chapter.videoUrl}
             isLocked={isLocked}
             completeOnEnd={completeOnEnd}
+            videoSourceType={chapter.videoSourceType as "UPLOAD" | "EXTERNAL"}
+            embedUrl={chapter.embedUrl}
             onPlayerReady={setPlayerRef}
           />
         </div>

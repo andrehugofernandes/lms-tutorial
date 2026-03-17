@@ -63,7 +63,7 @@ export const CategoryForm = ({
     }
   }
 
-const selectedOptinn = options.find((option) => 
+const selectedOption = options.find((option) => 
 option.value === initialData.categoryId);
 
   return (
@@ -86,13 +86,13 @@ option.value === initialData.categoryId);
           "text-sm mt-2",
           !initialData.categoryId && "text-slate-500 italic"
         )}>
-          {selectedOptinn?.label || "No category."}
+          {selectedOption?.label || "No category."}
         </p>
       )}
       {isEditing && (
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4 mt-4"
           >
             <FormField 
@@ -102,7 +102,7 @@ option.value === initialData.categoryId);
                 <FormItem>
                   <FormControl>
                     <Combobox 
-                      options={...options}
+                      options={options}
                       {...field}                      
                     />
                   </FormControl>

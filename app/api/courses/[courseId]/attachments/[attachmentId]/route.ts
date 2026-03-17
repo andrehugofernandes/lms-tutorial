@@ -9,7 +9,7 @@ export async function DELETE(
 ) {
   try {
     const params = await props.params;
-    const { userId } = auth();
+    const { userId } = await auth();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });

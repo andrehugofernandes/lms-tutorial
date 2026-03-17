@@ -3,12 +3,14 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { CheckCircle, Clock, Compass, Flame, Medal, PlayCircle, Trophy } from "lucide-react";
 
+import { db } from "@/lib/db";
 import { getStudentMetrics } from "@/actions/get-student-metrics";
 import { CoursesList } from "@/components/courses-list";
 import { InfoCard } from "./_components/info-card";
 import { Button } from "@/components/ui/button";
 import { CheckpointCard } from "./_components/checkpoint-card";
 import { StreakCard } from "./_components/streak-card";
+import { TeacherDashboard } from "./_components/teacher-dashboard";
 
 export default async function Dashboard() {
   console.time("📊 [DASHBOARD_PAGE_RENDER]");
@@ -18,6 +20,41 @@ export default async function Dashboard() {
     return redirect("/");
   }
 
+  // Check user profile for role (Arnaldo's logic)
+  const profile = await db.profile.findUnique({
+    where: { userId }
+  });
+
+  const isTeacher = profile?.role === "TEACHER" || profile?.role === "ADMIN";
+
+  if (isTeacher) {
+    const courses = await db.course.findMany({
+      where: { userId },
+      include: {
+        category: true,
+        chapters: {
+          select: { id: true, isPublished: true, videoSourceType: true }
+        }
+      },
+      orderBy: { updatedAt: "desc" }
+    });
+
+    const stats = {
+      totalCourses: courses.length,
+      publishedCourses: courses.filter(c => c.isPublished).length,
+      draftCourses: courses.filter(c => !c.isPublished).length,
+      pendingChapters: courses.reduce((acc, c) => acc + c.chapters.filter(ch => !ch.videoSourceType).length, 0)
+    };
+
+    return (
+      <TeacherDashboard 
+        courses={courses}
+        stats={stats}
+      />
+    );
+  }
+
+  // Student Dashboard logic (Diego's updated metrics)
   const { 
     totalHoursWatched, 
     totalHoursTarget, 
@@ -26,6 +63,7 @@ export default async function Dashboard() {
     achievements,
     streakCount 
   } = await getStudentMetrics(userId);
+  
   console.timeEnd("📊 [DASHBOARD_PAGE_RENDER]");
 
   return (
@@ -54,27 +92,27 @@ export default async function Dashboard() {
           icon={Clock}
           label="Horas Estudadas"
           numberOfItems={totalHoursWatched}
-          suffix="Hours"
+          suffix="Horas"
         />
         <InfoCard
           variant="success"
           icon={CheckCircle}
           label="Cursos Concluídos"
           numberOfItems={completedCoursesCount}
-          suffix="Courses"
+          suffix="Cursos"
         />
         <InfoCard
           icon={PlayCircle}
           label="Cursos em Andamento"
           numberOfItems={coursesInProgress.length}
-          suffix="Courses"
+          suffix="Cursos"
         />
         <InfoCard
           variant="success"
           icon={Medal}
           label="Medalhas Ganhas"
           numberOfItems={achievements.length}
-          suffix="Medals"
+          suffix="Medalhas"
         />
       </div>
 

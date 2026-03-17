@@ -117,6 +117,33 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
+    // Logic for External URLs (YouTube / Vimeo conversion)
+    if (values.externalUrl && values.videoSourceType === "EXTERNAL") {
+      const url = values.externalUrl;
+      
+      // YouTube
+      const youtubeRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-0_-]{11})/;
+      const ytMatch = url.match(youtubeRegex);
+      
+      if (ytMatch && ytMatch[1]) {
+        values.embedUrl = `https://www.youtube.com/embed/${ytMatch[1]}`;
+        values.videoProvider = "YOUTUBE";
+      } 
+      // Vimeo
+      else {
+        const vimeoRegex = /(?:vimeo\.com\/|player\.vimeo\.com\/video\/)([0-9]+)/;
+        const vimeoMatch = url.match(vimeoRegex);
+        
+        if (vimeoMatch && vimeoMatch[1]) {
+          values.embedUrl = `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+          values.videoProvider = "VIMEO";
+        } else {
+          values.videoProvider = "OTHER";
+          values.embedUrl = url; // Fallback
+        }
+      }
+    }
+
     const chapter = await db.chapter.update({
       where: {
         id: params.chapterId,
@@ -127,7 +154,7 @@ export async function PATCH(
       }
     });
 
-    if (values.videoUrl) {
+    if (values.videoUrl && values.videoSourceType === "UPLOAD") {
       const existingMuxData = await db.muxData.findFirst({
         where: {
           chapterId: params.chapterId,
@@ -135,7 +162,11 @@ export async function PATCH(
       });
 
       if (existingMuxData) {
-        await video.assets.delete(existingMuxData.assetId);
+        try {
+          await video.assets.delete(existingMuxData.assetId);
+        } catch (e) {
+          console.log("Mux asset delete failed", e);
+        }
         await db.muxData.delete({
           where: {
             id: existingMuxData.id,
@@ -143,19 +174,23 @@ export async function PATCH(
         });
       }
 
-      const asset = await video.assets.create({
-        inputs: [{ url: values.videoUrl }],
-        playback_policy: ["public"],
-        test: false,
-      });
+      try {
+        const asset = await video.assets.create({
+          inputs: [{ url: values.videoUrl }],
+          playback_policy: ["public"],
+          test: false,
+        });
 
-      await db.muxData.create({
-        data: {
-          chapterId: params.chapterId,
-          assetId: asset.id,
-          playbackId: asset.playback_ids?.[0]?.id,
-        }
-      });
+        await db.muxData.create({
+          data: {
+            chapterId: params.chapterId,
+            assetId: asset.id,
+            playbackId: asset.playback_ids?.[0]?.id,
+          }
+        });
+      } catch (muxError) {
+        console.log("MUX_ERROR", muxError);
+      }
     }
 
     return NextResponse.json(chapter);

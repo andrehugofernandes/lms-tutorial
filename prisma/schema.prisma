@@ -10,22 +10,40 @@ datasource db {
   relationMode = "prisma"
 }
 
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+}
+
+enum VideoSourceType {
+  UPLOAD
+  EXTERNAL
+}
+
+enum VideoProvider {
+  YOUTUBE
+  VIMEO
+  OTHER
+}
+
 model Profile {
   id        String   @id @default(uuid())
   userId    String   @unique
   name      String?
-  email     String?
+  email     String?  @db.Text
   role      Role     @default(STUDENT)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Course {
   id          String       @id @default(uuid())
   userId      String
-  title       String
-  description String?
-  imageUrl    String?
+  title       String       @db.Text
+  description String?      @db.Text
+  imageUrl    String?      @db.Text
   price       Float?
   isPublished Boolean      @default(false)
   categoryId  String?
@@ -60,8 +78,15 @@ model Attachment {
 model Chapter {
   id           String         @id @default(uuid())
   title        String
-  description  String?
-  videoUrl     String?
+  description  String?        @db.Text
+  
+  // Hybrid Video Logic (Arnaldo's)
+  videoSourceType VideoSourceType?
+  videoUrl     String?        @db.Text
+  externalUrl  String?        @db.Text
+  embedUrl     String?        @db.Text
+  videoProvider VideoProvider?
+  
   position     Int
   isPublished  Boolean        @default(false)
   isFree       Boolean        @default(false)
@@ -130,7 +155,7 @@ model Quiz {
 model Question {
   id        String   @id @default(uuid())
   quizId    String
-  prompt    String
+  prompt    String   @db.Text
   position  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -144,7 +169,7 @@ model Question {
 model Option {
   id         String   @id @default(uuid())
   questionId String
-  text       String
+  text       String   @db.Text
   isCorrect  Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -170,36 +195,42 @@ model Answer {
 }
 
 model Account {
-  id                String  @id
+  id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String?
-  access_token      String?
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String?
+  id_token          String? @db.Text
   session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
 
 model Session {
-  id           String   @id
+  id           String   @id @default(cuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
-  id            String    @id
+  id            String    @id @default(cuid())
   name          String?
   email         String?   @unique
   password      String?
   emailVerified DateTime?
   image         String?
+  accounts      Account[]
+  sessions      Session[]
+  profile       Profile?
 }
 
 model VerificationToken {
@@ -208,10 +239,4 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-}
-
-enum Role {
-  ADMIN
-  TEACHER
-  STUDENT
 }
