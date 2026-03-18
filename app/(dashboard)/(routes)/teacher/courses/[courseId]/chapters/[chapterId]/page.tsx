@@ -11,6 +11,7 @@ import { ChapterTitleForm } from "./_components/chapter-title-form";
 import { ChapterDescriptionForm } from "./_components/chapter-description-form";
 import { ChapterAccessForm } from "./_components/chapter-access-form";
 import { ChapterVideoForm } from "./_components/chapter-video-form";
+import { CompletionInfo } from "../../_components/completion-info";
 
 const ChapterIdPage = async (props: {
   params: Promise<{ courseId: string; chapterId: string }>;
@@ -36,14 +37,30 @@ const ChapterIdPage = async (props: {
     return redirect("/");
   }
 
-  const requiredFields = [chapter.title, chapter.description, chapter.videoUrl];
+  const requiredFields = [
+    {
+      label: "Titulo do capitulo",
+      complete: Boolean(chapter.title?.trim()),
+    },
+    {
+      label: "Descricao do capitulo",
+      complete: Boolean(chapter.description?.trim()),
+    },
+    {
+      label: "Video do capitulo",
+      complete: Boolean(chapter.videoUrl || chapter.externalUrl),
+    },
+  ];
 
   const totalFields = requiredFields.length;
-  const completedFields = requiredFields.filter(Boolean).length;
+  const completedFields = requiredFields.filter((field) => field.complete).length;
+  const missingFields = requiredFields
+    .filter((field) => !field.complete)
+    .map((field) => field.label);
 
   const completionText = `(${completedFields}/${totalFields})`;
 
-  const isComplete = requiredFields.every(Boolean);
+  const isComplete = requiredFields.every((field) => field.complete);
 
   return (
     <>
@@ -73,8 +90,14 @@ const ChapterIdPage = async (props: {
                 <h1 className="text-2xl text-sky-800 font-bold">
                   Chapter Creation
                 </h1>
-                <span className="text-sm text-slate-700">
+                <span className="inline-flex items-center gap-2 text-sm text-slate-700">
                   Complete all fields {completionText}
+                  <CompletionInfo
+                    missingFields={missingFields}
+                    buttonLabel="Ver campos pendentes do capitulo"
+                    completeTitle="Capitulo completo"
+                    incompleteDescription="Preencha os itens abaixo para publicar este capitulo."
+                  />
                 </span>
               </div>
               <ChapterActions

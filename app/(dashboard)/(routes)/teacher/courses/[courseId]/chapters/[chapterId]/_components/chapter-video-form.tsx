@@ -27,6 +27,7 @@ import {
   TabsList, 
   TabsTrigger 
 } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 
 interface ChapterVideoFormProps {
   initialData: Chapter & { muxData?: MuxData | null };
@@ -120,9 +121,9 @@ export const ChapterVideoForm = ({
                     <p className="font-bold text-sm">Vídeo Externo Configurado</p>
                     <p className="text-xs text-slate-400 truncate max-w-[250px]">{initialData.externalUrl}</p>
                  </div>
-                 <Badge variant="success" className="bg-emerald-500/10 text-emerald-500 border-none">
+                  <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-none">
                     <CheckCircle className="h-3 w-3 mr-1" /> Pronto para o aluno
-                 </Badge>
+                  </Badge>
               </div>
             )}
           </div>
@@ -188,10 +189,3 @@ export const ChapterVideoForm = ({
     </div>
   )
 }
-
-// Minimal Badge helper since it might not be exported from components/ui
-const Badge = ({ children, variant, className }: any) => (
-  <div className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${className}`}>
-    {children}
-  </div>
-)

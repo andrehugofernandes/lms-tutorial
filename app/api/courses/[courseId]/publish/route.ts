@@ -36,15 +36,37 @@ export async function PATCH(
       (chapter) => chapter.isPublished
     );
 
-    if (
-      !course.title ||
-      !course.description ||
-      !course.imageUrl ||
-      !course.categoryId ||
-      !hasPublishedChapter ||
-      !course.price
-    ) {
-      return new NextResponse("Missing required fields", { status: 401 });
+    const missingFields: string[] = [];
+
+    if (!course.title?.trim()) {
+      missingFields.push("titulo do curso");
+    }
+
+    if (!course.description?.trim()) {
+      missingFields.push("descricao do curso");
+    }
+
+    if (!course.imageUrl) {
+      missingFields.push("imagem de capa");
+    }
+
+    if (!course.categoryId) {
+      missingFields.push("categoria do curso");
+    }
+
+    if (course.price === null) {
+      missingFields.push("preco do curso");
+    }
+
+    if (!hasPublishedChapter) {
+      missingFields.push("pelo menos 1 capitulo publicado");
+    }
+
+    if (missingFields.length > 0) {
+      return new NextResponse(
+        `Campos obrigatorios faltando: ${missingFields.join(", ")}`,
+        { status: 400 },
+      );
     }
 
     const publishedCourse = await db.course.update({

@@ -20,18 +20,18 @@ interface CpmfirModalProps {
 export const ConfirmModal = ({ children, onConfirm }: CpmfirModalProps) => {
   return (
     <AlertDialog>
-      <AlertDialogTrigger>{children}</AlertDialogTrigger>
+      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          <AlertDialogTitle>Você tem certeza?</AlertDialogTitle>
         <AlertDialogDescription>
-          This action cannot be undone.
+          Esta ação não pode ser desfeita.
         </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>Cancelar</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm}>
-            Continue
+            Confirmar
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

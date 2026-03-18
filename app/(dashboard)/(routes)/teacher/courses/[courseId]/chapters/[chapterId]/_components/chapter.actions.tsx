@@ -38,8 +38,13 @@ export const ChapterActions = ({
       }
 
       router.refresh();
-    } catch {
-      toast.error("Something went wrong");
+    } catch (error) {
+      const message =
+        axios.isAxiosError(error) && typeof error.response?.data === "string"
+          ? error.response.data
+          : "Something went wrong";
+
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
@@ -54,8 +59,13 @@ export const ChapterActions = ({
       toast.success("Chapter deleted");
       router.refresh();
       router.push(`/teacher/courses/${courseId}`);
-    } catch {
-      toast.error("Something went wrong");
+    } catch (error) {
+      const message =
+        axios.isAxiosError(error) && typeof error.response?.data === "string"
+          ? error.response.data
+          : "Something went wrong";
+
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }

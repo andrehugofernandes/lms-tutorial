@@ -30,12 +30,18 @@ export const CourseCard = ({
       <div className="group hover:shadow-lg transition overflow-hidden border 
       hover:border-2 rounded-lg p-3 h-full">
         <div className="relative w-full aspect-video rounded-md overflow-hidden">
-          <Image
-            fill
-            className="object-cover"
-            alt={title}
-            src={imageUrl}
-          />
+          {imageUrl ? (
+            <Image
+              fill
+              className="object-cover"
+              alt={title}
+              src={imageUrl}
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full w-full bg-slate-200">
+              <BookOpen className="h-10 w-10 text-slate-500" />
+            </div>
+          )}
         </div>
         <div className="flex flex-col pt-2">
           <div className="text-lg md:text-base font-medium group-hover:text-sky-700 transition line-clamp-2">
@@ -48,7 +54,7 @@ export const CourseCard = ({
             <div className="flex items-center gap-x-1 text-slate-500">
               <IconBadge size="sm" icon={BookOpen} />
               <span>
-                {chaptersLength} {chaptersLength === 1 ? "Chapter" : "Chapters"}
+                {chaptersLength} {chaptersLength === 1 ? "Capítulo" : "Capítulos"}
               </span>
             </div>
           </div>

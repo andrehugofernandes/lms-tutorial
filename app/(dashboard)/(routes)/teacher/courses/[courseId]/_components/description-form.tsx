@@ -54,26 +54,26 @@ const formSchema = z.object({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course Description updated!");
+      toast.success("Descrição do curso atualizada!");
       toggleEdit();
       router.refresh();
 
     } catch {
-      toast.error("Something went wrong!")
+      toast.error("Algo deu errado!")
     }
   }
 
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Course description
+        Descrição do curso
         <Button onClick={toggleEdit} variant="outline">
           {isEditing ? (
-            <>Cancel</>
+            <>Cancelar</>
           ): (
            <>
             <Pencil className="h-4 w-4 mr-2" />
-            Edit description
+            Editar descrição
             </>
           )}
         </Button>
@@ -83,7 +83,7 @@ const formSchema = z.object({
           "text-sm mt-2",
           !initialData.description && "text-slate-500 italic"
         )}>
-          {initialData.description || "No description."}
+          {initialData.description || "Sem descrição."}
         </p>
       )}
       {isEditing && (
@@ -100,7 +100,7 @@ const formSchema = z.object({
                   <FormControl>
                     <Textarea 
                       disabled={isSubmitting}
-                      placeholder="e.g. 'This course is about...'"
+                      placeholder="ex: 'Este curso é sobre...'"
                       {...field}
                     />
                   </FormControl>
@@ -112,7 +112,8 @@ const formSchema = z.object({
               <Button
                 disabled={!isValid || isSubmitting}
                 type="submit"
-              >Save
+              >
+                Salvar
               </Button>
             </div>
           </form>

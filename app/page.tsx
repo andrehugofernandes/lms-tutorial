@@ -10,6 +10,7 @@ import { Role } from "@prisma/client";
 export default async function Home() {
     const { userId } = await auth();
 
+/* 
     if (userId) {
         const profile = await getProfile(userId);
         
@@ -21,7 +22,7 @@ export default async function Home() {
             return redirect("/teacher/courses");
         }
     }
-
+*/
     return (
         <div className="h-full flex flex-col items-center justify-center bg-slate-100/50">
             <div className="flex flex-col items-center justify-center w-full max-w-4xl px-4 py-8">
@@ -80,7 +81,7 @@ export default async function Home() {
                                 Acesse o painel para criar e gerenciar cursos e aulas.
                             </p>
                         </div>
-                        <Link href={userId ? "/teacher/courses" : "/sign-in?afterSignInUrl=/teacher/courses"} className="w-full">
+                        <Link href={userId ? "/teacher/onboarding" : "/sign-in?afterSignInUrl=/teacher/onboarding"} className="w-full">
                             <Button variant="outline" className="w-full text-md py-6 border-emerald-700 text-emerald-700 hover:bg-emerald-50">
                                 {userId ? "Ir para o Painel" : "Entrar como Professor"}
                             </Button>

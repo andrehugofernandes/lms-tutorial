@@ -52,26 +52,26 @@ export const TitleForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course title updated!");
+      toast.success("Título do curso atualizado!");
       toggleEdit();
       router.refresh();
 
     } catch {
-      toast.error("Something went wrong!")
+      toast.error("Algo deu errado!")
     }
   }
 
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Course title
+        Título do curso
         <Button onClick={toggleEdit} variant="outline">
           {isEditing ? (
-            <>Cancel</>
+            <>Cancelar</>
           ): (
            <>
             <Pencil className="h-4 w-4 mr-2" />
-            Edit title
+            Editar título
             </>
           )}
         </Button>
@@ -95,7 +95,7 @@ export const TitleForm = ({
                   <FormControl>
                     <Input 
                       disabled={isSubmitting}
-                      placeholder="e.g. 'Advanced web development'"
+                      placeholder="ex: 'Desenvolvimento Web Avançado'"
                       {...field}
                     />
                   </FormControl>
@@ -107,7 +107,7 @@ export const TitleForm = ({
               <Button
                 disabled={!isValid || isSubmitting}
                 type="submit"
-              >Save
+              >Salvar
               </Button>
             </div>
           </form>
