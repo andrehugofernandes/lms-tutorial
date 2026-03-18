@@ -3,7 +3,7 @@
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 
 export default function SignInPage() {
@@ -12,6 +12,9 @@ export default function SignInPage() {
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
+    const searchParams = useSearchParams();
+
+    const afterSignInUrl = searchParams.get("afterSignInUrl") || "/search";
 
     if (!isNextAuth) {
         return (
@@ -35,7 +38,7 @@ export default function SignInPage() {
                 toast.error("Credenciais inválidas");
             } else {
                 toast.success("Login realizado com sucesso!");
-                window.location.href = "/search";
+                window.location.href = afterSignInUrl;
             }
         } catch (error) {
             toast.error("Ocorreu um erro ao fazer login");

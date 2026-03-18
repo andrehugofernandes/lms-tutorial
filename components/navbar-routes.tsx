@@ -51,7 +51,7 @@ export const NavbarRoutes = () => {
           <Link href="/search">
             <Button size="sm" variant="outline">
               <LogOut className="h-4 w-4 mr-2" />
-              Exit
+              Sair
             </Button>
           </Link>
         ) : (
@@ -59,14 +59,14 @@ export const NavbarRoutes = () => {
             {isAdminUser && (
               <Link href="/admin">
                 <Button size="sm" variant="outline">
-                  Admin mode
+                  Modo Admin
                 </Button>
               </Link>
             )}
             {isTeacherUser && (
               <Link href="/teacher/courses">
                 <Button size="sm" variant="outline">
-                  Teacher mode
+                  Modo Professor
                 </Button>
               </Link>
             )}

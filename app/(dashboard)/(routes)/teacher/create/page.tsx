@@ -41,10 +41,10 @@ const CreatePage = () => {
     try {
       const response = await axios.post("/api/courses", values);
       router.push(`/teacher/courses/${response.data.id}`);
-      toast.success("Course created")
+      toast.success("Curso criado");
 
     } catch {
-      toast.error("Something went wrong");
+      toast.error("Algo deu errado");
 
     }
   };
@@ -55,10 +55,9 @@ const CreatePage = () => {
       md:justify-center h-full p-6"
     >
       <div>
-        <h1 className="text-2xl">Name your course</h1>
+        <h1 className="text-2xl">Dê um nome ao seu curso</h1>
         <p className="text-sm text-slate-600">
-          What would you like to name your couse? Don&apos;t worry,
-          you can change this later.
+          Como você gostaria de chamar seu curso? Não se preocupe, você pode mudar isso depois.
         </p>
         <Form {...form}>
           <form
@@ -71,17 +70,17 @@ const CreatePage = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Course title
+                    Título do curso
                   </FormLabel>
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
-                      placeholder="e.g 'Advanced web development'"
+                      placeholder="ex: 'Desenvolvimento web avançado'"
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    What will you teach in this course?
+                    O que você vai ensinar neste curso?
                   </FormDescription>
                   <FormMessage
 
@@ -96,7 +95,7 @@ const CreatePage = () => {
                   variant="outline"
                   size="sm"
                 >
-                  Cancel
+                  Cancelar
                 </Button>
               </Link>
               <Button
@@ -105,7 +104,7 @@ const CreatePage = () => {
                 type="submit"
                 disabled={!isValid || isSubmitting}
               >
-                Continue
+                {isSubmitting ? "Criando..." : "Continuar"}
               </Button>
             </div>
 

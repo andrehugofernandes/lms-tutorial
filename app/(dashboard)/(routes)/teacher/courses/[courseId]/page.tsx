@@ -19,6 +19,7 @@ import { PriceForm } from "./_components/price-form";
 import { AttachmentForm } from "./_components/attachment-form";
 import { ChaptersForm } from "./_components/chapters-form";
 import { Actions } from "./_components/actions";
+import { CompletionInfo } from "./_components/completion-info";
 
 const CourseIdPage = async (props: {
   params: Promise<{
@@ -61,32 +62,54 @@ const CourseIdPage = async (props: {
   }
 
   const requiredFields = [
-    course.title,
-    course.description,
-    course.price,
-    course.imageUrl,
-    course.categoryId,
-    course.chapters.some((chapter) => chapter.isPublished),
+    {
+      label: "Titulo do curso",
+      complete: Boolean(course.title?.trim()),
+    },
+    {
+      label: "Descricao do curso",
+      complete: Boolean(course.description?.trim()),
+    },
+    {
+      label: "Preco do curso",
+      complete: course.price !== null,
+    },
+    {
+      label: "Imagem de capa",
+      complete: Boolean(course.imageUrl),
+    },
+    {
+      label: "Categoria do curso",
+      complete: Boolean(course.categoryId),
+    },
+    {
+      label: "Pelo menos 1 capitulo publicado",
+      complete: course.chapters.some((chapter) => chapter.isPublished),
+    },
   ];
 
   const totalFields = requiredFields.length;
-  const completedFields = requiredFields.filter(Boolean).length;
+  const completedFields = requiredFields.filter((field) => field.complete).length;
+  const missingFields = requiredFields
+    .filter((field) => !field.complete)
+    .map((field) => field.label);
 
   const compleitionText = `(${completedFields}/${totalFields})`;
 
-  const isComplete = requiredFields.every(Boolean);
+  const isComplete = requiredFields.every((field) => field.complete);
 
   return (
     <>
       {!course.isPublished && (
-        <Banner label="This course is unpublished. It will not be visible to students." />
+        <Banner label="Este curso não está publicado. Ele não será visível para os alunos." />
       )}
       <div className="p-6">
         <div className="flex items-center justify-between">
           <div className="flex flex-col gap-y-2">
             <h1 className="text-2xl text-sky-800 font-bold">{course.title}</h1>
-            <span className="text-sm text-slate-700">
-              Complete all fields {compleitionText}
+            <span className="inline-flex items-center gap-2 text-sm text-slate-700">
+              Complete todos os campos {compleitionText}
+              <CompletionInfo missingFields={missingFields} />
             </span>
           </div>
           <Actions
@@ -100,7 +123,7 @@ const CourseIdPage = async (props: {
             <div className="flex items-center gap-x-2">
               <IconBadge icon={LayoutDashboard} />
               <h2 className="text-xl text-sky-800 font-bold">
-                Customize your course.
+                Personalize seu curso
               </h2>
             </div>
             <TitleForm initialData={course} courseId={course.id} />
@@ -120,7 +143,7 @@ const CourseIdPage = async (props: {
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={ListChecks} />
                 <h2 className="text-xl text-sky-800 font-bold">
-                  Course chapters
+                  Capítulos do curso
                 </h2>
               </div>
               <ChaptersForm initialData={course} courseId={course.id} />
@@ -130,7 +153,7 @@ const CourseIdPage = async (props: {
                 <div className="flex items-center gap-x-2">
                   <IconBadge icon={CircleDollarSign} />
                   <h2 className="text-xl  text-sky-800 font-bold">
-                    Sell your course
+                    Venda seu curso
                   </h2>
                 </div>
                 <PriceForm initialData={course} courseId={course.id} />
@@ -139,7 +162,7 @@ const CourseIdPage = async (props: {
                 <div className="flex items-center gap-x-2">
                   <IconBadge icon={File} />
                   <h2 className="text-xl  text-sky-800 font-bold">
-                    Resources & Attachments
+                    Recursos & Anexos
                   </h2>
                 </div>
                 <AttachmentForm initialData={course} courseId={course.id} />

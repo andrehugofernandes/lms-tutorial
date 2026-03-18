@@ -31,16 +31,21 @@ export const Actions = ({
 
       if (isPublished) {
         await axios.patch(`/api/courses/${courseId}/unpublish`);
-        toast.success("Course unpublished");
+        toast.success("Curso despublicado");
       } else {
         await axios.patch(`/api/courses/${courseId}/publish`);
-        toast.success("Course published");
+        toast.success("Curso publicado");
         confetti.onOpen();
       }
 
       router.refresh();
-    } catch {
-      toast.error("Something went wrong");
+    } catch (error) {
+      const message =
+        axios.isAxiosError(error) && typeof error.response?.data === "string"
+          ? error.response.data
+          : "Algo deu errado";
+
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
@@ -52,11 +57,16 @@ export const Actions = ({
 
       await axios.delete(`/api/courses/${courseId}`);
 
-      toast.success("Course deleted");
+      toast.success("Curso excluído");
       router.refresh();
       router.push(`/teacher/courses`);
-    } catch {
-      toast.error("Something went wrong");
+    } catch (error) {
+      const message =
+        axios.isAxiosError(error) && typeof error.response?.data === "string"
+          ? error.response.data
+          : "Algo deu errado";
+
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
@@ -70,7 +80,7 @@ export const Actions = ({
         variant="outline"
         size="sm"
       >
-        {isPublished ? "Unpublish" : "Publish"}
+        {isPublished ? "Despublicar" : "Publicar"}
       </Button>
       <ConfirmModal onConfirm={onDelete}>
         <Button size="sm" disabled={isLoading}>

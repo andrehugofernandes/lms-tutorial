@@ -19,15 +19,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClientProviders>
-      <html lang="en">
-        <body className={inter.className}>
+    <html lang="en">
+      <body className={inter.className}>
+        <ClientProviders>
           <ConfettiProvider />
           <ToastProvider />
           {children}
-        </body>
-      </html>
-    </ClientProviders>
+        </ClientProviders>
+      </body>
+    </html>
   );
 }
 

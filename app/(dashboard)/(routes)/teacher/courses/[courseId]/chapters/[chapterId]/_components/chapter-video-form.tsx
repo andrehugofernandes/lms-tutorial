@@ -27,6 +27,7 @@ import {
   TabsList, 
   TabsTrigger 
 } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 
 interface ChapterVideoFormProps {
   initialData: Chapter & { muxData?: MuxData | null };
@@ -71,7 +72,7 @@ export const ChapterVideoForm = ({
   const onExternalUrlSubmit = () => {
     if (!urlInput) return;
     onSubmit({
-      videoSourceType: "EXTERNAL",
+      videoSourceType: VideoSourceType.EXTERNAL,
       externalUrl: urlInput,
     });
   }
@@ -105,13 +106,13 @@ export const ChapterVideoForm = ({
           </div>
         ) : (
           <div className="relative aspect-video mt-2">
-            {initialData.videoSourceType === "UPLOAD" ? (
+            {initialData.videoSourceType === VideoSourceType.UPLOAD ? (
               <MuxPlayer
                 playbackId={initialData?.muxData?.playbackId || ""}
               />
             ) : (
               <div className="w-full h-full bg-slate-900 rounded-md flex flex-col items-center justify-center text-white p-4 text-center gap-y-2">
-                 {initialData.videoProvider === "YOUTUBE" ? (
+                 {initialData.videoProvider === VideoProvider.YOUTUBE ? (
                     <Youtube className="h-12 w-12 text-rose-500" />
                  ) : (
                     <ExternalLink className="h-12 w-12 text-sky-400" />
@@ -120,9 +121,9 @@ export const ChapterVideoForm = ({
                     <p className="font-bold text-sm">Vídeo Externo Configurado</p>
                     <p className="text-xs text-slate-400 truncate max-w-[250px]">{initialData.externalUrl}</p>
                  </div>
-                 <Badge variant="success" className="bg-emerald-500/10 text-emerald-500 border-none">
+                  <Badge variant="outline" className="bg-emerald-500/10 text-emerald-500 border-none">
                     <CheckCircle className="h-3 w-3 mr-1" /> Pronto para o aluno
-                 </Badge>
+                  </Badge>
               </div>
             )}
           </div>
@@ -146,7 +147,7 @@ export const ChapterVideoForm = ({
                   if (url) {
                     onSubmit({ 
                       videoUrl: url,
-                      videoSourceType: "UPLOAD" 
+                      videoSourceType: VideoSourceType.UPLOAD 
                     });
                   }
                 }}
@@ -180,7 +181,7 @@ export const ChapterVideoForm = ({
       )}
       {(initialData.videoUrl || initialData.externalUrl) && !isEditing && (
         <div className="text-xs text-muted-foreground mt-2">
-          {initialData.videoSourceType === "UPLOAD" 
+          {initialData.videoSourceType === VideoSourceType.UPLOAD 
             ? "O processamento do vídeo pode levar alguns minutos." 
             : "Vídeo externo configurado com sucesso."}
         </div>
@@ -188,10 +189,3 @@ export const ChapterVideoForm = ({
     </div>
   )
 }
-
-// Minimal Badge helper since it might not be exported from components/ui
-const Badge = ({ children, variant, className }: any) => (
-  <div className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${className}`}>
-    {children}
-  </div>
-)

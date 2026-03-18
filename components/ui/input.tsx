@@ -7,6 +7,16 @@ export interface InputProps
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
+    const normalizedProps = { ...props }
+
+    if (
+      type !== "file" &&
+      "value" in normalizedProps &&
+      normalizedProps.value == null
+    ) {
+      normalizedProps.value = ""
+    }
+
     return (
       <input
         type={type}
@@ -15,7 +25,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           className
         )}
         ref={ref}
-        {...props}
+        {...normalizedProps}
       />
     )
   }

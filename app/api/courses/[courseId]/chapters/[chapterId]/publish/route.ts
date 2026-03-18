@@ -39,8 +39,33 @@ export async function PATCH(
       }
     });
 
-    if (!chapter || !muxData || !chapter.title || !chapter.description || !chapter.videoUrl) {
-      return new NextResponse("Missing required fields", { status: 400 });
+    if (!chapter) {
+      return new NextResponse("Capitulo nao encontrado", { status: 404 });
+    }
+
+    const missingFields: string[] = [];
+    const hasExternalVideo =
+      chapter.videoSourceType === "EXTERNAL" &&
+      Boolean(chapter.externalUrl || chapter.embedUrl);
+    const hasUploadedVideo = Boolean(chapter.videoUrl && muxData);
+
+    if (!chapter.title?.trim()) {
+      missingFields.push("titulo do capitulo");
+    }
+
+    if (!chapter.description?.trim()) {
+      missingFields.push("descricao do capitulo");
+    }
+
+    if (!hasExternalVideo && !hasUploadedVideo) {
+      missingFields.push("video do capitulo");
+    }
+
+    if (missingFields.length > 0) {
+      return new NextResponse(
+        `Campos obrigatorios faltando: ${missingFields.join(", ")}`,
+        { status: 400 },
+      );
     }
 
     const publishedChapter = await db.chapter.update({

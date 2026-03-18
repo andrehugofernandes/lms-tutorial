@@ -35,12 +35,12 @@ export const AttachmentForm = ({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post(`/api/courses/${courseId}/attachments`, values);
-      toast.success("Course attachment updated!");
+      toast.success("Anexo do curso atualizado!");
       toggleEdit();
       router.refresh();
 
     } catch {
-      toast.error("Something went wrong!")
+      toast.error("Algo deu errado!")
     }
   }
 
@@ -48,10 +48,10 @@ export const AttachmentForm = ({
     try {
       setDeletingId(id)
       await axios.delete(`/api/courses/${courseId}/attachments/${id}`);
-      toast.success("Course attachment deleted!");
+      toast.success("Anexo do curso excluído!");
       router.refresh();
     } catch {
-      toast.error("Something went wrong!")
+      toast.error("Algo deu errado!")
     }
     finally{
       setDeletingId(null);
@@ -61,15 +61,15 @@ export const AttachmentForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between mb-4">
-        Course attachments
+        Anexos do curso
         <Button onClick={toggleEdit} variant="outline">
           {isEditing && (
-            <>Cancel</>
+            <>Cancelar</>
           )}
           {!isEditing && (
             <>
               <PlusCircle className="w-4 h-4 mr-2" />
-              Add a file
+              Adicionar um arquivo
             </>
           )}
    
@@ -79,7 +79,7 @@ export const AttachmentForm = ({
         <>
           {initialData.attachments.length === 0 && (
             <p className="text-sm mt-2 text-slate-500 italic">
-              No attachments yet.
+              Nenhum anexo ainda.
             </p>
           )}
           {initialData.attachments.length > 0 && (
@@ -123,7 +123,7 @@ export const AttachmentForm = ({
             }}
           />
           <div className="text-xs text-muted-foreground mt-4">
-            Add anything your students might to complete the course.
+            Adicione qualquer recurso que seus alunos possam precisar.
           </div>
         </div>
       )}

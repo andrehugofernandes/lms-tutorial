@@ -38,7 +38,7 @@ export const CourseCard = ({
               src={imageUrl}
             />
           ) : (
-            <div className="flex flex-col items-center justify-center text-slate-500 gap-y-2">
+            <div className="flex flex-col items-center justify-center h-full w-full bg-slate-200 text-slate-500 gap-y-2">
               <BookOpen className="h-10 w-10" />
               <span className="text-xs">Sem Imagem</span>
             </div>
@@ -55,7 +55,7 @@ export const CourseCard = ({
             <div className="flex items-center gap-x-1 text-slate-500">
               <IconBadge size="sm" icon={BookOpen} />
               <span>
-                {chaptersLength} {chaptersLength === 1 ? "Chapter" : "Chapters"}
+                {chaptersLength} {chaptersLength === 1 ? "Capítulo" : "Capítulos"}
               </span>
             </div>
           </div>
