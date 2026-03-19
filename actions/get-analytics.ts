@@ -1,58 +1,58 @@
 import { db } from "@/lib/db";
-import { Course, Purchase } from "@/lib/generated/db";
-
-type PurchaseWithCourse = Purchase & {
-  course: Course;
-};
-
-const groupByCourse = (purchases: PurchaseWithCourse[]) => {
-  const grouped: { [courseTitle: string]: number } = {};
-
-  purchases.forEach((purchase) => {
-    const courseTitle = purchase.course.title;
-    if (!grouped[courseTitle]){
-      grouped[courseTitle] = 0;
-    }
-    grouped[courseTitle] += purchase.course.price!;
-  });
-  return grouped;
-}
 
 export const getAnalytics = async (userId: string) => {
   try {
-
-    const purchases = await db.purchase.findMany({
-      where: {
-        course: {
-          userId: userId
-        }
-      },
+    // In the institutional LMS, analytics are based on enrollments and course engagement.
+    const courses = await db.course.findMany({
+      where: { userId },
       include: {
-        course: true
-      }
+        chapters: {
+          include: {
+            userProgress: true,
+          },
+        },
+      },
     });
 
-    const groupedEarnings = groupByCourse(purchases);
-    const data = Object.entries(groupedEarnings).map(([courseTitle, total]) => ({
-      name: courseTitle,
-      total: total,
-    }));
+    const data = courses.map((course) => {
+      const totalEnrollments = new Set(
+        course.chapters.flatMap((ch) => ch.userProgress.map((up) => up.userId))
+      ).size;
 
-    const totalRevenue = data.reduce((acc, curr) => acc + curr.total, 0);
-    const totalSales = purchases.length;
+      const totalCompleted = course.chapters.flatMap((ch) =>
+        ch.userProgress.filter((up) => up.isCompleted)
+      ).length;
+
+      const totalProgress = course.chapters.flatMap((ch) =>
+        ch.userProgress
+      ).length;
+
+      const completionRate =
+        totalProgress > 0
+          ? Math.round((totalCompleted / totalProgress) * 100)
+          : 0;
+
+      return {
+        name: course.title,
+        total: totalEnrollments,
+        completionRate,
+      };
+    });
+
+    const totalEnrollments = data.reduce((acc, curr) => acc + curr.total, 0);
+    const totalCourses = courses.length;
 
     return {
       data,
-      totalRevenue,
-      totalSales,
-    }
-
+      totalEnrollments,
+      totalCourses,
+    };
   } catch (error) {
-    console.log("[]GET_ANALYTICS", error)
+    console.log("[GET_ANALYTICS]", error);
     return {
       data: [],
-      totalRevenue: 0,
-      totalSales: 0,
-    }
+      totalEnrollments: 0,
+      totalCourses: 0,
+    };
   }
-}
+};

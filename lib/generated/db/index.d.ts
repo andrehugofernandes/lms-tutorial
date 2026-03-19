@@ -49,16 +49,6 @@ export type MuxData = $Result.DefaultSelection<Prisma.$MuxDataPayload>
  */
 export type UserProgress = $Result.DefaultSelection<Prisma.$UserProgressPayload>
 /**
- * Model Purchase
- * 
- */
-export type Purchase = $Result.DefaultSelection<Prisma.$PurchasePayload>
-/**
- * Model StripeCustomer
- * 
- */
-export type StripeCustomer = $Result.DefaultSelection<Prisma.$StripeCustomerPayload>
-/**
  * Model Quiz
  * 
  */
@@ -333,26 +323,6 @@ export class PrismaClient<
     * ```
     */
   get userProgress(): Prisma.UserProgressDelegate<ExtArgs>;
-
-  /**
-   * `prisma.purchase`: Exposes CRUD operations for the **Purchase** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Purchases
-    * const purchases = await prisma.purchase.findMany()
-    * ```
-    */
-  get purchase(): Prisma.PurchaseDelegate<ExtArgs>;
-
-  /**
-   * `prisma.stripeCustomer`: Exposes CRUD operations for the **StripeCustomer** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more StripeCustomers
-    * const stripeCustomers = await prisma.stripeCustomer.findMany()
-    * ```
-    */
-  get stripeCustomer(): Prisma.StripeCustomerDelegate<ExtArgs>;
 
   /**
    * `prisma.quiz`: Exposes CRUD operations for the **Quiz** model.
@@ -910,8 +880,6 @@ export namespace Prisma {
     Chapter: 'Chapter',
     MuxData: 'MuxData',
     UserProgress: 'UserProgress',
-    Purchase: 'Purchase',
-    StripeCustomer: 'StripeCustomer',
     Quiz: 'Quiz',
     Question: 'Question',
     Option: 'Option',
@@ -936,7 +904,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: 'profile' | 'course' | 'category' | 'attachment' | 'chapter' | 'muxData' | 'userProgress' | 'purchase' | 'stripeCustomer' | 'quiz' | 'question' | 'option' | 'answer' | 'account' | 'session' | 'user' | 'verificationToken'
+      modelProps: 'profile' | 'course' | 'category' | 'attachment' | 'chapter' | 'muxData' | 'userProgress' | 'quiz' | 'question' | 'option' | 'answer' | 'account' | 'session' | 'user' | 'verificationToken'
       txIsolationLevel: Prisma.TransactionIsolationLevel
     },
     model: {
@@ -1399,138 +1367,6 @@ export namespace Prisma {
           count: {
             args: Prisma.UserProgressCountArgs<ExtArgs>,
             result: $Utils.Optional<UserProgressCountAggregateOutputType> | number
-          }
-        }
-      }
-      Purchase: {
-        payload: Prisma.$PurchasePayload<ExtArgs>
-        fields: Prisma.PurchaseFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.PurchaseFindUniqueArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PurchasePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.PurchaseFindUniqueOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PurchasePayload>
-          }
-          findFirst: {
-            args: Prisma.PurchaseFindFirstArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PurchasePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.PurchaseFindFirstOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PurchasePayload>
-          }
-          findMany: {
-            args: Prisma.PurchaseFindManyArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PurchasePayload>[]
-          }
-          create: {
-            args: Prisma.PurchaseCreateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PurchasePayload>
-          }
-          createMany: {
-            args: Prisma.PurchaseCreateManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          delete: {
-            args: Prisma.PurchaseDeleteArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PurchasePayload>
-          }
-          update: {
-            args: Prisma.PurchaseUpdateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PurchasePayload>
-          }
-          deleteMany: {
-            args: Prisma.PurchaseDeleteManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          updateMany: {
-            args: Prisma.PurchaseUpdateManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          upsert: {
-            args: Prisma.PurchaseUpsertArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PurchasePayload>
-          }
-          aggregate: {
-            args: Prisma.PurchaseAggregateArgs<ExtArgs>,
-            result: $Utils.Optional<AggregatePurchase>
-          }
-          groupBy: {
-            args: Prisma.PurchaseGroupByArgs<ExtArgs>,
-            result: $Utils.Optional<PurchaseGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.PurchaseCountArgs<ExtArgs>,
-            result: $Utils.Optional<PurchaseCountAggregateOutputType> | number
-          }
-        }
-      }
-      StripeCustomer: {
-        payload: Prisma.$StripeCustomerPayload<ExtArgs>
-        fields: Prisma.StripeCustomerFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.StripeCustomerFindUniqueArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$StripeCustomerPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.StripeCustomerFindUniqueOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
-          }
-          findFirst: {
-            args: Prisma.StripeCustomerFindFirstArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$StripeCustomerPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.StripeCustomerFindFirstOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
-          }
-          findMany: {
-            args: Prisma.StripeCustomerFindManyArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$StripeCustomerPayload>[]
-          }
-          create: {
-            args: Prisma.StripeCustomerCreateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
-          }
-          createMany: {
-            args: Prisma.StripeCustomerCreateManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          delete: {
-            args: Prisma.StripeCustomerDeleteArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
-          }
-          update: {
-            args: Prisma.StripeCustomerUpdateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
-          }
-          deleteMany: {
-            args: Prisma.StripeCustomerDeleteManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          updateMany: {
-            args: Prisma.StripeCustomerUpdateManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          upsert: {
-            args: Prisma.StripeCustomerUpsertArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$StripeCustomerPayload>
-          }
-          aggregate: {
-            args: Prisma.StripeCustomerAggregateArgs<ExtArgs>,
-            result: $Utils.Optional<AggregateStripeCustomer>
-          }
-          groupBy: {
-            args: Prisma.StripeCustomerGroupByArgs<ExtArgs>,
-            result: $Utils.Optional<StripeCustomerGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.StripeCustomerCountArgs<ExtArgs>,
-            result: $Utils.Optional<StripeCustomerCountAggregateOutputType> | number
           }
         }
       }
@@ -2217,13 +2053,11 @@ export namespace Prisma {
   export type CourseCountOutputType = {
     chapters: number
     attachments: number
-    purchases: number
   }
 
   export type CourseCountOutputTypeSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     chapters?: boolean | CourseCountOutputTypeCountChaptersArgs
     attachments?: boolean | CourseCountOutputTypeCountAttachmentsArgs
-    purchases?: boolean | CourseCountOutputTypeCountPurchasesArgs
   }
 
   // Custom InputTypes
@@ -2252,14 +2086,6 @@ export namespace Prisma {
    */
   export type CourseCountOutputTypeCountAttachmentsArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     where?: AttachmentWhereInput
-  }
-
-
-  /**
-   * CourseCountOutputType without action
-   */
-  export type CourseCountOutputTypeCountPurchasesArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    where?: PurchaseWhereInput
   }
 
 
@@ -3438,18 +3264,8 @@ export namespace Prisma {
 
   export type AggregateCourse = {
     _count: CourseCountAggregateOutputType | null
-    _avg: CourseAvgAggregateOutputType | null
-    _sum: CourseSumAggregateOutputType | null
     _min: CourseMinAggregateOutputType | null
     _max: CourseMaxAggregateOutputType | null
-  }
-
-  export type CourseAvgAggregateOutputType = {
-    price: number | null
-  }
-
-  export type CourseSumAggregateOutputType = {
-    price: number | null
   }
 
   export type CourseMinAggregateOutputType = {
@@ -3458,7 +3274,6 @@ export namespace Prisma {
     title: string | null
     description: string | null
     imageUrl: string | null
-    price: number | null
     isPublished: boolean | null
     categoryId: string | null
     createdAt: Date | null
@@ -3471,7 +3286,6 @@ export namespace Prisma {
     title: string | null
     description: string | null
     imageUrl: string | null
-    price: number | null
     isPublished: boolean | null
     categoryId: string | null
     createdAt: Date | null
@@ -3484,7 +3298,6 @@ export namespace Prisma {
     title: number
     description: number
     imageUrl: number
-    price: number
     isPublished: number
     categoryId: number
     createdAt: number
@@ -3493,21 +3306,12 @@ export namespace Prisma {
   }
 
 
-  export type CourseAvgAggregateInputType = {
-    price?: true
-  }
-
-  export type CourseSumAggregateInputType = {
-    price?: true
-  }
-
   export type CourseMinAggregateInputType = {
     id?: true
     userId?: true
     title?: true
     description?: true
     imageUrl?: true
-    price?: true
     isPublished?: true
     categoryId?: true
     createdAt?: true
@@ -3520,7 +3324,6 @@ export namespace Prisma {
     title?: true
     description?: true
     imageUrl?: true
-    price?: true
     isPublished?: true
     categoryId?: true
     createdAt?: true
@@ -3533,7 +3336,6 @@ export namespace Prisma {
     title?: true
     description?: true
     imageUrl?: true
-    price?: true
     isPublished?: true
     categoryId?: true
     createdAt?: true
@@ -3579,18 +3381,6 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Select which fields to average
-    **/
-    _avg?: CourseAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: CourseSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
      * Select which fields to find the minimum value
     **/
     _min?: CourseMinAggregateInputType
@@ -3621,8 +3411,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: CourseCountAggregateInputType | true
-    _avg?: CourseAvgAggregateInputType
-    _sum?: CourseSumAggregateInputType
     _min?: CourseMinAggregateInputType
     _max?: CourseMaxAggregateInputType
   }
@@ -3633,14 +3421,11 @@ export namespace Prisma {
     title: string
     description: string | null
     imageUrl: string | null
-    price: number | null
     isPublished: boolean
     categoryId: string | null
     createdAt: Date
     updatedAt: Date
     _count: CourseCountAggregateOutputType | null
-    _avg: CourseAvgAggregateOutputType | null
-    _sum: CourseSumAggregateOutputType | null
     _min: CourseMinAggregateOutputType | null
     _max: CourseMaxAggregateOutputType | null
   }
@@ -3665,7 +3450,6 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     imageUrl?: boolean
-    price?: boolean
     isPublished?: boolean
     categoryId?: boolean
     createdAt?: boolean
@@ -3673,7 +3457,6 @@ export namespace Prisma {
     category?: boolean | Course$categoryArgs<ExtArgs>
     chapters?: boolean | Course$chaptersArgs<ExtArgs>
     attachments?: boolean | Course$attachmentsArgs<ExtArgs>
-    purchases?: boolean | Course$purchasesArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["course"]>
 
@@ -3683,7 +3466,6 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     imageUrl?: boolean
-    price?: boolean
     isPublished?: boolean
     categoryId?: boolean
     createdAt?: boolean
@@ -3694,7 +3476,6 @@ export namespace Prisma {
     category?: boolean | Course$categoryArgs<ExtArgs>
     chapters?: boolean | Course$chaptersArgs<ExtArgs>
     attachments?: boolean | Course$attachmentsArgs<ExtArgs>
-    purchases?: boolean | Course$purchasesArgs<ExtArgs>
     _count?: boolean | CourseCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -3705,7 +3486,6 @@ export namespace Prisma {
       category: Prisma.$CategoryPayload<ExtArgs> | null
       chapters: Prisma.$ChapterPayload<ExtArgs>[]
       attachments: Prisma.$AttachmentPayload<ExtArgs>[]
-      purchases: Prisma.$PurchasePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetResult<{
       id: string
@@ -3713,7 +3493,6 @@ export namespace Prisma {
       title: string
       description: string | null
       imageUrl: string | null
-      price: number | null
       isPublished: boolean
       categoryId: string | null
       createdAt: Date
@@ -4089,8 +3868,6 @@ export namespace Prisma {
 
     attachments<T extends Course$attachmentsArgs<ExtArgs> = {}>(args?: Subset<T, Course$attachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, 'findMany'> | Null>;
 
-    purchases<T extends Course$purchasesArgs<ExtArgs> = {}>(args?: Subset<T, Course$purchasesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'findMany'> | Null>;
-
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4124,7 +3901,6 @@ export namespace Prisma {
     readonly title: FieldRef<"Course", 'String'>
     readonly description: FieldRef<"Course", 'String'>
     readonly imageUrl: FieldRef<"Course", 'String'>
-    readonly price: FieldRef<"Course", 'Float'>
     readonly isPublished: FieldRef<"Course", 'Boolean'>
     readonly categoryId: FieldRef<"Course", 'String'>
     readonly createdAt: FieldRef<"Course", 'DateTime'>
@@ -4495,27 +4271,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: AttachmentScalarFieldEnum | AttachmentScalarFieldEnum[]
-  }
-
-
-  /**
-   * Course.purchases
-   */
-  export type Course$purchasesArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Purchase
-     */
-    select?: PurchaseSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PurchaseInclude<ExtArgs> | null
-    where?: PurchaseWhereInput
-    orderBy?: PurchaseOrderByWithRelationAndSearchRelevanceInput | PurchaseOrderByWithRelationAndSearchRelevanceInput[]
-    cursor?: PurchaseWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PurchaseScalarFieldEnum | PurchaseScalarFieldEnum[]
   }
 
 
@@ -9325,1794 +9080,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well.
      */
     include?: UserProgressInclude<ExtArgs> | null
-  }
-
-
-
-  /**
-   * Model Purchase
-   */
-
-  export type AggregatePurchase = {
-    _count: PurchaseCountAggregateOutputType | null
-    _min: PurchaseMinAggregateOutputType | null
-    _max: PurchaseMaxAggregateOutputType | null
-  }
-
-  export type PurchaseMinAggregateOutputType = {
-    id: string | null
-    userId: string | null
-    courseId: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type PurchaseMaxAggregateOutputType = {
-    id: string | null
-    userId: string | null
-    courseId: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type PurchaseCountAggregateOutputType = {
-    id: number
-    userId: number
-    courseId: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type PurchaseMinAggregateInputType = {
-    id?: true
-    userId?: true
-    courseId?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type PurchaseMaxAggregateInputType = {
-    id?: true
-    userId?: true
-    courseId?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type PurchaseCountAggregateInputType = {
-    id?: true
-    userId?: true
-    courseId?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type PurchaseAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Purchase to aggregate.
-     */
-    where?: PurchaseWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Purchases to fetch.
-     */
-    orderBy?: PurchaseOrderByWithRelationAndSearchRelevanceInput | PurchaseOrderByWithRelationAndSearchRelevanceInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: PurchaseWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Purchases from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Purchases.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Purchases
-    **/
-    _count?: true | PurchaseCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: PurchaseMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: PurchaseMaxAggregateInputType
-  }
-
-  export type GetPurchaseAggregateType<T extends PurchaseAggregateArgs> = {
-        [P in keyof T & keyof AggregatePurchase]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregatePurchase[P]>
-      : GetScalarType<T[P], AggregatePurchase[P]>
-  }
-
-
-
-
-  export type PurchaseGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    where?: PurchaseWhereInput
-    orderBy?: PurchaseOrderByWithAggregationInput | PurchaseOrderByWithAggregationInput[]
-    by: PurchaseScalarFieldEnum[] | PurchaseScalarFieldEnum
-    having?: PurchaseScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: PurchaseCountAggregateInputType | true
-    _min?: PurchaseMinAggregateInputType
-    _max?: PurchaseMaxAggregateInputType
-  }
-
-  export type PurchaseGroupByOutputType = {
-    id: string
-    userId: string
-    courseId: string
-    createdAt: Date
-    updatedAt: Date
-    _count: PurchaseCountAggregateOutputType | null
-    _min: PurchaseMinAggregateOutputType | null
-    _max: PurchaseMaxAggregateOutputType | null
-  }
-
-  type GetPurchaseGroupByPayload<T extends PurchaseGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<PurchaseGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof PurchaseGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], PurchaseGroupByOutputType[P]>
-            : GetScalarType<T[P], PurchaseGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type PurchaseSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    userId?: boolean
-    courseId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    course?: boolean | CourseDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["purchase"]>
-
-  export type PurchaseSelectScalar = {
-    id?: boolean
-    userId?: boolean
-    courseId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type PurchaseInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    course?: boolean | CourseDefaultArgs<ExtArgs>
-  }
-
-
-  export type $PurchasePayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    name: "Purchase"
-    objects: {
-      course: Prisma.$CoursePayload<ExtArgs>
-    }
-    scalars: $Extensions.GetResult<{
-      id: string
-      userId: string
-      courseId: string
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["purchase"]>
-    composites: {}
-  }
-
-
-  type PurchaseGetPayload<S extends boolean | null | undefined | PurchaseDefaultArgs> = $Result.GetResult<Prisma.$PurchasePayload, S>
-
-  type PurchaseCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
-    Omit<PurchaseFindManyArgs, 'select' | 'include'> & {
-      select?: PurchaseCountAggregateInputType | true
-    }
-
-  export interface PurchaseDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Purchase'], meta: { name: 'Purchase' } }
-    /**
-     * Find zero or one Purchase that matches the filter.
-     * @param {PurchaseFindUniqueArgs} args - Arguments to find a Purchase
-     * @example
-     * // Get one Purchase
-     * const purchase = await prisma.purchase.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUnique<T extends PurchaseFindUniqueArgs<ExtArgs>>(
-      args: SelectSubset<T, PurchaseFindUniqueArgs<ExtArgs>>
-    ): Prisma__PurchaseClient<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
-
-    /**
-     * Find one Purchase that matches the filter or throw an error  with `error.code='P2025'` 
-     *     if no matches were found.
-     * @param {PurchaseFindUniqueOrThrowArgs} args - Arguments to find a Purchase
-     * @example
-     * // Get one Purchase
-     * const purchase = await prisma.purchase.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUniqueOrThrow<T extends PurchaseFindUniqueOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, PurchaseFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__PurchaseClient<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
-
-    /**
-     * Find the first Purchase that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PurchaseFindFirstArgs} args - Arguments to find a Purchase
-     * @example
-     * // Get one Purchase
-     * const purchase = await prisma.purchase.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirst<T extends PurchaseFindFirstArgs<ExtArgs>>(
-      args?: SelectSubset<T, PurchaseFindFirstArgs<ExtArgs>>
-    ): Prisma__PurchaseClient<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
-
-    /**
-     * Find the first Purchase that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PurchaseFindFirstOrThrowArgs} args - Arguments to find a Purchase
-     * @example
-     * // Get one Purchase
-     * const purchase = await prisma.purchase.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirstOrThrow<T extends PurchaseFindFirstOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, PurchaseFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__PurchaseClient<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
-
-    /**
-     * Find zero or more Purchases that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PurchaseFindManyArgs=} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Purchases
-     * const purchases = await prisma.purchase.findMany()
-     * 
-     * // Get first 10 Purchases
-     * const purchases = await prisma.purchase.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const purchaseWithIdOnly = await prisma.purchase.findMany({ select: { id: true } })
-     * 
-    **/
-    findMany<T extends PurchaseFindManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, PurchaseFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'findMany'>>
-
-    /**
-     * Create a Purchase.
-     * @param {PurchaseCreateArgs} args - Arguments to create a Purchase.
-     * @example
-     * // Create one Purchase
-     * const Purchase = await prisma.purchase.create({
-     *   data: {
-     *     // ... data to create a Purchase
-     *   }
-     * })
-     * 
-    **/
-    create<T extends PurchaseCreateArgs<ExtArgs>>(
-      args: SelectSubset<T, PurchaseCreateArgs<ExtArgs>>
-    ): Prisma__PurchaseClient<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'create'>, never, ExtArgs>
-
-    /**
-     * Create many Purchases.
-     *     @param {PurchaseCreateManyArgs} args - Arguments to create many Purchases.
-     *     @example
-     *     // Create many Purchases
-     *     const purchase = await prisma.purchase.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends PurchaseCreateManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, PurchaseCreateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a Purchase.
-     * @param {PurchaseDeleteArgs} args - Arguments to delete one Purchase.
-     * @example
-     * // Delete one Purchase
-     * const Purchase = await prisma.purchase.delete({
-     *   where: {
-     *     // ... filter to delete one Purchase
-     *   }
-     * })
-     * 
-    **/
-    delete<T extends PurchaseDeleteArgs<ExtArgs>>(
-      args: SelectSubset<T, PurchaseDeleteArgs<ExtArgs>>
-    ): Prisma__PurchaseClient<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
-
-    /**
-     * Update one Purchase.
-     * @param {PurchaseUpdateArgs} args - Arguments to update one Purchase.
-     * @example
-     * // Update one Purchase
-     * const purchase = await prisma.purchase.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    update<T extends PurchaseUpdateArgs<ExtArgs>>(
-      args: SelectSubset<T, PurchaseUpdateArgs<ExtArgs>>
-    ): Prisma__PurchaseClient<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'update'>, never, ExtArgs>
-
-    /**
-     * Delete zero or more Purchases.
-     * @param {PurchaseDeleteManyArgs} args - Arguments to filter Purchases to delete.
-     * @example
-     * // Delete a few Purchases
-     * const { count } = await prisma.purchase.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-    **/
-    deleteMany<T extends PurchaseDeleteManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, PurchaseDeleteManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Purchases.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PurchaseUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Purchases
-     * const purchase = await prisma.purchase.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    updateMany<T extends PurchaseUpdateManyArgs<ExtArgs>>(
-      args: SelectSubset<T, PurchaseUpdateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one Purchase.
-     * @param {PurchaseUpsertArgs} args - Arguments to update or create a Purchase.
-     * @example
-     * // Update or create a Purchase
-     * const purchase = await prisma.purchase.upsert({
-     *   create: {
-     *     // ... data to create a Purchase
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Purchase we want to update
-     *   }
-     * })
-    **/
-    upsert<T extends PurchaseUpsertArgs<ExtArgs>>(
-      args: SelectSubset<T, PurchaseUpsertArgs<ExtArgs>>
-    ): Prisma__PurchaseClient<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
-
-    /**
-     * Count the number of Purchases.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PurchaseCountArgs} args - Arguments to filter Purchases to count.
-     * @example
-     * // Count the number of Purchases
-     * const count = await prisma.purchase.count({
-     *   where: {
-     *     // ... the filter for the Purchases we want to count
-     *   }
-     * })
-    **/
-    count<T extends PurchaseCountArgs>(
-      args?: Subset<T, PurchaseCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], PurchaseCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Purchase.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PurchaseAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends PurchaseAggregateArgs>(args: Subset<T, PurchaseAggregateArgs>): Prisma.PrismaPromise<GetPurchaseAggregateType<T>>
-
-    /**
-     * Group by Purchase.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PurchaseGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends PurchaseGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: PurchaseGroupByArgs['orderBy'] }
-        : { orderBy?: PurchaseGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, PurchaseGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPurchaseGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Purchase model
-   */
-  readonly fields: PurchaseFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Purchase.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__PurchaseClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: 'PrismaPromise';
-
-    course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
-
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
-  }
-
-
-
-  /**
-   * Fields of the Purchase model
-   */ 
-  interface PurchaseFieldRefs {
-    readonly id: FieldRef<"Purchase", 'String'>
-    readonly userId: FieldRef<"Purchase", 'String'>
-    readonly courseId: FieldRef<"Purchase", 'String'>
-    readonly createdAt: FieldRef<"Purchase", 'DateTime'>
-    readonly updatedAt: FieldRef<"Purchase", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-
-  /**
-   * Purchase findUnique
-   */
-  export type PurchaseFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Purchase
-     */
-    select?: PurchaseSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PurchaseInclude<ExtArgs> | null
-    /**
-     * Filter, which Purchase to fetch.
-     */
-    where: PurchaseWhereUniqueInput
-  }
-
-
-  /**
-   * Purchase findUniqueOrThrow
-   */
-  export type PurchaseFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Purchase
-     */
-    select?: PurchaseSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PurchaseInclude<ExtArgs> | null
-    /**
-     * Filter, which Purchase to fetch.
-     */
-    where: PurchaseWhereUniqueInput
-  }
-
-
-  /**
-   * Purchase findFirst
-   */
-  export type PurchaseFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Purchase
-     */
-    select?: PurchaseSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PurchaseInclude<ExtArgs> | null
-    /**
-     * Filter, which Purchase to fetch.
-     */
-    where?: PurchaseWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Purchases to fetch.
-     */
-    orderBy?: PurchaseOrderByWithRelationAndSearchRelevanceInput | PurchaseOrderByWithRelationAndSearchRelevanceInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Purchases.
-     */
-    cursor?: PurchaseWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Purchases from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Purchases.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Purchases.
-     */
-    distinct?: PurchaseScalarFieldEnum | PurchaseScalarFieldEnum[]
-  }
-
-
-  /**
-   * Purchase findFirstOrThrow
-   */
-  export type PurchaseFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Purchase
-     */
-    select?: PurchaseSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PurchaseInclude<ExtArgs> | null
-    /**
-     * Filter, which Purchase to fetch.
-     */
-    where?: PurchaseWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Purchases to fetch.
-     */
-    orderBy?: PurchaseOrderByWithRelationAndSearchRelevanceInput | PurchaseOrderByWithRelationAndSearchRelevanceInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Purchases.
-     */
-    cursor?: PurchaseWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Purchases from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Purchases.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Purchases.
-     */
-    distinct?: PurchaseScalarFieldEnum | PurchaseScalarFieldEnum[]
-  }
-
-
-  /**
-   * Purchase findMany
-   */
-  export type PurchaseFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Purchase
-     */
-    select?: PurchaseSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PurchaseInclude<ExtArgs> | null
-    /**
-     * Filter, which Purchases to fetch.
-     */
-    where?: PurchaseWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Purchases to fetch.
-     */
-    orderBy?: PurchaseOrderByWithRelationAndSearchRelevanceInput | PurchaseOrderByWithRelationAndSearchRelevanceInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Purchases.
-     */
-    cursor?: PurchaseWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Purchases from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Purchases.
-     */
-    skip?: number
-    distinct?: PurchaseScalarFieldEnum | PurchaseScalarFieldEnum[]
-  }
-
-
-  /**
-   * Purchase create
-   */
-  export type PurchaseCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Purchase
-     */
-    select?: PurchaseSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PurchaseInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Purchase.
-     */
-    data: XOR<PurchaseCreateInput, PurchaseUncheckedCreateInput>
-  }
-
-
-  /**
-   * Purchase createMany
-   */
-  export type PurchaseCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Purchases.
-     */
-    data: PurchaseCreateManyInput | PurchaseCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-
-  /**
-   * Purchase update
-   */
-  export type PurchaseUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Purchase
-     */
-    select?: PurchaseSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PurchaseInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Purchase.
-     */
-    data: XOR<PurchaseUpdateInput, PurchaseUncheckedUpdateInput>
-    /**
-     * Choose, which Purchase to update.
-     */
-    where: PurchaseWhereUniqueInput
-  }
-
-
-  /**
-   * Purchase updateMany
-   */
-  export type PurchaseUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Purchases.
-     */
-    data: XOR<PurchaseUpdateManyMutationInput, PurchaseUncheckedUpdateManyInput>
-    /**
-     * Filter which Purchases to update
-     */
-    where?: PurchaseWhereInput
-  }
-
-
-  /**
-   * Purchase upsert
-   */
-  export type PurchaseUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Purchase
-     */
-    select?: PurchaseSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PurchaseInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Purchase to update in case it exists.
-     */
-    where: PurchaseWhereUniqueInput
-    /**
-     * In case the Purchase found by the `where` argument doesn't exist, create a new Purchase with this data.
-     */
-    create: XOR<PurchaseCreateInput, PurchaseUncheckedCreateInput>
-    /**
-     * In case the Purchase was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<PurchaseUpdateInput, PurchaseUncheckedUpdateInput>
-  }
-
-
-  /**
-   * Purchase delete
-   */
-  export type PurchaseDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Purchase
-     */
-    select?: PurchaseSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PurchaseInclude<ExtArgs> | null
-    /**
-     * Filter which Purchase to delete.
-     */
-    where: PurchaseWhereUniqueInput
-  }
-
-
-  /**
-   * Purchase deleteMany
-   */
-  export type PurchaseDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Purchases to delete
-     */
-    where?: PurchaseWhereInput
-  }
-
-
-  /**
-   * Purchase without action
-   */
-  export type PurchaseDefaultArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Purchase
-     */
-    select?: PurchaseSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PurchaseInclude<ExtArgs> | null
-  }
-
-
-
-  /**
-   * Model StripeCustomer
-   */
-
-  export type AggregateStripeCustomer = {
-    _count: StripeCustomerCountAggregateOutputType | null
-    _min: StripeCustomerMinAggregateOutputType | null
-    _max: StripeCustomerMaxAggregateOutputType | null
-  }
-
-  export type StripeCustomerMinAggregateOutputType = {
-    id: string | null
-    userId: string | null
-    stripeCustomerId: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type StripeCustomerMaxAggregateOutputType = {
-    id: string | null
-    userId: string | null
-    stripeCustomerId: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type StripeCustomerCountAggregateOutputType = {
-    id: number
-    userId: number
-    stripeCustomerId: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type StripeCustomerMinAggregateInputType = {
-    id?: true
-    userId?: true
-    stripeCustomerId?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type StripeCustomerMaxAggregateInputType = {
-    id?: true
-    userId?: true
-    stripeCustomerId?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type StripeCustomerCountAggregateInputType = {
-    id?: true
-    userId?: true
-    stripeCustomerId?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type StripeCustomerAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which StripeCustomer to aggregate.
-     */
-    where?: StripeCustomerWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of StripeCustomers to fetch.
-     */
-    orderBy?: StripeCustomerOrderByWithRelationAndSearchRelevanceInput | StripeCustomerOrderByWithRelationAndSearchRelevanceInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: StripeCustomerWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` StripeCustomers from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` StripeCustomers.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned StripeCustomers
-    **/
-    _count?: true | StripeCustomerCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: StripeCustomerMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: StripeCustomerMaxAggregateInputType
-  }
-
-  export type GetStripeCustomerAggregateType<T extends StripeCustomerAggregateArgs> = {
-        [P in keyof T & keyof AggregateStripeCustomer]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateStripeCustomer[P]>
-      : GetScalarType<T[P], AggregateStripeCustomer[P]>
-  }
-
-
-
-
-  export type StripeCustomerGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    where?: StripeCustomerWhereInput
-    orderBy?: StripeCustomerOrderByWithAggregationInput | StripeCustomerOrderByWithAggregationInput[]
-    by: StripeCustomerScalarFieldEnum[] | StripeCustomerScalarFieldEnum
-    having?: StripeCustomerScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: StripeCustomerCountAggregateInputType | true
-    _min?: StripeCustomerMinAggregateInputType
-    _max?: StripeCustomerMaxAggregateInputType
-  }
-
-  export type StripeCustomerGroupByOutputType = {
-    id: string
-    userId: string
-    stripeCustomerId: string
-    createdAt: Date
-    updatedAt: Date
-    _count: StripeCustomerCountAggregateOutputType | null
-    _min: StripeCustomerMinAggregateOutputType | null
-    _max: StripeCustomerMaxAggregateOutputType | null
-  }
-
-  type GetStripeCustomerGroupByPayload<T extends StripeCustomerGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<StripeCustomerGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof StripeCustomerGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], StripeCustomerGroupByOutputType[P]>
-            : GetScalarType<T[P], StripeCustomerGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type StripeCustomerSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    userId?: boolean
-    stripeCustomerId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }, ExtArgs["result"]["stripeCustomer"]>
-
-  export type StripeCustomerSelectScalar = {
-    id?: boolean
-    userId?: boolean
-    stripeCustomerId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-
-  export type $StripeCustomerPayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    name: "StripeCustomer"
-    objects: {}
-    scalars: $Extensions.GetResult<{
-      id: string
-      userId: string
-      stripeCustomerId: string
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["stripeCustomer"]>
-    composites: {}
-  }
-
-
-  type StripeCustomerGetPayload<S extends boolean | null | undefined | StripeCustomerDefaultArgs> = $Result.GetResult<Prisma.$StripeCustomerPayload, S>
-
-  type StripeCustomerCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
-    Omit<StripeCustomerFindManyArgs, 'select' | 'include'> & {
-      select?: StripeCustomerCountAggregateInputType | true
-    }
-
-  export interface StripeCustomerDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['StripeCustomer'], meta: { name: 'StripeCustomer' } }
-    /**
-     * Find zero or one StripeCustomer that matches the filter.
-     * @param {StripeCustomerFindUniqueArgs} args - Arguments to find a StripeCustomer
-     * @example
-     * // Get one StripeCustomer
-     * const stripeCustomer = await prisma.stripeCustomer.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUnique<T extends StripeCustomerFindUniqueArgs<ExtArgs>>(
-      args: SelectSubset<T, StripeCustomerFindUniqueArgs<ExtArgs>>
-    ): Prisma__StripeCustomerClient<$Result.GetResult<Prisma.$StripeCustomerPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
-
-    /**
-     * Find one StripeCustomer that matches the filter or throw an error  with `error.code='P2025'` 
-     *     if no matches were found.
-     * @param {StripeCustomerFindUniqueOrThrowArgs} args - Arguments to find a StripeCustomer
-     * @example
-     * // Get one StripeCustomer
-     * const stripeCustomer = await prisma.stripeCustomer.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUniqueOrThrow<T extends StripeCustomerFindUniqueOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, StripeCustomerFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__StripeCustomerClient<$Result.GetResult<Prisma.$StripeCustomerPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
-
-    /**
-     * Find the first StripeCustomer that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {StripeCustomerFindFirstArgs} args - Arguments to find a StripeCustomer
-     * @example
-     * // Get one StripeCustomer
-     * const stripeCustomer = await prisma.stripeCustomer.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirst<T extends StripeCustomerFindFirstArgs<ExtArgs>>(
-      args?: SelectSubset<T, StripeCustomerFindFirstArgs<ExtArgs>>
-    ): Prisma__StripeCustomerClient<$Result.GetResult<Prisma.$StripeCustomerPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
-
-    /**
-     * Find the first StripeCustomer that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {StripeCustomerFindFirstOrThrowArgs} args - Arguments to find a StripeCustomer
-     * @example
-     * // Get one StripeCustomer
-     * const stripeCustomer = await prisma.stripeCustomer.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirstOrThrow<T extends StripeCustomerFindFirstOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, StripeCustomerFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__StripeCustomerClient<$Result.GetResult<Prisma.$StripeCustomerPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
-
-    /**
-     * Find zero or more StripeCustomers that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {StripeCustomerFindManyArgs=} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all StripeCustomers
-     * const stripeCustomers = await prisma.stripeCustomer.findMany()
-     * 
-     * // Get first 10 StripeCustomers
-     * const stripeCustomers = await prisma.stripeCustomer.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const stripeCustomerWithIdOnly = await prisma.stripeCustomer.findMany({ select: { id: true } })
-     * 
-    **/
-    findMany<T extends StripeCustomerFindManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, StripeCustomerFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StripeCustomerPayload<ExtArgs>, T, 'findMany'>>
-
-    /**
-     * Create a StripeCustomer.
-     * @param {StripeCustomerCreateArgs} args - Arguments to create a StripeCustomer.
-     * @example
-     * // Create one StripeCustomer
-     * const StripeCustomer = await prisma.stripeCustomer.create({
-     *   data: {
-     *     // ... data to create a StripeCustomer
-     *   }
-     * })
-     * 
-    **/
-    create<T extends StripeCustomerCreateArgs<ExtArgs>>(
-      args: SelectSubset<T, StripeCustomerCreateArgs<ExtArgs>>
-    ): Prisma__StripeCustomerClient<$Result.GetResult<Prisma.$StripeCustomerPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
-
-    /**
-     * Create many StripeCustomers.
-     *     @param {StripeCustomerCreateManyArgs} args - Arguments to create many StripeCustomers.
-     *     @example
-     *     // Create many StripeCustomers
-     *     const stripeCustomer = await prisma.stripeCustomer.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends StripeCustomerCreateManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, StripeCustomerCreateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a StripeCustomer.
-     * @param {StripeCustomerDeleteArgs} args - Arguments to delete one StripeCustomer.
-     * @example
-     * // Delete one StripeCustomer
-     * const StripeCustomer = await prisma.stripeCustomer.delete({
-     *   where: {
-     *     // ... filter to delete one StripeCustomer
-     *   }
-     * })
-     * 
-    **/
-    delete<T extends StripeCustomerDeleteArgs<ExtArgs>>(
-      args: SelectSubset<T, StripeCustomerDeleteArgs<ExtArgs>>
-    ): Prisma__StripeCustomerClient<$Result.GetResult<Prisma.$StripeCustomerPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
-
-    /**
-     * Update one StripeCustomer.
-     * @param {StripeCustomerUpdateArgs} args - Arguments to update one StripeCustomer.
-     * @example
-     * // Update one StripeCustomer
-     * const stripeCustomer = await prisma.stripeCustomer.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    update<T extends StripeCustomerUpdateArgs<ExtArgs>>(
-      args: SelectSubset<T, StripeCustomerUpdateArgs<ExtArgs>>
-    ): Prisma__StripeCustomerClient<$Result.GetResult<Prisma.$StripeCustomerPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
-
-    /**
-     * Delete zero or more StripeCustomers.
-     * @param {StripeCustomerDeleteManyArgs} args - Arguments to filter StripeCustomers to delete.
-     * @example
-     * // Delete a few StripeCustomers
-     * const { count } = await prisma.stripeCustomer.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-    **/
-    deleteMany<T extends StripeCustomerDeleteManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, StripeCustomerDeleteManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more StripeCustomers.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {StripeCustomerUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many StripeCustomers
-     * const stripeCustomer = await prisma.stripeCustomer.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    updateMany<T extends StripeCustomerUpdateManyArgs<ExtArgs>>(
-      args: SelectSubset<T, StripeCustomerUpdateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one StripeCustomer.
-     * @param {StripeCustomerUpsertArgs} args - Arguments to update or create a StripeCustomer.
-     * @example
-     * // Update or create a StripeCustomer
-     * const stripeCustomer = await prisma.stripeCustomer.upsert({
-     *   create: {
-     *     // ... data to create a StripeCustomer
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the StripeCustomer we want to update
-     *   }
-     * })
-    **/
-    upsert<T extends StripeCustomerUpsertArgs<ExtArgs>>(
-      args: SelectSubset<T, StripeCustomerUpsertArgs<ExtArgs>>
-    ): Prisma__StripeCustomerClient<$Result.GetResult<Prisma.$StripeCustomerPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
-
-    /**
-     * Count the number of StripeCustomers.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {StripeCustomerCountArgs} args - Arguments to filter StripeCustomers to count.
-     * @example
-     * // Count the number of StripeCustomers
-     * const count = await prisma.stripeCustomer.count({
-     *   where: {
-     *     // ... the filter for the StripeCustomers we want to count
-     *   }
-     * })
-    **/
-    count<T extends StripeCustomerCountArgs>(
-      args?: Subset<T, StripeCustomerCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], StripeCustomerCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a StripeCustomer.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {StripeCustomerAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends StripeCustomerAggregateArgs>(args: Subset<T, StripeCustomerAggregateArgs>): Prisma.PrismaPromise<GetStripeCustomerAggregateType<T>>
-
-    /**
-     * Group by StripeCustomer.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {StripeCustomerGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends StripeCustomerGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: StripeCustomerGroupByArgs['orderBy'] }
-        : { orderBy?: StripeCustomerGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, StripeCustomerGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStripeCustomerGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the StripeCustomer model
-   */
-  readonly fields: StripeCustomerFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for StripeCustomer.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__StripeCustomerClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: 'PrismaPromise';
-
-
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
-  }
-
-
-
-  /**
-   * Fields of the StripeCustomer model
-   */ 
-  interface StripeCustomerFieldRefs {
-    readonly id: FieldRef<"StripeCustomer", 'String'>
-    readonly userId: FieldRef<"StripeCustomer", 'String'>
-    readonly stripeCustomerId: FieldRef<"StripeCustomer", 'String'>
-    readonly createdAt: FieldRef<"StripeCustomer", 'DateTime'>
-    readonly updatedAt: FieldRef<"StripeCustomer", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-
-  /**
-   * StripeCustomer findUnique
-   */
-  export type StripeCustomerFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StripeCustomer
-     */
-    select?: StripeCustomerSelect<ExtArgs> | null
-    /**
-     * Filter, which StripeCustomer to fetch.
-     */
-    where: StripeCustomerWhereUniqueInput
-  }
-
-
-  /**
-   * StripeCustomer findUniqueOrThrow
-   */
-  export type StripeCustomerFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StripeCustomer
-     */
-    select?: StripeCustomerSelect<ExtArgs> | null
-    /**
-     * Filter, which StripeCustomer to fetch.
-     */
-    where: StripeCustomerWhereUniqueInput
-  }
-
-
-  /**
-   * StripeCustomer findFirst
-   */
-  export type StripeCustomerFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StripeCustomer
-     */
-    select?: StripeCustomerSelect<ExtArgs> | null
-    /**
-     * Filter, which StripeCustomer to fetch.
-     */
-    where?: StripeCustomerWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of StripeCustomers to fetch.
-     */
-    orderBy?: StripeCustomerOrderByWithRelationAndSearchRelevanceInput | StripeCustomerOrderByWithRelationAndSearchRelevanceInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for StripeCustomers.
-     */
-    cursor?: StripeCustomerWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` StripeCustomers from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` StripeCustomers.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of StripeCustomers.
-     */
-    distinct?: StripeCustomerScalarFieldEnum | StripeCustomerScalarFieldEnum[]
-  }
-
-
-  /**
-   * StripeCustomer findFirstOrThrow
-   */
-  export type StripeCustomerFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StripeCustomer
-     */
-    select?: StripeCustomerSelect<ExtArgs> | null
-    /**
-     * Filter, which StripeCustomer to fetch.
-     */
-    where?: StripeCustomerWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of StripeCustomers to fetch.
-     */
-    orderBy?: StripeCustomerOrderByWithRelationAndSearchRelevanceInput | StripeCustomerOrderByWithRelationAndSearchRelevanceInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for StripeCustomers.
-     */
-    cursor?: StripeCustomerWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` StripeCustomers from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` StripeCustomers.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of StripeCustomers.
-     */
-    distinct?: StripeCustomerScalarFieldEnum | StripeCustomerScalarFieldEnum[]
-  }
-
-
-  /**
-   * StripeCustomer findMany
-   */
-  export type StripeCustomerFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StripeCustomer
-     */
-    select?: StripeCustomerSelect<ExtArgs> | null
-    /**
-     * Filter, which StripeCustomers to fetch.
-     */
-    where?: StripeCustomerWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of StripeCustomers to fetch.
-     */
-    orderBy?: StripeCustomerOrderByWithRelationAndSearchRelevanceInput | StripeCustomerOrderByWithRelationAndSearchRelevanceInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing StripeCustomers.
-     */
-    cursor?: StripeCustomerWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` StripeCustomers from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` StripeCustomers.
-     */
-    skip?: number
-    distinct?: StripeCustomerScalarFieldEnum | StripeCustomerScalarFieldEnum[]
-  }
-
-
-  /**
-   * StripeCustomer create
-   */
-  export type StripeCustomerCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StripeCustomer
-     */
-    select?: StripeCustomerSelect<ExtArgs> | null
-    /**
-     * The data needed to create a StripeCustomer.
-     */
-    data: XOR<StripeCustomerCreateInput, StripeCustomerUncheckedCreateInput>
-  }
-
-
-  /**
-   * StripeCustomer createMany
-   */
-  export type StripeCustomerCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many StripeCustomers.
-     */
-    data: StripeCustomerCreateManyInput | StripeCustomerCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-
-  /**
-   * StripeCustomer update
-   */
-  export type StripeCustomerUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StripeCustomer
-     */
-    select?: StripeCustomerSelect<ExtArgs> | null
-    /**
-     * The data needed to update a StripeCustomer.
-     */
-    data: XOR<StripeCustomerUpdateInput, StripeCustomerUncheckedUpdateInput>
-    /**
-     * Choose, which StripeCustomer to update.
-     */
-    where: StripeCustomerWhereUniqueInput
-  }
-
-
-  /**
-   * StripeCustomer updateMany
-   */
-  export type StripeCustomerUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update StripeCustomers.
-     */
-    data: XOR<StripeCustomerUpdateManyMutationInput, StripeCustomerUncheckedUpdateManyInput>
-    /**
-     * Filter which StripeCustomers to update
-     */
-    where?: StripeCustomerWhereInput
-  }
-
-
-  /**
-   * StripeCustomer upsert
-   */
-  export type StripeCustomerUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StripeCustomer
-     */
-    select?: StripeCustomerSelect<ExtArgs> | null
-    /**
-     * The filter to search for the StripeCustomer to update in case it exists.
-     */
-    where: StripeCustomerWhereUniqueInput
-    /**
-     * In case the StripeCustomer found by the `where` argument doesn't exist, create a new StripeCustomer with this data.
-     */
-    create: XOR<StripeCustomerCreateInput, StripeCustomerUncheckedCreateInput>
-    /**
-     * In case the StripeCustomer was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<StripeCustomerUpdateInput, StripeCustomerUncheckedUpdateInput>
-  }
-
-
-  /**
-   * StripeCustomer delete
-   */
-  export type StripeCustomerDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StripeCustomer
-     */
-    select?: StripeCustomerSelect<ExtArgs> | null
-    /**
-     * Filter which StripeCustomer to delete.
-     */
-    where: StripeCustomerWhereUniqueInput
-  }
-
-
-  /**
-   * StripeCustomer deleteMany
-   */
-  export type StripeCustomerDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which StripeCustomers to delete
-     */
-    where?: StripeCustomerWhereInput
-  }
-
-
-  /**
-   * StripeCustomer without action
-   */
-  export type StripeCustomerDefaultArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the StripeCustomer
-     */
-    select?: StripeCustomerSelect<ExtArgs> | null
   }
 
 
@@ -18787,7 +16754,6 @@ export namespace Prisma {
     title: 'title',
     description: 'description',
     imageUrl: 'imageUrl',
-    price: 'price',
     isPublished: 'isPublished',
     categoryId: 'categoryId',
     createdAt: 'createdAt',
@@ -18857,28 +16823,6 @@ export namespace Prisma {
   };
 
   export type UserProgressScalarFieldEnum = (typeof UserProgressScalarFieldEnum)[keyof typeof UserProgressScalarFieldEnum]
-
-
-  export const PurchaseScalarFieldEnum: {
-    id: 'id',
-    userId: 'userId',
-    courseId: 'courseId',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type PurchaseScalarFieldEnum = (typeof PurchaseScalarFieldEnum)[keyof typeof PurchaseScalarFieldEnum]
-
-
-  export const StripeCustomerScalarFieldEnum: {
-    id: 'id',
-    userId: 'userId',
-    stripeCustomerId: 'stripeCustomerId',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type StripeCustomerScalarFieldEnum = (typeof StripeCustomerScalarFieldEnum)[keyof typeof StripeCustomerScalarFieldEnum]
 
 
   export const QuizScalarFieldEnum: {
@@ -19073,24 +17017,6 @@ export namespace Prisma {
   export type UserProgressOrderByRelevanceFieldEnum = (typeof UserProgressOrderByRelevanceFieldEnum)[keyof typeof UserProgressOrderByRelevanceFieldEnum]
 
 
-  export const PurchaseOrderByRelevanceFieldEnum: {
-    id: 'id',
-    userId: 'userId',
-    courseId: 'courseId'
-  };
-
-  export type PurchaseOrderByRelevanceFieldEnum = (typeof PurchaseOrderByRelevanceFieldEnum)[keyof typeof PurchaseOrderByRelevanceFieldEnum]
-
-
-  export const StripeCustomerOrderByRelevanceFieldEnum: {
-    id: 'id',
-    userId: 'userId',
-    stripeCustomerId: 'stripeCustomerId'
-  };
-
-  export type StripeCustomerOrderByRelevanceFieldEnum = (typeof StripeCustomerOrderByRelevanceFieldEnum)[keyof typeof StripeCustomerOrderByRelevanceFieldEnum]
-
-
   export const QuizOrderByRelevanceFieldEnum: {
     id: 'id',
     chapterId: 'chapterId'
@@ -19220,20 +17146,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Float'
-   */
-  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float[]'
-   */
-  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -19279,6 +17191,20 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
   /**
    * Deep Input Types
@@ -19360,7 +17286,6 @@ export namespace Prisma {
     title?: StringFilter<"Course"> | string
     description?: StringNullableFilter<"Course"> | string | null
     imageUrl?: StringNullableFilter<"Course"> | string | null
-    price?: FloatNullableFilter<"Course"> | number | null
     isPublished?: BoolFilter<"Course"> | boolean
     categoryId?: StringNullableFilter<"Course"> | string | null
     createdAt?: DateTimeFilter<"Course"> | Date | string
@@ -19368,7 +17293,6 @@ export namespace Prisma {
     category?: XOR<CategoryNullableRelationFilter, CategoryWhereInput> | null
     chapters?: ChapterListRelationFilter
     attachments?: AttachmentListRelationFilter
-    purchases?: PurchaseListRelationFilter
   }
 
   export type CourseOrderByWithRelationAndSearchRelevanceInput = {
@@ -19377,7 +17301,6 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     imageUrl?: SortOrderInput | SortOrder
-    price?: SortOrderInput | SortOrder
     isPublished?: SortOrder
     categoryId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -19385,7 +17308,6 @@ export namespace Prisma {
     category?: CategoryOrderByWithRelationAndSearchRelevanceInput
     chapters?: ChapterOrderByRelationAggregateInput
     attachments?: AttachmentOrderByRelationAggregateInput
-    purchases?: PurchaseOrderByRelationAggregateInput
     _relevance?: CourseOrderByRelevanceInput
   }
 
@@ -19398,7 +17320,6 @@ export namespace Prisma {
     title?: StringFilter<"Course"> | string
     description?: StringNullableFilter<"Course"> | string | null
     imageUrl?: StringNullableFilter<"Course"> | string | null
-    price?: FloatNullableFilter<"Course"> | number | null
     isPublished?: BoolFilter<"Course"> | boolean
     categoryId?: StringNullableFilter<"Course"> | string | null
     createdAt?: DateTimeFilter<"Course"> | Date | string
@@ -19406,7 +17327,6 @@ export namespace Prisma {
     category?: XOR<CategoryNullableRelationFilter, CategoryWhereInput> | null
     chapters?: ChapterListRelationFilter
     attachments?: AttachmentListRelationFilter
-    purchases?: PurchaseListRelationFilter
   }, "id">
 
   export type CourseOrderByWithAggregationInput = {
@@ -19415,16 +17335,13 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrderInput | SortOrder
     imageUrl?: SortOrderInput | SortOrder
-    price?: SortOrderInput | SortOrder
     isPublished?: SortOrder
     categoryId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CourseCountOrderByAggregateInput
-    _avg?: CourseAvgOrderByAggregateInput
     _max?: CourseMaxOrderByAggregateInput
     _min?: CourseMinOrderByAggregateInput
-    _sum?: CourseSumOrderByAggregateInput
   }
 
   export type CourseScalarWhereWithAggregatesInput = {
@@ -19436,7 +17353,6 @@ export namespace Prisma {
     title?: StringWithAggregatesFilter<"Course"> | string
     description?: StringNullableWithAggregatesFilter<"Course"> | string | null
     imageUrl?: StringNullableWithAggregatesFilter<"Course"> | string | null
-    price?: FloatNullableWithAggregatesFilter<"Course"> | number | null
     isPublished?: BoolWithAggregatesFilter<"Course"> | boolean
     categoryId?: StringNullableWithAggregatesFilter<"Course"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Course"> | Date | string
@@ -19768,116 +17684,6 @@ export namespace Prisma {
     isCompleted?: BoolWithAggregatesFilter<"UserProgress"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"UserProgress"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"UserProgress"> | Date | string
-  }
-
-  export type PurchaseWhereInput = {
-    AND?: PurchaseWhereInput | PurchaseWhereInput[]
-    OR?: PurchaseWhereInput[]
-    NOT?: PurchaseWhereInput | PurchaseWhereInput[]
-    id?: StringFilter<"Purchase"> | string
-    userId?: StringFilter<"Purchase"> | string
-    courseId?: StringFilter<"Purchase"> | string
-    createdAt?: DateTimeFilter<"Purchase"> | Date | string
-    updatedAt?: DateTimeFilter<"Purchase"> | Date | string
-    course?: XOR<CourseRelationFilter, CourseWhereInput>
-  }
-
-  export type PurchaseOrderByWithRelationAndSearchRelevanceInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    courseId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    course?: CourseOrderByWithRelationAndSearchRelevanceInput
-    _relevance?: PurchaseOrderByRelevanceInput
-  }
-
-  export type PurchaseWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    userId_courseId?: PurchaseUserIdCourseIdCompoundUniqueInput
-    AND?: PurchaseWhereInput | PurchaseWhereInput[]
-    OR?: PurchaseWhereInput[]
-    NOT?: PurchaseWhereInput | PurchaseWhereInput[]
-    userId?: StringFilter<"Purchase"> | string
-    courseId?: StringFilter<"Purchase"> | string
-    createdAt?: DateTimeFilter<"Purchase"> | Date | string
-    updatedAt?: DateTimeFilter<"Purchase"> | Date | string
-    course?: XOR<CourseRelationFilter, CourseWhereInput>
-  }, "id" | "userId_courseId">
-
-  export type PurchaseOrderByWithAggregationInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    courseId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: PurchaseCountOrderByAggregateInput
-    _max?: PurchaseMaxOrderByAggregateInput
-    _min?: PurchaseMinOrderByAggregateInput
-  }
-
-  export type PurchaseScalarWhereWithAggregatesInput = {
-    AND?: PurchaseScalarWhereWithAggregatesInput | PurchaseScalarWhereWithAggregatesInput[]
-    OR?: PurchaseScalarWhereWithAggregatesInput[]
-    NOT?: PurchaseScalarWhereWithAggregatesInput | PurchaseScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Purchase"> | string
-    userId?: StringWithAggregatesFilter<"Purchase"> | string
-    courseId?: StringWithAggregatesFilter<"Purchase"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"Purchase"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Purchase"> | Date | string
-  }
-
-  export type StripeCustomerWhereInput = {
-    AND?: StripeCustomerWhereInput | StripeCustomerWhereInput[]
-    OR?: StripeCustomerWhereInput[]
-    NOT?: StripeCustomerWhereInput | StripeCustomerWhereInput[]
-    id?: StringFilter<"StripeCustomer"> | string
-    userId?: StringFilter<"StripeCustomer"> | string
-    stripeCustomerId?: StringFilter<"StripeCustomer"> | string
-    createdAt?: DateTimeFilter<"StripeCustomer"> | Date | string
-    updatedAt?: DateTimeFilter<"StripeCustomer"> | Date | string
-  }
-
-  export type StripeCustomerOrderByWithRelationAndSearchRelevanceInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    stripeCustomerId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _relevance?: StripeCustomerOrderByRelevanceInput
-  }
-
-  export type StripeCustomerWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    userId?: string
-    stripeCustomerId?: string
-    AND?: StripeCustomerWhereInput | StripeCustomerWhereInput[]
-    OR?: StripeCustomerWhereInput[]
-    NOT?: StripeCustomerWhereInput | StripeCustomerWhereInput[]
-    createdAt?: DateTimeFilter<"StripeCustomer"> | Date | string
-    updatedAt?: DateTimeFilter<"StripeCustomer"> | Date | string
-  }, "id" | "userId" | "stripeCustomerId">
-
-  export type StripeCustomerOrderByWithAggregationInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    stripeCustomerId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: StripeCustomerCountOrderByAggregateInput
-    _max?: StripeCustomerMaxOrderByAggregateInput
-    _min?: StripeCustomerMinOrderByAggregateInput
-  }
-
-  export type StripeCustomerScalarWhereWithAggregatesInput = {
-    AND?: StripeCustomerScalarWhereWithAggregatesInput | StripeCustomerScalarWhereWithAggregatesInput[]
-    OR?: StripeCustomerScalarWhereWithAggregatesInput[]
-    NOT?: StripeCustomerScalarWhereWithAggregatesInput | StripeCustomerScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"StripeCustomer"> | string
-    userId?: StringWithAggregatesFilter<"StripeCustomer"> | string
-    stripeCustomerId?: StringWithAggregatesFilter<"StripeCustomer"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"StripeCustomer"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"StripeCustomer"> | Date | string
   }
 
   export type QuizWhereInput = {
@@ -20468,14 +18274,12 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
-    price?: number | null
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     category?: CategoryCreateNestedOneWithoutCoursesInput
     chapters?: ChapterCreateNestedManyWithoutCourseInput
     attachments?: AttachmentCreateNestedManyWithoutCourseInput
-    purchases?: PurchaseCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateInput = {
@@ -20484,14 +18288,12 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
-    price?: number | null
     isPublished?: boolean
     categoryId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     chapters?: ChapterUncheckedCreateNestedManyWithoutCourseInput
     attachments?: AttachmentUncheckedCreateNestedManyWithoutCourseInput
-    purchases?: PurchaseUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUpdateInput = {
@@ -20500,14 +18302,12 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneWithoutCoursesNestedInput
     chapters?: ChapterUpdateManyWithoutCourseNestedInput
     attachments?: AttachmentUpdateManyWithoutCourseNestedInput
-    purchases?: PurchaseUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateInput = {
@@ -20516,14 +18316,12 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chapters?: ChapterUncheckedUpdateManyWithoutCourseNestedInput
     attachments?: AttachmentUncheckedUpdateManyWithoutCourseNestedInput
-    purchases?: PurchaseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseCreateManyInput = {
@@ -20532,7 +18330,6 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
-    price?: number | null
     isPublished?: boolean
     categoryId?: string | null
     createdAt?: Date | string
@@ -20545,7 +18342,6 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20557,7 +18353,6 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20901,117 +18696,6 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     chapterId?: StringFieldUpdateOperationsInput | string
     isCompleted?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PurchaseCreateInput = {
-    id?: string
-    userId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    course: CourseCreateNestedOneWithoutPurchasesInput
-  }
-
-  export type PurchaseUncheckedCreateInput = {
-    id?: string
-    userId: string
-    courseId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type PurchaseUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    course?: CourseUpdateOneRequiredWithoutPurchasesNestedInput
-  }
-
-  export type PurchaseUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    courseId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PurchaseCreateManyInput = {
-    id?: string
-    userId: string
-    courseId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type PurchaseUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PurchaseUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    courseId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type StripeCustomerCreateInput = {
-    id?: string
-    userId: string
-    stripeCustomerId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type StripeCustomerUncheckedCreateInput = {
-    id?: string
-    userId: string
-    stripeCustomerId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type StripeCustomerUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    stripeCustomerId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type StripeCustomerUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    stripeCustomerId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type StripeCustomerCreateManyInput = {
-    id?: string
-    userId: string
-    stripeCustomerId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type StripeCustomerUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    stripeCustomerId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type StripeCustomerUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    stripeCustomerId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -21699,17 +19383,6 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type FloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -21732,21 +19405,11 @@ export namespace Prisma {
     none?: AttachmentWhereInput
   }
 
-  export type PurchaseListRelationFilter = {
-    every?: PurchaseWhereInput
-    some?: PurchaseWhereInput
-    none?: PurchaseWhereInput
-  }
-
   export type ChapterOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type AttachmentOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type PurchaseOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -21762,15 +19425,10 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     imageUrl?: SortOrder
-    price?: SortOrder
     isPublished?: SortOrder
     categoryId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type CourseAvgOrderByAggregateInput = {
-    price?: SortOrder
   }
 
   export type CourseMaxOrderByAggregateInput = {
@@ -21779,7 +19437,6 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     imageUrl?: SortOrder
-    price?: SortOrder
     isPublished?: SortOrder
     categoryId?: SortOrder
     createdAt?: SortOrder
@@ -21792,31 +19449,10 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     imageUrl?: SortOrder
-    price?: SortOrder
     isPublished?: SortOrder
     categoryId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type CourseSumOrderByAggregateInput = {
-    price?: SortOrder
-  }
-
-  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -22108,71 +19744,6 @@ export namespace Prisma {
     userId?: SortOrder
     chapterId?: SortOrder
     isCompleted?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type PurchaseOrderByRelevanceInput = {
-    fields: PurchaseOrderByRelevanceFieldEnum | PurchaseOrderByRelevanceFieldEnum[]
-    sort: SortOrder
-    search: string
-  }
-
-  export type PurchaseUserIdCourseIdCompoundUniqueInput = {
-    userId: string
-    courseId: string
-  }
-
-  export type PurchaseCountOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    courseId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type PurchaseMaxOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    courseId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type PurchaseMinOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    courseId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type StripeCustomerOrderByRelevanceInput = {
-    fields: StripeCustomerOrderByRelevanceFieldEnum | StripeCustomerOrderByRelevanceFieldEnum[]
-    sort: SortOrder
-    search: string
-  }
-
-  export type StripeCustomerCountOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    stripeCustomerId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type StripeCustomerMaxOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    stripeCustomerId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type StripeCustomerMinOrderByAggregateInput = {
-    id?: SortOrder
-    userId?: SortOrder
-    stripeCustomerId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -22644,13 +20215,6 @@ export namespace Prisma {
     connect?: AttachmentWhereUniqueInput | AttachmentWhereUniqueInput[]
   }
 
-  export type PurchaseCreateNestedManyWithoutCourseInput = {
-    create?: XOR<PurchaseCreateWithoutCourseInput, PurchaseUncheckedCreateWithoutCourseInput> | PurchaseCreateWithoutCourseInput[] | PurchaseUncheckedCreateWithoutCourseInput[]
-    connectOrCreate?: PurchaseCreateOrConnectWithoutCourseInput | PurchaseCreateOrConnectWithoutCourseInput[]
-    createMany?: PurchaseCreateManyCourseInputEnvelope
-    connect?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
-  }
-
   export type ChapterUncheckedCreateNestedManyWithoutCourseInput = {
     create?: XOR<ChapterCreateWithoutCourseInput, ChapterUncheckedCreateWithoutCourseInput> | ChapterCreateWithoutCourseInput[] | ChapterUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: ChapterCreateOrConnectWithoutCourseInput | ChapterCreateOrConnectWithoutCourseInput[]
@@ -22663,21 +20227,6 @@ export namespace Prisma {
     connectOrCreate?: AttachmentCreateOrConnectWithoutCourseInput | AttachmentCreateOrConnectWithoutCourseInput[]
     createMany?: AttachmentCreateManyCourseInputEnvelope
     connect?: AttachmentWhereUniqueInput | AttachmentWhereUniqueInput[]
-  }
-
-  export type PurchaseUncheckedCreateNestedManyWithoutCourseInput = {
-    create?: XOR<PurchaseCreateWithoutCourseInput, PurchaseUncheckedCreateWithoutCourseInput> | PurchaseCreateWithoutCourseInput[] | PurchaseUncheckedCreateWithoutCourseInput[]
-    connectOrCreate?: PurchaseCreateOrConnectWithoutCourseInput | PurchaseCreateOrConnectWithoutCourseInput[]
-    createMany?: PurchaseCreateManyCourseInputEnvelope
-    connect?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
-  }
-
-  export type NullableFloatFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -22722,20 +20271,6 @@ export namespace Prisma {
     deleteMany?: AttachmentScalarWhereInput | AttachmentScalarWhereInput[]
   }
 
-  export type PurchaseUpdateManyWithoutCourseNestedInput = {
-    create?: XOR<PurchaseCreateWithoutCourseInput, PurchaseUncheckedCreateWithoutCourseInput> | PurchaseCreateWithoutCourseInput[] | PurchaseUncheckedCreateWithoutCourseInput[]
-    connectOrCreate?: PurchaseCreateOrConnectWithoutCourseInput | PurchaseCreateOrConnectWithoutCourseInput[]
-    upsert?: PurchaseUpsertWithWhereUniqueWithoutCourseInput | PurchaseUpsertWithWhereUniqueWithoutCourseInput[]
-    createMany?: PurchaseCreateManyCourseInputEnvelope
-    set?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
-    disconnect?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
-    delete?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
-    connect?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
-    update?: PurchaseUpdateWithWhereUniqueWithoutCourseInput | PurchaseUpdateWithWhereUniqueWithoutCourseInput[]
-    updateMany?: PurchaseUpdateManyWithWhereWithoutCourseInput | PurchaseUpdateManyWithWhereWithoutCourseInput[]
-    deleteMany?: PurchaseScalarWhereInput | PurchaseScalarWhereInput[]
-  }
-
   export type ChapterUncheckedUpdateManyWithoutCourseNestedInput = {
     create?: XOR<ChapterCreateWithoutCourseInput, ChapterUncheckedCreateWithoutCourseInput> | ChapterCreateWithoutCourseInput[] | ChapterUncheckedCreateWithoutCourseInput[]
     connectOrCreate?: ChapterCreateOrConnectWithoutCourseInput | ChapterCreateOrConnectWithoutCourseInput[]
@@ -22762,20 +20297,6 @@ export namespace Prisma {
     update?: AttachmentUpdateWithWhereUniqueWithoutCourseInput | AttachmentUpdateWithWhereUniqueWithoutCourseInput[]
     updateMany?: AttachmentUpdateManyWithWhereWithoutCourseInput | AttachmentUpdateManyWithWhereWithoutCourseInput[]
     deleteMany?: AttachmentScalarWhereInput | AttachmentScalarWhereInput[]
-  }
-
-  export type PurchaseUncheckedUpdateManyWithoutCourseNestedInput = {
-    create?: XOR<PurchaseCreateWithoutCourseInput, PurchaseUncheckedCreateWithoutCourseInput> | PurchaseCreateWithoutCourseInput[] | PurchaseUncheckedCreateWithoutCourseInput[]
-    connectOrCreate?: PurchaseCreateOrConnectWithoutCourseInput | PurchaseCreateOrConnectWithoutCourseInput[]
-    upsert?: PurchaseUpsertWithWhereUniqueWithoutCourseInput | PurchaseUpsertWithWhereUniqueWithoutCourseInput[]
-    createMany?: PurchaseCreateManyCourseInputEnvelope
-    set?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
-    disconnect?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
-    delete?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
-    connect?: PurchaseWhereUniqueInput | PurchaseWhereUniqueInput[]
-    update?: PurchaseUpdateWithWhereUniqueWithoutCourseInput | PurchaseUpdateWithWhereUniqueWithoutCourseInput[]
-    updateMany?: PurchaseUpdateManyWithWhereWithoutCourseInput | PurchaseUpdateManyWithWhereWithoutCourseInput[]
-    deleteMany?: PurchaseScalarWhereInput | PurchaseScalarWhereInput[]
   }
 
   export type CourseCreateNestedManyWithoutCategoryInput = {
@@ -22996,20 +20517,6 @@ export namespace Prisma {
     upsert?: ChapterUpsertWithoutUserProgressInput
     connect?: ChapterWhereUniqueInput
     update?: XOR<XOR<ChapterUpdateToOneWithWhereWithoutUserProgressInput, ChapterUpdateWithoutUserProgressInput>, ChapterUncheckedUpdateWithoutUserProgressInput>
-  }
-
-  export type CourseCreateNestedOneWithoutPurchasesInput = {
-    create?: XOR<CourseCreateWithoutPurchasesInput, CourseUncheckedCreateWithoutPurchasesInput>
-    connectOrCreate?: CourseCreateOrConnectWithoutPurchasesInput
-    connect?: CourseWhereUniqueInput
-  }
-
-  export type CourseUpdateOneRequiredWithoutPurchasesNestedInput = {
-    create?: XOR<CourseCreateWithoutPurchasesInput, CourseUncheckedCreateWithoutPurchasesInput>
-    connectOrCreate?: CourseCreateOrConnectWithoutPurchasesInput
-    upsert?: CourseUpsertWithoutPurchasesInput
-    connect?: CourseWhereUniqueInput
-    update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutPurchasesInput, CourseUpdateWithoutPurchasesInput>, CourseUncheckedUpdateWithoutPurchasesInput>
   }
 
   export type ChapterCreateNestedOneWithoutQuizInput = {
@@ -23536,36 +21043,9 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -23651,6 +21131,17 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
@@ -23827,30 +21318,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type PurchaseCreateWithoutCourseInput = {
-    id?: string
-    userId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type PurchaseUncheckedCreateWithoutCourseInput = {
-    id?: string
-    userId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type PurchaseCreateOrConnectWithoutCourseInput = {
-    where: PurchaseWhereUniqueInput
-    create: XOR<PurchaseCreateWithoutCourseInput, PurchaseUncheckedCreateWithoutCourseInput>
-  }
-
-  export type PurchaseCreateManyCourseInputEnvelope = {
-    data: PurchaseCreateManyCourseInput | PurchaseCreateManyCourseInput[]
-    skipDuplicates?: boolean
-  }
-
   export type CategoryUpsertWithoutCoursesInput = {
     update: XOR<CategoryUpdateWithoutCoursesInput, CategoryUncheckedUpdateWithoutCoursesInput>
     create: XOR<CategoryCreateWithoutCoursesInput, CategoryUncheckedCreateWithoutCoursesInput>
@@ -23936,46 +21403,17 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Attachment"> | Date | string
   }
 
-  export type PurchaseUpsertWithWhereUniqueWithoutCourseInput = {
-    where: PurchaseWhereUniqueInput
-    update: XOR<PurchaseUpdateWithoutCourseInput, PurchaseUncheckedUpdateWithoutCourseInput>
-    create: XOR<PurchaseCreateWithoutCourseInput, PurchaseUncheckedCreateWithoutCourseInput>
-  }
-
-  export type PurchaseUpdateWithWhereUniqueWithoutCourseInput = {
-    where: PurchaseWhereUniqueInput
-    data: XOR<PurchaseUpdateWithoutCourseInput, PurchaseUncheckedUpdateWithoutCourseInput>
-  }
-
-  export type PurchaseUpdateManyWithWhereWithoutCourseInput = {
-    where: PurchaseScalarWhereInput
-    data: XOR<PurchaseUpdateManyMutationInput, PurchaseUncheckedUpdateManyWithoutCourseInput>
-  }
-
-  export type PurchaseScalarWhereInput = {
-    AND?: PurchaseScalarWhereInput | PurchaseScalarWhereInput[]
-    OR?: PurchaseScalarWhereInput[]
-    NOT?: PurchaseScalarWhereInput | PurchaseScalarWhereInput[]
-    id?: StringFilter<"Purchase"> | string
-    userId?: StringFilter<"Purchase"> | string
-    courseId?: StringFilter<"Purchase"> | string
-    createdAt?: DateTimeFilter<"Purchase"> | Date | string
-    updatedAt?: DateTimeFilter<"Purchase"> | Date | string
-  }
-
   export type CourseCreateWithoutCategoryInput = {
     id?: string
     userId: string
     title: string
     description?: string | null
     imageUrl?: string | null
-    price?: number | null
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     chapters?: ChapterCreateNestedManyWithoutCourseInput
     attachments?: AttachmentCreateNestedManyWithoutCourseInput
-    purchases?: PurchaseCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutCategoryInput = {
@@ -23984,13 +21422,11 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
-    price?: number | null
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     chapters?: ChapterUncheckedCreateNestedManyWithoutCourseInput
     attachments?: AttachmentUncheckedCreateNestedManyWithoutCourseInput
-    purchases?: PurchaseUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutCategoryInput = {
@@ -24028,7 +21464,6 @@ export namespace Prisma {
     title?: StringFilter<"Course"> | string
     description?: StringNullableFilter<"Course"> | string | null
     imageUrl?: StringNullableFilter<"Course"> | string | null
-    price?: FloatNullableFilter<"Course"> | number | null
     isPublished?: BoolFilter<"Course"> | boolean
     categoryId?: StringNullableFilter<"Course"> | string | null
     createdAt?: DateTimeFilter<"Course"> | Date | string
@@ -24041,13 +21476,11 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
-    price?: number | null
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     category?: CategoryCreateNestedOneWithoutCoursesInput
     chapters?: ChapterCreateNestedManyWithoutCourseInput
-    purchases?: PurchaseCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutAttachmentsInput = {
@@ -24056,13 +21489,11 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
-    price?: number | null
     isPublished?: boolean
     categoryId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     chapters?: ChapterUncheckedCreateNestedManyWithoutCourseInput
-    purchases?: PurchaseUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutAttachmentsInput = {
@@ -24087,13 +21518,11 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneWithoutCoursesNestedInput
     chapters?: ChapterUpdateManyWithoutCourseNestedInput
-    purchases?: PurchaseUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutAttachmentsInput = {
@@ -24102,13 +21531,11 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chapters?: ChapterUncheckedUpdateManyWithoutCourseNestedInput
-    purchases?: PurchaseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type MuxDataCreateWithoutChapterInput = {
@@ -24155,13 +21582,11 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
-    price?: number | null
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     category?: CategoryCreateNestedOneWithoutCoursesInput
     attachments?: AttachmentCreateNestedManyWithoutCourseInput
-    purchases?: PurchaseCreateNestedManyWithoutCourseInput
   }
 
   export type CourseUncheckedCreateWithoutChaptersInput = {
@@ -24170,13 +21595,11 @@ export namespace Prisma {
     title: string
     description?: string | null
     imageUrl?: string | null
-    price?: number | null
     isPublished?: boolean
     categoryId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     attachments?: AttachmentUncheckedCreateNestedManyWithoutCourseInput
-    purchases?: PurchaseUncheckedCreateNestedManyWithoutCourseInput
   }
 
   export type CourseCreateOrConnectWithoutChaptersInput = {
@@ -24277,13 +21700,11 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoryUpdateOneWithoutCoursesNestedInput
     attachments?: AttachmentUpdateManyWithoutCourseNestedInput
-    purchases?: PurchaseUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutChaptersInput = {
@@ -24292,13 +21713,11 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     attachments?: AttachmentUncheckedUpdateManyWithoutCourseNestedInput
-    purchases?: PurchaseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type UserProgressUpsertWithWhereUniqueWithoutChapterInput = {
@@ -24511,82 +21930,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     muxData?: MuxDataUncheckedUpdateOneWithoutChapterNestedInput
     quiz?: QuizUncheckedUpdateOneWithoutChapterNestedInput
-  }
-
-  export type CourseCreateWithoutPurchasesInput = {
-    id?: string
-    userId: string
-    title: string
-    description?: string | null
-    imageUrl?: string | null
-    price?: number | null
-    isPublished?: boolean
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    category?: CategoryCreateNestedOneWithoutCoursesInput
-    chapters?: ChapterCreateNestedManyWithoutCourseInput
-    attachments?: AttachmentCreateNestedManyWithoutCourseInput
-  }
-
-  export type CourseUncheckedCreateWithoutPurchasesInput = {
-    id?: string
-    userId: string
-    title: string
-    description?: string | null
-    imageUrl?: string | null
-    price?: number | null
-    isPublished?: boolean
-    categoryId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    chapters?: ChapterUncheckedCreateNestedManyWithoutCourseInput
-    attachments?: AttachmentUncheckedCreateNestedManyWithoutCourseInput
-  }
-
-  export type CourseCreateOrConnectWithoutPurchasesInput = {
-    where: CourseWhereUniqueInput
-    create: XOR<CourseCreateWithoutPurchasesInput, CourseUncheckedCreateWithoutPurchasesInput>
-  }
-
-  export type CourseUpsertWithoutPurchasesInput = {
-    update: XOR<CourseUpdateWithoutPurchasesInput, CourseUncheckedUpdateWithoutPurchasesInput>
-    create: XOR<CourseCreateWithoutPurchasesInput, CourseUncheckedCreateWithoutPurchasesInput>
-    where?: CourseWhereInput
-  }
-
-  export type CourseUpdateToOneWithWhereWithoutPurchasesInput = {
-    where?: CourseWhereInput
-    data: XOR<CourseUpdateWithoutPurchasesInput, CourseUncheckedUpdateWithoutPurchasesInput>
-  }
-
-  export type CourseUpdateWithoutPurchasesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableFloatFieldUpdateOperationsInput | number | null
-    isPublished?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    category?: CategoryUpdateOneWithoutCoursesNestedInput
-    chapters?: ChapterUpdateManyWithoutCourseNestedInput
-    attachments?: AttachmentUpdateManyWithoutCourseNestedInput
-  }
-
-  export type CourseUncheckedUpdateWithoutPurchasesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableFloatFieldUpdateOperationsInput | number | null
-    isPublished?: BoolFieldUpdateOperationsInput | boolean
-    categoryId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    chapters?: ChapterUncheckedUpdateManyWithoutCourseNestedInput
-    attachments?: AttachmentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type ChapterCreateWithoutQuizInput = {
@@ -25419,13 +22762,6 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type PurchaseCreateManyCourseInput = {
-    id?: string
-    userId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type ChapterUpdateWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -25504,34 +22840,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type PurchaseUpdateWithoutCourseInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PurchaseUncheckedUpdateWithoutCourseInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type PurchaseUncheckedUpdateManyWithoutCourseInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type CourseCreateManyCategoryInput = {
     id?: string
     userId: string
     title: string
     description?: string | null
     imageUrl?: string | null
-    price?: number | null
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -25543,13 +22857,11 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chapters?: ChapterUpdateManyWithoutCourseNestedInput
     attachments?: AttachmentUpdateManyWithoutCourseNestedInput
-    purchases?: PurchaseUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateWithoutCategoryInput = {
@@ -25558,13 +22870,11 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chapters?: ChapterUncheckedUpdateManyWithoutCourseNestedInput
     attachments?: AttachmentUncheckedUpdateManyWithoutCourseNestedInput
-    purchases?: PurchaseUncheckedUpdateManyWithoutCourseNestedInput
   }
 
   export type CourseUncheckedUpdateManyWithoutCategoryInput = {
@@ -25573,7 +22883,6 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    price?: NullableFloatFieldUpdateOperationsInput | number | null
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25886,14 +23195,6 @@ export namespace Prisma {
      * @deprecated Use UserProgressDefaultArgs instead
      */
     export type UserProgressArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = UserProgressDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use PurchaseDefaultArgs instead
-     */
-    export type PurchaseArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = PurchaseDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use StripeCustomerDefaultArgs instead
-     */
-    export type StripeCustomerArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = StripeCustomerDefaultArgs<ExtArgs>
     /**
      * @deprecated Use QuizDefaultArgs instead
      */

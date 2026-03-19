@@ -45,7 +45,6 @@ model Course {
   title       String       @db.Text
   description String?      @db.Text
   imageUrl    String?      @db.Text
-  price       Float?
   isPublished Boolean      @default(false)
   categoryId  String?
   createdAt   DateTime     @default(now())
@@ -53,7 +52,6 @@ model Course {
   category    Category?    @relation(fields: [categoryId], references: [id])
   chapters    Chapter[]
   attachments Attachment[]
-  purchases   Purchase[]
 
   @@index([categoryId])
 }
@@ -123,25 +121,7 @@ model UserProgress {
   @@index([chapterId])
 }
 
-model Purchase {
-  id        String   @id @default(uuid())
-  userId    String
-  courseId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, courseId])
-  @@index([courseId])
-}
-
-model StripeCustomer {
-  id               String   @id @default(uuid())
-  userId           String   @unique
-  stripeCustomerId String   @unique
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-}
 
 model Quiz {
   id          String     @id @default(uuid())

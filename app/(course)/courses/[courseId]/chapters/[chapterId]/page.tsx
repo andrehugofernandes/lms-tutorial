@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { File, Clock, PlusCircle } from "lucide-react";
+import { File } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -11,7 +11,6 @@ import { Separator } from "@/components/ui/separator";
 import { Preview } from "@/components/preview";
 
 import { VideoPlayer } from "./_components/video-player";
-import { CourseEnrollButton } from "./_components/course-enroll-button";
 import { CourseProgressButton } from "./_components/course-progress-button";
 import { ChapterNotes } from "./_components/chapter-notes";
 import { ZenModeToggle } from "./_components/zen-mode-toggle";
@@ -47,9 +46,9 @@ const ChapterIdPage = (props: {
 
   if (loading || !params) {
     return (
-        <div className="h-full flex items-center justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-700" />
-        </div>
+      <div className="h-full flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-700" />
+      </div>
     );
   }
 
@@ -57,39 +56,19 @@ const ChapterIdPage = (props: {
     return redirect("/");
   }
 
-  const {
-    chapter,
-    course,
-    muxData,
-    attachments,
-    nextChapter,
-    userProgress,
-    purchase,
-  } = data;
+  const { chapter, course, muxData, attachments, nextChapter, userProgress } = data;
 
-  const isLocked = !chapter.isFree && !purchase;
-  const completeOnEnd = !!purchase && !userProgress?.isCompleted;
+  const completeOnEnd = !userProgress?.isCompleted;
 
-  const getCurrentTime = () => {
-    return playerRef?.currentTime || 0;
-  };
-
+  const getCurrentTime = () => playerRef?.currentTime || 0;
   const seekTo = (time: number) => {
-    if (playerRef) {
-      playerRef.currentTime = time;
-    }
+    if (playerRef) playerRef.currentTime = time;
   };
 
   return (
     <div>
       {userProgress?.isCompleted && (
         <Banner variant="success" label="Você já completou este capítulo." />
-      )}
-      {isLocked && (
-        <Banner
-          variant="warning"
-          label="Você precisa adquirir este curso para assistir a este capítulo."
-        />
       )}
       <div className="flex flex-col max-w-4xl mx-auto pb-20">
         <div className="p-4">
@@ -100,7 +79,7 @@ const ChapterIdPage = (props: {
             nextChapterId={nextChapter?.id}
             playbackId={muxData?.playbackId}
             videoUrl={chapter.videoUrl}
-            isLocked={isLocked}
+            isLocked={false}
             completeOnEnd={completeOnEnd}
             videoSourceType={chapter.videoSourceType as "UPLOAD" | "EXTERNAL"}
             embedUrl={chapter.embedUrl}
@@ -112,19 +91,12 @@ const ChapterIdPage = (props: {
             <h2 className="text-2xl font-semibold mb-2">{chapter.title}</h2>
             <div className="flex items-center gap-x-2">
               <ZenModeToggle />
-              {purchase ? (
-                <CourseProgressButton
-                  chapterId={params.chapterId}
-                  courseId={params.courseId}
-                  nextChapterId={nextChapter?.id}
-                  isCompleted={!!userProgress?.isCompleted}
-                />
-              ) : (
-                <CourseEnrollButton
-                  courseId={params.courseId}
-                  price={course.price!}
-                />
-              )}
+              <CourseProgressButton
+                chapterId={params.chapterId}
+                courseId={params.courseId}
+                nextChapterId={nextChapter?.id}
+                isCompleted={!!userProgress?.isCompleted}
+              />
             </div>
           </div>
           <Separator />
@@ -132,17 +104,13 @@ const ChapterIdPage = (props: {
             <Preview value={chapter.description!} />
           </div>
 
-          {!isLocked && purchase && (
-            <>
-              <Separator />
-              <ChapterNotes
-                courseId={params.courseId}
-                chapterId={params.chapterId}
-                getCurrentTime={getCurrentTime}
-                seekTo={seekTo}
-              />
-            </>
-          )}
+          <Separator />
+          <ChapterNotes
+            courseId={params.courseId}
+            chapterId={params.chapterId}
+            getCurrentTime={getCurrentTime}
+            seekTo={seekTo}
+          />
 
           {!!attachments.length && (
             <>
@@ -153,8 +121,7 @@ const ChapterIdPage = (props: {
                     href={attachment.url}
                     target="_blank"
                     key={attachment.id}
-                    className="flex items-center p-2 w-full bg-sky-200 border
-                   text-sky-700 rounded-md hover:underline"
+                    className="flex items-center p-2 w-full bg-sky-200 border text-sky-700 rounded-md hover:underline"
                   >
                     <File />
                     <p className="line-clamp-1 ml-2">{attachment.name}</p>

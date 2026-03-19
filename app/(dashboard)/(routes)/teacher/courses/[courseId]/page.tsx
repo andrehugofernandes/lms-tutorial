@@ -1,10 +1,10 @@
 import { auth } from "@/lib/auth";
 import {
-  CircleDollarSign,
   File,
   LayoutDashboard,
   ListChecks,
 } from "lucide-react";
+
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { Banner } from "@/components/banner";
@@ -15,11 +15,11 @@ import { TitleForm } from "./_components/title-form";
 import { DescriptionForm } from "./_components/description-form";
 import { ImageForm } from "./_components/image-form";
 import { CategoryForm } from "./_components/category-form";
-import { PriceForm } from "./_components/price-form";
 import { AttachmentForm } from "./_components/attachment-form";
 import { ChaptersForm } from "./_components/chapters-form";
 import { Actions } from "./_components/actions";
 import { CompletionInfo } from "./_components/completion-info";
+
 
 const CourseIdPage = async (props: {
   params: Promise<{
@@ -71,10 +71,6 @@ const CourseIdPage = async (props: {
       complete: Boolean(course.description?.trim()),
     },
     {
-      label: "Preco do curso",
-      complete: course.price !== null,
-    },
-    {
       label: "Imagem de capa",
       complete: Boolean(course.imageUrl),
     },
@@ -87,6 +83,7 @@ const CourseIdPage = async (props: {
       complete: course.chapters.some((chapter) => chapter.isPublished),
     },
   ];
+
 
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter((field) => field.complete).length;
@@ -151,23 +148,15 @@ const CourseIdPage = async (props: {
             <div className="space-y-6">
               <div>
                 <div className="flex items-center gap-x-2">
-                  <IconBadge icon={CircleDollarSign} />
-                  <h2 className="text-xl  text-sky-800 font-bold">
-                    Venda seu curso
-                  </h2>
-                </div>
-                <PriceForm initialData={course} courseId={course.id} />
-              </div>
-              <div>
-                <div className="flex items-center gap-x-2">
                   <IconBadge icon={File} />
                   <h2 className="text-xl  text-sky-800 font-bold">
-                    Recursos & Anexos
+                    Recursos &amp; Anexos
                   </h2>
                 </div>
                 <AttachmentForm initialData={course} courseId={course.id} />
               </div>
             </div>
+
           </div>
         </div>
       </div>

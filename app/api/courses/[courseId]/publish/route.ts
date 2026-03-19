@@ -54,9 +54,6 @@ export async function PATCH(
       missingFields.push("categoria do curso");
     }
 
-    if (course.price === null) {
-      missingFields.push("preco do curso");
-    }
 
     if (!hasPublishedChapter) {
       missingFields.push("pelo menos 1 capitulo publicado");
