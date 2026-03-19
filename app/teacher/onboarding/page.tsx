@@ -1,7 +1,7 @@
 import { auth, currentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
-import { UserRole } from "@/lib/generated/db";
+import { Role } from "@/lib/generated/db";
 
 export default async function TeacherOnboardingPage() {
     const { userId } = await auth();
@@ -23,15 +23,15 @@ export default async function TeacherOnboardingPage() {
                 userId,
                 name: user.name ?? "Professor",
                 email: user.email ?? "",
-                role: UserRole.TEACHER,
+                role: Role.TEACHER,
             },
         });
-    } else if (existingProfile.role === UserRole.STUDENT) {
+    } else if (existingProfile.role === Role.STUDENT) {
         // Upgrade to TEACHER if they are currently a STUDENT
         await db.profile.update({
             where: { userId },
             data: {
-                role: UserRole.TEACHER,
+                role: Role.TEACHER,
             },
         });
     }
