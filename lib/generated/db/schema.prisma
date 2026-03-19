@@ -124,25 +124,33 @@ model UserProgress {
 
 
 model Quiz {
-  id          String     @id @default(uuid())
-  chapterId   String     @unique
-  isPublished Boolean    @default(false)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  chapter     Chapter    @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-  questions   Question[]
+  id           String       @id @default(uuid())
+  chapterId    String       @unique
+  isPublished  Boolean      @default(false)
+  isRequired   Boolean      @default(false)
+  maxQuestions Int          @default(5)
+  timeLimit    Int?                         // seconds per question (null = no limit)
+  passingScore Int          @default(70)    // % to pass
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  chapter      Chapter      @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  questions    Question[]
+  results      QuizResult[]
 }
 
 model Question {
-  id        String   @id @default(uuid())
-  quizId    String
-  prompt    String   @db.Text
-  position  Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  options   Option[]
-  answers   Answer[]
+  id          String   @id @default(uuid())
+  quizId      String
+  prompt      String   @db.Text
+  position    Int
+  isBonus     Boolean  @default(false)
+  bonusPoints Int?                    // extra XP for bonus questions
+  pointWeight Float    @default(1.0)  // multiplier: 1x, 1.5x, 2x
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  options     Option[]
+  answers     Answer[]
 
   @@index([quizId])
 }
@@ -173,6 +181,28 @@ model Answer {
   @@unique([userId, questionId])
   @@index([questionId])
   @@index([optionId])
+}
+
+model QuizResult {
+  id          String   @id @default(uuid())
+  userId      String
+  quizId      String
+  score       Int      // percentage 0-100
+  xpEarned    Int
+  passed      Boolean
+  completedAt DateTime @default(now())
+  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, quizId])
+  @@index([quizId])
+}
+
+model UserXP {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  totalXp   Int      @default(0)
+  level     Int      @default(1)
+  updatedAt DateTime @updatedAt
 }
 
 model Account {

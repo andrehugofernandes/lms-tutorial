@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
+    "@google/generative-ai": "^0.24.1",
     "@hello-pangea/dnd": "^16.3.0",
     "@hookform/resolvers": "^3.3.1",
     "@mux/mux-node": "^12.8.1",
@@ -40,14 +41,15 @@
     "eslint-config-next": "13.4.12",
     "firebase": "^12.10.0",
     "firebase-admin": "^13.7.0",
+    "framer-motion": "^12.38.0",
     "lucide-react": "^0.276.0",
-    "next": "16.1.6",
+    "next": "15.1.0",
     "next-auth": "^4.24.13",
     "postcss": "8.4.29",
     "query-string": "^8.1.0",
-    "react": "19.2.4",
+    "react": "19.0.0",
     "react-confetti": "^6.1.0",
-    "react-dom": "19.2.4",
+    "react-dom": "19.0.0",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.46.1",
     "react-hot-toast": "^2.4.1",
@@ -66,6 +68,10 @@
   "packageManager": "pnpm@9.0.0+sha512.b4106707c7225b1748b61595953ccbebff97b54ad05d002aa3635f633b9c53cd666f7ce9b8bc44704f1fa048b9a49b55371ab2d9e9d667d1efe2ef1514bcd513",
   "devDependencies": {
     "@prisma/client": "5.3.1",
-    "prisma": "5.3.1"
+    "prisma": "5.3.1",
+    "tsx": "^4.21.0"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }

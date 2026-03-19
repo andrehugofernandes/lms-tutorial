@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "./next-auth";
-import { adminAuth } from "./firebase-admin";
+// import { adminAuth } from "./firebase-admin";
 import { cookies } from "next/headers";
 
 const isNextAuth = process.env.NEXT_PUBLIC_AUTH_PROVIDER === "nextauth";
@@ -19,6 +19,7 @@ export const getCurrentUser = async () => {
       };
     } else {
       // Firebase Route
+/*
       const cookieStore = await cookies();
       const sessionCookie = cookieStore.get("session")?.value;
 
@@ -31,6 +32,8 @@ export const getCurrentUser = async () => {
         name: decodedClaims.name,
         image: decodedClaims.picture,
       };
+      */
+     return null;
     }
   } catch (error) {
     console.log("[GET_CURRENT_USER_ERROR]", error);

@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { File } from "lucide-react";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 import { Banner } from "@/components/banner";
 import { Separator } from "@/components/ui/separator";
@@ -14,6 +15,7 @@ import { VideoPlayer } from "./_components/video-player";
 import { CourseProgressButton } from "./_components/course-progress-button";
 import { ChapterNotes } from "./_components/chapter-notes";
 import { ZenModeToggle } from "./_components/zen-mode-toggle";
+import { QuizPlayer } from "@/components/quiz/quiz-player";
 
 const ChapterIdPage = (props: {
   params: Promise<{ courseId: string; chapterId: string }>;
@@ -57,6 +59,7 @@ const ChapterIdPage = (props: {
   }
 
   const { chapter, course, muxData, attachments, nextChapter, userProgress } = data;
+  const quiz = data.quiz ?? null;
 
   const completeOnEnd = !userProgress?.isCompleted;
 
@@ -111,6 +114,20 @@ const ChapterIdPage = (props: {
             getCurrentTime={getCurrentTime}
             seekTo={seekTo}
           />
+
+          {quiz?.isPublished && (
+            <>
+              <Separator />
+              <div className="p-4">
+                <QuizPlayer
+                  quiz={quiz}
+                  onComplete={(passed, xp) => {
+                    if (passed) toast.success(`🎉 Quiz concluído! +${xp} XP`);
+                  }}
+                />
+              </div>
+            </>
+          )}
 
           {!!attachments.length && (
             <>

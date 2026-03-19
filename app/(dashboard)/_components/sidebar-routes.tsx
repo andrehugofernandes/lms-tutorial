@@ -92,9 +92,11 @@ const SidebarRoutes = () => {
       ? adminRoutes
       : isTeacherPage && isTeacherUser
         ? teacherRoutes
-        : isStudentUser
-          ? studentRoutes
-          : guestRoutes;
+        : isAdminUser
+          ? adminRoutes
+          : isTeacherUser
+            ? teacherRoutes
+            : studentRoutes;
 
   return (
     <div className="flex flex-col w-full">

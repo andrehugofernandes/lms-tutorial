@@ -39,6 +39,9 @@ const CourseIdPage = async (props: {
     },
     include: {
       chapters: {
+        include: {
+          quiz: true,
+        },
         orderBy: {
           position: "asc",
         },

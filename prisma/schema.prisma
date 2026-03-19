@@ -1,7 +1,7 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"]
   output          = "../lib/generated/db"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -11,28 +11,11 @@ datasource db {
   relationMode = "prisma"
 }
 
-enum Role {
-  ADMIN
-  TEACHER
-  STUDENT
-}
-
-enum VideoSourceType {
-  UPLOAD
-  EXTERNAL
-}
-
-enum VideoProvider {
-  YOUTUBE
-  VIMEO
-  OTHER
-}
-
 model Profile {
   id        String   @id @default(uuid())
   userId    String   @unique
   name      String?
-  email     String?  @db.Text
+  email     String?
   role      Role     @default(STUDENT)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -42,9 +25,9 @@ model Profile {
 model Course {
   id          String       @id @default(uuid())
   userId      String
-  title       String       @db.Text
-  description String?      @db.Text
-  imageUrl    String?      @db.Text
+  title       String
+  description String?
+  imageUrl    String?
   isPublished Boolean      @default(false)
   categoryId  String?
   createdAt   DateTime     @default(now())
@@ -75,27 +58,24 @@ model Attachment {
 }
 
 model Chapter {
-  id           String         @id @default(uuid())
-  title        String
-  description  String?        @db.Text
-  
-  // Hybrid Video Logic (Arnaldo's)
+  id              String           @id @default(uuid())
+  title           String
+  description     String?
   videoSourceType VideoSourceType?
-  videoUrl     String?        @db.Text
-  externalUrl  String?        @db.Text
-  embedUrl     String?        @db.Text
-  videoProvider VideoProvider?
-  
-  position     Int
-  isPublished  Boolean        @default(false)
-  isFree       Boolean        @default(false)
-  courseId     String
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  muxData      MuxData?
-  quiz         Quiz?
-  course       Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  userProgress UserProgress[]
+  videoUrl        String?
+  externalUrl     String?
+  embedUrl        String?
+  videoProvider   VideoProvider?
+  position        Int
+  isPublished     Boolean          @default(false)
+  isFree          Boolean          @default(false)
+  courseId        String
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  muxData         MuxData?
+  quiz            Quiz?
+  course          Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  userProgress    UserProgress[]
 
   @@index([courseId])
 }
@@ -121,28 +101,34 @@ model UserProgress {
   @@index([chapterId])
 }
 
-
-
 model Quiz {
-  id          String     @id @default(uuid())
-  chapterId   String     @unique
-  isPublished Boolean    @default(false)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  chapter     Chapter    @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-  questions   Question[]
+  id           String       @id @default(uuid())
+  chapterId    String       @unique
+  isPublished  Boolean      @default(false)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  isRequired   Boolean      @default(false)
+  maxQuestions Int          @default(5)
+  passingScore Int          @default(70)
+  timeLimit    Int?
+  chapter      Chapter      @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  questions    Question[]
+  results      QuizResult[]
 }
 
 model Question {
-  id        String   @id @default(uuid())
-  quizId    String
-  prompt    String   @db.Text
-  position  Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  options   Option[]
-  answers   Answer[]
+  id          String   @id @default(uuid())
+  quizId      String
+  prompt      String
+  position    Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  bonusPoints Int?
+  isBonus     Boolean  @default(false)
+  pointWeight Float    @default(1.0)
+  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  options     Option[]
+  answers     Answer[]
 
   @@index([quizId])
 }
@@ -150,7 +136,7 @@ model Question {
 model Option {
   id         String   @id @default(uuid())
   questionId String
-  text       String   @db.Text
+  text       String
   isCorrect  Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -175,21 +161,42 @@ model Answer {
   @@index([optionId])
 }
 
+model QuizResult {
+  id          String   @id @default(uuid())
+  userId      String
+  quizId      String
+  score       Int
+  xpEarned    Int
+  passed      Boolean
+  completedAt DateTime @default(now())
+  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, quizId])
+  @@index([quizId])
+}
+
+model UserXP {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  totalXp   Int      @default(0)
+  level     Int      @default(1)
+  updatedAt DateTime @updatedAt
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -220,4 +227,21 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+}
+
+enum VideoSourceType {
+  UPLOAD
+  EXTERNAL
+}
+
+enum VideoProvider {
+  YOUTUBE
+  VIMEO
+  OTHER
 }

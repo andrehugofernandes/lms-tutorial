@@ -12,6 +12,8 @@ import { CheckpointCard } from "./_components/checkpoint-card";
 import { StreakCard } from "./_components/streak-card";
 import { TeacherDashboard } from "./_components/teacher-dashboard";
 
+export const dynamic = "force-dynamic";
+
 export default async function Dashboard() {
   console.time("📊 [DASHBOARD_PAGE_RENDER]");
   const { userId } = await auth();
@@ -20,10 +22,14 @@ export default async function Dashboard() {
     return redirect("/");
   }
 
+  console.log("DEBUG: DASHBOARD_USER_ID:", userId);
+  
   // Check user profile for role (Arnaldo's logic)
   const profile = await db.profile.findUnique({
     where: { userId }
   });
+
+  console.log("DEBUG: DASHBOARD_PROFILE_ROLE:", profile?.role);
 
   const isTeacher = profile?.role === "TEACHER" || profile?.role === "ADMIN";
 

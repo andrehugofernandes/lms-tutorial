@@ -99,6 +99,11 @@ export const ChaptersList = ({
                           Free
                         </Badge>
                       )}
+                      {(chapter as any).quiz && (
+                        <Badge className="bg-amber-500 hover:bg-amber-600 border-none">
+                          Quiz 🎮
+                        </Badge>
+                      )}
                       <Badge
                         className={cn(
                           "bg-slate-500",

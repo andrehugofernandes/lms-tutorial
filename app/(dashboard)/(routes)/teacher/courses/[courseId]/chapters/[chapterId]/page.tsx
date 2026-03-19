@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Banner } from "@/components/banner";
 import { db } from "@/lib/db";
-import { ArrowLeft, Eye, LayoutDashboard, Video } from "lucide-react";
+import { ArrowLeft, Eye, LayoutDashboard, Video, HelpCircle } from "lucide-react";
 import { ChapterActions } from "./_components/chapter.actions";
 
 import { IconBadge } from "@/components/icon-badge";
@@ -12,6 +12,7 @@ import { ChapterDescriptionForm } from "./_components/chapter-description-form";
 import { ChapterAccessForm } from "./_components/chapter-access-form";
 import { ChapterVideoForm } from "./_components/chapter-video-form";
 import { ChapterDurationForm } from "./_components/chapter-duration-form";
+import { ChapterQuizForm } from "./_components/chapter-quiz-form";
 import { CompletionInfo } from "../../_components/completion-info";
 
 const ChapterIdPage = async (props: {
@@ -31,6 +32,15 @@ const ChapterIdPage = async (props: {
     },
     include: {
       muxData: true,
+      quiz: {
+        include: {
+          questions: {
+            include: {
+              options: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -160,6 +170,17 @@ const ChapterIdPage = async (props: {
               initialData={chapter}
               chapterId={params.chapterId}
               courseId={params.courseId}
+            />
+          </div>
+          <div>
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={HelpCircle} />
+              <h2 className="text-xl  text-sky-800 font-bold">Configurar Quiz</h2>
+            </div>
+            <ChapterQuizForm
+              initialQuiz={chapter.quiz}
+              courseId={params.courseId}
+              chapterId={params.chapterId}
             />
           </div>
         </div>
