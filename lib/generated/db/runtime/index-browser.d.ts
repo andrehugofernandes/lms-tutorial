@@ -377,3 +377,6 @@ declare function validator<C, M extends Exclude<keyof C, `$${string}`>, O extend
 
 export { }
 
+
+
+

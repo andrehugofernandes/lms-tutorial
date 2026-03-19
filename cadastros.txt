@@ -20,3 +20,9 @@ Admin/Professor:
 
 📧 Email: professor@diego.com
 🔑 Senha: diego123
+
+
+📧 Email: teste_prof@teste.com
+🔑 Senha: 123456
+
+
