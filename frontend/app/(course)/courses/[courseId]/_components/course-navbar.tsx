@@ -1,0 +1,31 @@
+import { Course, Chapter, UserProgress } from "@/lib/types";
+
+import { NavbarRoutes } from "@/components/navbar-routes";
+import { CourseMobileSidebar } from "./course-mobile-sidebar";
+
+interface CourseNavbarProps {
+  course: Course & {
+    chapters: (Chapter & {
+      userProgress: UserProgress[] | null;
+    })[];
+  };
+  progressCount: number;
+  isEnrolled: boolean;
+}
+
+export const CourseNavbar = ({
+  course,
+  progressCount,
+  isEnrolled,
+}: CourseNavbarProps) => {
+  return (
+    <div className="p-4 border-b h-full flex items-center bg-white shadow-sm">
+      <CourseMobileSidebar
+        course={course}
+        progressCount={progressCount}
+        isEnrolled={isEnrolled}
+      />
+      <NavbarRoutes />
+    </div>
+  );
+};

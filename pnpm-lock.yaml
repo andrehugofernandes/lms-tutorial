@@ -6,7 +6,9 @@ settings:
 
 importers:
 
-  .:
+  .: {}
+
+  frontend:
     dependencies:
       '@auth/prisma-adapter':
         specifier: ^2.11.1
@@ -26,6 +28,9 @@ importers:
       '@mux/mux-player-react':
         specifier: ^3.11.5
         version: 3.11.5(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@prisma/client':
+        specifier: 5.3.1
+        version: 5.3.1(prisma@5.3.1)
       '@radix-ui/react-alert-dialog':
         specifier: ^1.0.5
         version: 1.1.15(@types/react-dom@18.2.7)(@types/react@18.2.21)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -171,9 +176,6 @@ importers:
         specifier: ^4.4.7
         version: 4.5.7(@types/react@18.2.21)(react@19.0.0)
     devDependencies:
-      '@prisma/client':
-        specifier: 5.3.1
-        version: 5.3.1(prisma@5.3.1)
       prisma:
         specifier: 5.3.1
         version: 5.3.1

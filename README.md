@@ -1,83 +1,59 @@
-# 🎓 LMS Modern Pro: Jaboatão
+# LMS Monorepo
 
-Plataforma de Gestão de Aprendizado (LMS) de última geração, desenvolvida para alta performance, engajamento e inteligência educacional.
+Estrutura atual:
 
----
-
-## 🚀 Funcionalidades Recentes (Março 2026)
-
-### 🤖 Inteligência Artificial
-- **Auto-Gerador de Quizzes**: Integrado com **Google Gemini 1.5 Flash**. Gera automaticamente questões de múltipla escolha baseadas no título e descrição do capítulo.
-
-### 🎮 Gamificação Avançada
-- **Sistema de Quiz Pro**: Cronômetro, combos de acertos, animações fluidas (Framer Motion) e feedback instantâneo.
-- **Progressão de XP & Nível**: Barra de XP global na sidebar e sistema de medalhas automático por curso concluído.
-- **Ranking Visual**: Avaliação por estrelas (1-3) dependendo do desempenho no quiz.
-
-### 👨‍🏫 Ferramentas do Professor
-- **Dashboard Estatístico**: Visão rápida de cursos publicados, rascunhos e capítulos pendentes.
-- **Editor Dinâmico**: Gestão de capítulos com suporte a vídeos (Mux/Link Externo) e anexos.
-- **Badges de Status**: Identificação visual rápida de capítulos que já possuem Quizzes configurados.
-
-### 🍱 Interface & UX
-- **Modo Foco (Zen)**: Interface imersiva que remove distrações para os alunos.
-- **Design Moderno**: Inspirado em plataformas premium, com Skeletons de loading e cores harmoniosas.
-
----
-
-## 🛠️ Guia de Início Rápido
-
-### 1. Sincronização de Código (Para Desenvolvedores)
-A branch **`homologacao`** é atualmente a branch mais atualizada e estável do projeto. Todos os desenvolvedores devem realizar o pull desta branch:
-
-```bash
-git checkout homologacao
-git pull origin homologacao
+```text
+backend/   -> API em Python Flask
+frontend/  -> interface em Next.js
 ```
 
-### 2. Variáveis de Ambiente (.env)
-Certifique-se de ter as seguintes chaves configuradas:
+## Como rodar
 
-```env
-# Database (Prisma)
-DATABASE_URL=...
-DIRECT_URL=...
-
-# Auth & Role
-NEXT_PUBLIC_AUTH_PROVIDER=nextauth
-NEXT_PUBLIC_TEACHER_ID=... # ID do usuário com permissão de professor
-
-# AI (Obrigatório para o Gerador de Quiz)
-GEMINI_API_KEY=...
-
-# Media & Upload
-MUX_TOKEN_ID=...
-MUX_TOKEN_SECRET=...
-UPLOADTHING_SECRET=...
-```
-
-### 3. Setup do Banco de Dados
-Sempre que baixar novas atualizações da `homologacao`:
+1. Instale as dependencias do frontend:
 
 ```bash
 pnpm install
-npx prisma generate
-npx prisma db seed # Opcional: Popular dados de teste (Professor teste_prof@teste.com)
 ```
 
----
+2. Instale as dependencias do backend:
 
-## 📦 Stack Tecnológica
-- **Framework**: Next.js 15.1.0 (Stable)
-- **UI**: React 19, Tailwind CSS, Shadcn UI, Framer Motion
-- **Banco de Dados**: Prisma, Supabase (PostgreSQL)
-- **Vídeo**: Mux
-- **IA**: Google Generative AI (Gemini)
-- **Autenticação**: NextAuth / Clerk (Dependendo do ambiente)
+```bash
+pip install -r backend/requirements.txt
+```
 
----
+3. Suba os dois com um unico comando:
 
-## 🛡️ Fluxo de Trabalho (Workflow)
-1. **Funcionalidades Novas**: Criar uma branch a partir da `homologacao`.
-2. **Merge**: Realizar code review e merge de volta para a `homologacao`.
-3. **Produção**: A branch `main` é reservada para releases estáveis de produção.
+```bash
+pnpm dev
+```
+
+Portas padrao:
+
+- Frontend: `http://localhost:3000`
+- Backend: `http://127.0.0.1:5328`
+
+## Variaveis de ambiente
+
+O arquivo `.env` continua na raiz e eh compartilhado pelo orquestrador.
+
+Chaves importantes:
+
+- `DATABASE_URL`
+- `DIRECT_URL`
+- `NEXTAUTH_SECRET`
+- `NEXTAUTH_URL`
+- `NEXT_PUBLIC_AUTH_PROVIDER`
+- `GOOGLE_CLIENT_ID`
+- `GOOGLE_CLIENT_SECRET`
+- `UPLOADTHING_SECRET`
+- `UPLOADTHING_APP_ID`
+- `MUX_TOKEN_ID`
+- `MUX_TOKEN_SECRET`
+- `GEMINI_API_KEY`
+
+## Observacoes
+
+- O frontend manteve `NextAuth` e `UploadThing`.
+- A logica de negocio do LMS foi movida para `backend/`.
+- O frontend agora conversa com o Flask por HTTP e usa um proxy em `frontend/app/api/[...path]/route.ts`.
+- Documentacao legada segue na raiz em `API.md`, `PRD.md` e `ONBOARDING.md`.

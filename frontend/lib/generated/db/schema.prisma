@@ -1,0 +1,257 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../lib/generated/db"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  directUrl    = env("DIRECT_URL")
+  relationMode = "prisma"
+}
+
+model Profile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  name      String?
+  email     String?
+  role      Role     @default(STUDENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Course {
+  id          String       @id @default(uuid())
+  userId      String
+  title       String
+  description String?
+  imageUrl    String?
+  isPublished Boolean      @default(false)
+  categoryId  String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  category    Category?    @relation(fields: [categoryId], references: [id])
+  chapters    Chapter[]
+  attachments Attachment[]
+
+  @@index([categoryId])
+}
+
+model Category {
+  id      String   @id @default(uuid())
+  name    String   @unique
+  courses Course[]
+}
+
+model Attachment {
+  id        String   @id @default(uuid())
+  name      String
+  url       String
+  courseId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+}
+
+model Chapter {
+  id              String           @id @default(uuid())
+  title           String
+  description     String?
+  videoSourceType VideoSourceType?
+  videoUrl        String?
+  externalUrl     String?
+  embedUrl        String?
+  videoProvider   VideoProvider?
+  transcript      String?          @db.Text
+  transcriptStatus TranscriptStatus @default(NOT_AVAILABLE)
+  position        Int
+  isPublished     Boolean          @default(false)
+  isFree          Boolean          @default(false)
+  courseId        String
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  muxData         MuxData?
+  quiz            Quiz?
+  course          Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  userProgress    UserProgress[]
+
+  @@index([courseId])
+}
+
+model MuxData {
+  id         String  @id @default(uuid())
+  assetId    String
+  playbackId String?
+  chapterId  String  @unique
+  chapter    Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+}
+
+model UserProgress {
+  id          String   @id @default(uuid())
+  userId      String
+  chapterId   String
+  isCompleted Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  chapter     Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, chapterId])
+  @@index([chapterId])
+}
+
+model Quiz {
+  id           String       @id @default(uuid())
+  chapterId    String       @unique
+  isPublished  Boolean      @default(false)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  isRequired   Boolean      @default(false)
+  maxQuestions Int          @default(5)
+  passingScore Int          @default(70)
+  timeLimit    Int?
+  chapter      Chapter      @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  questions    Question[]
+  results      QuizResult[]
+}
+
+model Question {
+  id          String   @id @default(uuid())
+  quizId      String
+  prompt      String
+  position    Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  bonusPoints Int?
+  isBonus     Boolean  @default(false)
+  pointWeight Float    @default(1.0)
+  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  options     Option[]
+  answers     Answer[]
+
+  @@index([quizId])
+}
+
+model Option {
+  id         String   @id @default(uuid())
+  questionId String
+  text       String
+  isCorrect  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  answers    Answer[]
+
+  @@index([questionId])
+}
+
+model Answer {
+  id         String   @id @default(uuid())
+  userId     String
+  questionId String
+  optionId   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  option     Option   @relation(fields: [optionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
+  @@index([questionId])
+  @@index([optionId])
+}
+
+model QuizResult {
+  id          String   @id @default(uuid())
+  userId      String
+  quizId      String
+  score       Int
+  xpEarned    Int
+  passed      Boolean
+  completedAt DateTime @default(now())
+  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, quizId])
+  @@index([quizId])
+}
+
+model UserXP {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  totalXp   Int      @default(0)
+  level     Int      @default(1)
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  password      String?
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  profile       Profile?
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+}
+
+enum VideoSourceType {
+  UPLOAD
+  EXTERNAL
+}
+
+enum VideoProvider {
+  YOUTUBE
+  VIMEO
+  OTHER
+}
+
+enum TranscriptStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  NOT_AVAILABLE
+}
