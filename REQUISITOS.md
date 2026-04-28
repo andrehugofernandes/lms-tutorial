@@ -316,3 +316,197 @@ A arquitetura é composta por:
 ---
 
 *Documento gerado com base na análise do código-fonte do repositório em Abril de 2026.*
+
+---
+
+## 7. Status de Implementação
+
+> Legenda: ✅ **Implementado** | ⚠️ **Parcialmente implementado** | ❌ **Não implementado**
+
+### 7.1 Requisitos Funcionais
+
+| ID | Requisito (resumo) | Status | Evidência no código |
+|---|---|:---:|---|
+| **RF01 — Autenticação** ||||
+| RF01.1 | Cadastro com e-mail e senha | ✅ | `frontend/app/(auth)/(routes)/sign-up/` |
+| RF01.2 | Login com e-mail e senha (NextAuth + JWT) | ✅ | `frontend/app/(auth)/(routes)/sign-in/` + `frontend/lib/auth.ts` |
+| RF01.3 | Redirecionamento de rotas protegidas | ✅ | `middleware.ts` + `redirect("/")` em todas as páginas autenticadas |
+| RF01.4 | Persistência de sessão entre navegações | ✅ | NextAuth gerencia sessão com cookie seguro |
+| RF01.5 | Criação automática de perfil STUDENT | ✅ | `backend/lms_backend/services.py` → `ensure_student_profile()` |
+| RF01.6 | Fluxo de onboarding para novos alunos | ✅ | `frontend/app/student/onboarding/` |
+| RF01.7 | Redirecionamento de professores ao painel | ✅ | `dashboard/page.tsx` → detecta `mode === "teacher"` e renderiza `TeacherDashboard` |
+| **RF02 — Catálogo** ||||
+| RF02.1 | Exibir cursos publicados no catálogo | ✅ | `backend/routes.py` → `build_catalog_payload()` filtra `isPublished=True` |
+| RF02.2 | Busca por título | ✅ | `backend/routes.py` → `Course.title.ilike(f"%{title}%")` |
+| RF02.3 | Filtro por categoria | ✅ | `backend/routes.py` → `Course.categoryId == category_id` |
+| RF02.4 | Exibição de título, imagem, categoria e capítulos | ✅ | `serialize_course()` + `serialize_chapter()` em `utils.py` |
+| RF02.5 | Indicação visual de matrícula do aluno | ✅ | `build_catalog_payload()` compara `course.id in purchases` |
+| RF02.6 | Percentual de progresso no catálogo | ✅ | `get_progress(user_id, course.id)` chamado para cursos com matrícula |
+| **RF03 — Matrícula** ||||
+| RF03.1 | Matrícula gratuita sem pagamento | ✅ | Rota de enroll no backend cria `Purchase` sem cobrança |
+| RF03.2 | Registro de matrícula na tabela `Purchase` | ✅ | `backend/lms_backend/models.py` → classe `Purchase` |
+| RF03.3 | Redirecionamento ao primeiro capítulo | ✅ | Rota de enroll redireciona para `chapters[0]` após `Purchase` criado |
+| RF03.4 | Capítulos gratuitos acessíveis sem matrícula | ✅ | `chapter.isFree` verificado na rota de dados do capítulo |
+| RF03.5 | Bloqueio de capítulos não gratuitos sem matrícula | ⚠️ | `isLocked` está hardcoded como `false` em `page.tsx` — validação existe no backend mas não bloqueia a UI |
+| RF03.6 | Mensagem de bloqueio ao aluno sem matrícula | ⚠️ | Componente `<Lock>` existe no `VideoPlayer` mas não é ativado (`isLocked=false`) |
+| **RF04 — Player de Vídeo** ||||
+| RF04.1 | Reprodução de vídeos Mux | ✅ | `VideoPlayer` usa `<MuxPlayer>` quando `videoSourceType === "UPLOAD"` |
+| RF04.2 | Reprodução de vídeos externos (YouTube/Vimeo) | ✅ | `VideoPlayer` usa `<ReactPlayer>` quando `videoSourceType === "EXTERNAL"` |
+| RF04.3 | Marcar capítulo como concluído | ✅ | `<CourseProgressButton>` chama `PUT /api/courses/.../progress` |
+| RF04.4 | Exibição automática do próximo capítulo | ✅ | `onEnd()` em `video-player.tsx` redireciona via `router.push` para `nextChapterId` |
+| RF04.5 | Efeito de celebração (confete) no último capítulo | ✅ | `useConfettiStore` disparado quando não há `nextChapterId` |
+| RF04.6 | Exibição de anexos do curso | ✅ | `chapter/page.tsx` lista `attachments` com link para download |
+| RF04.7 | Criar anotações com timestamp | ✅ | `<ChapterNotes>` com `getCurrentTime()` passado como prop |
+| RF04.8 | Visualizar, editar e excluir anotações | ✅ | `<ChapterNotes>` implementa CRUD completo de notas |
+| RF04.9 | Barra lateral com capítulos e status | ✅ | `<CourseSidebar>` exibe todos os capítulos com ícone de conclusão |
+| **RF05 — Progresso e Gamificação** ||||
+| RF05.1 | Percentual de conclusão de cada curso | ✅ | `get_progress()` em `services.py` calcula capítulos concluídos / total |
+| RF05.2 | Dashboard com métricas do aluno | ✅ | `dashboard/page.tsx` exibe horas, cursos concluídos, em andamento e medalhas |
+| RF05.3 | Streak de estudos diários | ✅ | `UserStreak` model + `update_user_streak()` + `<StreakCard>` no dashboard |
+| RF05.4 | Concessão de XP ao concluir quiz | ✅ | `backend/routes.py` → `update_chapter_progress` acumula XP em `UserXP` |
+| RF05.5 | Cálculo de nível por XP (5 níveis) | ✅ | `calc_level()` e `LEVEL_LABELS` em `services.py` |
+| RF05.6 | Conquistas ao completar curso | ✅ | `Achievement` model + lógica de award quando progresso atinge 100% |
+| RF05.7 | Atalho "Continuar Assistindo" no dashboard | ✅ | `<CheckpointCard>` com `coursesInProgress` no dashboard |
+| **RF06 — Quiz** ||||
+| RF06.1 | Realizar quiz vinculado ao capítulo | ✅ | `<QuizPlayer>` renderizado em `chapter/page.tsx` quando `quiz.isPublished` |
+| RF06.2 | Questões em sequência com múltipla escolha | ✅ | `<QuizPlayer>` itera questões com opções de resposta |
+| RF06.3 | Resultado com pontuação, XP e status | ✅ | `QuizResult` retornado pelo backend após submissão |
+| RF06.4 | Uma tentativa por aluno (sem refazer) | ✅ | `UniqueConstraint("userId", "quizId")` em `QuizResult` |
+| RF06.5 | Multiplicador 2x XP por combo ≥ 3 corretas | ✅ | `calc_question_xp()` em `services.py` → `if combo_count >= 3: xp *= 2` |
+| RF06.6 | Questões bônus com pontuação extra | ✅ | `isBonus` + `bonusPoints` no modelo `Question` |
+| RF06.7 | Limite de tempo configurável por quiz | ✅ | Campo `timeLimit` no modelo `Quiz` |
+| RF06.8 | Quiz obrigatório bloqueia avanço ao capítulo | ⚠️ | Campo `isRequired` existe no modelo mas a lógica de bloqueio não está implementada na UI |
+| **RF07 — Criação de Cursos** ||||
+| RF07.1 | Criar curso com só o título | ✅ | `POST /api/courses` no backend aceita apenas `title` |
+| RF07.2 | Editar título, descrição, imagem, categoria, preço | ✅ | `PATCH /api/courses/{id}` aceita todos os campos opcionais |
+| RF07.3 | Publicar e despublicar curso | ✅ | `PATCH /api/courses/{id}/publish` e `/unpublish` |
+| RF07.4 | Validação antes de publicar | ✅ | Backend valida título, descrição, imagem, categoria e ≥1 capítulo publicado |
+| RF07.5 | Excluir curso com cascata | ✅ | `DELETE /api/courses/{id}` com `ondelete="CASCADE"` nos relacionamentos |
+| RF07.6 | Upload de anexos | ✅ | `POST /api/courses/{id}/attachments` |
+| RF07.7 | Remover anexo individual | ✅ | `DELETE /api/courses/{id}/attachments/{attachmentId}` + remoção no Mux |
+| **RF08 — Capítulos** ||||
+| RF08.1 | Adicionar capítulos ao curso | ✅ | `POST /api/courses/{id}/chapters` |
+| RF08.2 | Reordenar via drag-and-drop | ✅ | `PUT /api/courses/{id}/chapters/reorder` |
+| RF08.3 | Editar título, descrição, duração, vídeo | ✅ | `PATCH /api/courses/{id}/chapters/{id}` |
+| RF08.4 | Suporte a vídeo Mux e externo | ✅ | `VideoSourceTypeEnum` → `UPLOAD` / `EXTERNAL` |
+| RF08.5 | Transcrição automática de YouTube em background | ✅ | `start_transcription()` em `services.py` → `threading.Thread(daemon=True)` |
+| RF08.6 | Marcar capítulo como gratuito | ✅ | Campo `isFree` no modelo `Chapter` |
+| RF08.7 | Publicar e despublicar capítulos | ✅ | `PATCH /api/courses/{id}/chapters/{id}/publish` e `/unpublish` |
+| RF08.8 | Validação antes de publicar capítulo | ✅ | Backend valida título, descrição e presença de vídeo |
+| RF08.9 | Excluir capítulo e asset Mux | ✅ | `DELETE` + `delete_mux_asset(mux_data.assetId)` |
+| **RF09 — Quizzes (Professor)** ||||
+| RF09.1 | Criar quiz vinculado ao capítulo | ✅ | `POST /api/courses/{id}/chapters/{id}/quiz` |
+| RF09.2 | Configurar maxQuestions, passingScore, timeLimit | ✅ | Todos os campos no modelo `Quiz` e rota PATCH |
+| RF09.3 | CRUD manual de questões | ✅ | Rotas de criação, edição e exclusão de `Question` |
+| RF09.4 | Geração de questões via IA (Gemini) | ✅ | `generate_quiz_questions()` em `services.py` usa `gemini-1.5-flash` |
+| RF09.5 | Questões bônus com pontuação extra | ✅ | `isBonus` + `bonusPoints` configuráveis |
+| RF09.6 | Publicar e despublicar quiz | ✅ | `PATCH /api/courses/{id}/chapters/{id}/quiz/publish` e `/unpublish` |
+| RF09.7 | Marcar quiz como obrigatório | ✅ | Campo `isRequired` no modelo `Quiz` |
+| RF09.8 | Excluir quiz | ✅ | `DELETE /api/courses/{id}/chapters/{id}/quiz` |
+| **RF10 — Dashboard do Professor** ||||
+| RF10.1 | Lista de cursos com status | ✅ | `TeacherDashboard` lista cursos com badges de publicação |
+| RF10.2 | Total de alunos matriculados por curso | ✅ | `backend/routes.py` retorna `stats` com contagem de matrículas |
+| RF10.3 | Analytics com gráficos | ✅ | Rota `/teacher/analytics` com gráficos de engajamento |
+| RF10.4 | Acesso restrito a TEACHER/ADMIN | ✅ | `layout.tsx` do grupo `teacher/` verifica role |
+| **RF11 — Administração** ||||
+| RF11.1 | Promover usuário a TEACHER via painel | ⚠️ | `promote_admin_profile()` existe no backend; painel admin no frontend é um placeholder vazio |
+| RF11.2 | Promover usuário a ADMIN | ⚠️ | Lógica existe no backend mas sem UI funcional no frontend |
+| RF11.3 | Rota de categorias restrita a TEACHER/ADMIN | ✅ | `require_roles` aplicado nas rotas de categoria no backend |
+| RF11.4 | Criar e listar categorias | ✅ | `GET/POST /api/meta/categories` implementados |
+| **RF12 — LLM Local** ||||
+| RF12.1 | Integração com LLM local via handler | ✅ | `backend/llm.py` + `backend/lms_backend/con_model.py` |
+| RF12.2 | Streaming de respostas do modelo | ✅ | `backend/lms_backend/utils_stream.py` → `iter_sync()` |
+| RF12.3 | Execução assíncrona de queries | ✅ | `backend/lms_backend/utils_async_runner.py` |
+
+---
+
+### 7.2 Requisitos Não Funcionais
+
+| ID | Requisito (resumo) | Status | Evidência / Observação |
+|---|---|:---:|---|
+| **RNF01 — Desempenho** ||||
+| RNF01.1 | Páginas carregam em < 3s em 10 Mbps | ⚠️ | Arquitetura favorece isso mas não há testes de carga documentados |
+| RNF01.2 | Índices nas colunas de busca frequente | ✅ | `models.py` define `Index` em `chapterId`, `courseId`, `userId`, `questionId` |
+| RNF01.3 | Backend responde < 500ms em CRUD simples | ⚠️ | Sem benchmarks formais; estrutura de queries é eficiente |
+| RNF01.4 | Transcrição em thread separada (não bloqueante) | ✅ | `start_transcription()` usa `threading.Thread(daemon=True)` |
+| RNF01.5 | `joinedload` para evitar N+1 queries | ✅ | `routes.py` usa `joinedload(Course.category)`, `joinedload(Course.chapters)` |
+| **RNF02 — Segurança** ||||
+| RNF02.1 | Verificação de sessão em rotas protegidas | ✅ | `get_current_user()` chamado no início de todas as rotas privadas |
+| RNF02.2 | Senhas com hash seguro (bcrypt) | ✅ | NextAuth com provider Credentials usa bcrypt por padrão |
+| RNF02.3 | Chaves de API via variáveis de ambiente | ✅ | `config.py` lê todas as chaves via `os.environ` |
+| RNF02.4 | Token validado em cada requisição no backend | ✅ | `backend/lms_backend/auth.py` → middleware `get_current_user()` |
+| RNF02.5 | Verificação de proprietário do recurso | ✅ | Rotas de curso/capítulo comparam `course.userId == current_user.id` |
+| RNF02.6 | Não expõe dados de outros usuários | ✅ | Queries sempre filtradas por `userId` do usuário autenticado |
+| RNF02.7 | Arquivos `.pyc` não commitados | ❌ | Arquivos `__pycache__/*.pyc` foram incluídos no commit `7f15f766` — necessário adicionar ao `.gitignore` |
+| **RNF03 — Usabilidade** ||||
+| RNF03.1 | Interface responsiva (mobile e desktop) | ✅ | Tailwind CSS com classes responsivas (`md:`, `lg:`) em todos os componentes |
+| RNF03.2 | Feedback visual imediato (toast) | ✅ | `react-hot-toast` usado em toda a aplicação |
+| RNF03.3 | Indicador de carregamento no player | ✅ | `chapter/page.tsx` exibe spinner enquanto `loading === true` |
+| RNF03.4 | Mensagens de erro em português | ✅ | Todas as mensagens de UI estão em pt-BR |
+| RNF03.5 | Barra lateral indica status dos capítulos | ✅ | `<CourseSidebar>` exibe ícone de check/lock por capítulo |
+| **RNF04 — Manutenibilidade** ||||
+| RNF04.1 | Arquitetura monorepo com `frontend/` e `backend/` | ✅ | `pnpm-workspace.yaml` define o monorepo |
+| RNF04.2 | Separação em camadas no backend | ✅ | `models.py` / `services.py` / `routes.py` / `utils.py` bem definidos |
+| RNF04.3 | Server Components para busca de dados | ⚠️ | `chapter/page.tsx` usa `"use client"` — mistura de padrões; `dashboard/page.tsx` é Server Component correto |
+| RNF04.4 | Comunicação via camada `serverApi` | ✅ | `frontend/lib/server-api.ts` abstrai todos os fetches autenticados |
+| RNF04.5 | Schema versionado via Prisma Migrations | ✅ | `frontend/prisma/migrations/` com migration `0_init` |
+| RNF04.6 | Padrões de linting (ESLint/TypeScript) | ✅ | `tsconfig.json` e configuração ESLint presentes |
+| **RNF05 — Disponibilidade** ||||
+| RNF05.1 | Banco gerenciado com backups automáticos | ✅ | Supabase configurado como banco (`DATABASE_URL` via env) |
+| RNF05.2 | Suporte a ≥ 50 usuários simultâneos | ⚠️ | Sem teste de carga; Supabase e Flask podem escalar mas não validado |
+| RNF05.3 | Processamento de vídeo Mux assíncrono | ✅ | Mux processa o asset de forma assíncrona; backend apenas registra IDs |
+| **RNF06 — Compatibilidade** ||||
+| RNF06.1 | Compatível com Chrome, Firefox, Edge, Safari | ⚠️ | Sem testes formais entre browsers documentados |
+| RNF06.2 | Backend compatível com Python 3.10+ | ✅ | Uso de `type hints` modernos e arquivos `.pyc` com `cpython-310` confirmado |
+| RNF06.3 | Frontend compatível com Node.js 18+ | ✅ | `package.json` e Next.js 15 exigem Node ≥ 18 |
+| RNF06.4 | Gerenciador de pacotes `pnpm` | ✅ | `pnpm-lock.yaml` e `pnpm-workspace.yaml` presentes |
+| **RNF07 — Internacionalização** ||||
+| RNF07.1 | Sistema em pt-BR | ✅ | Toda a interface, mensagens e labels estão em português |
+| RNF07.2 | Transcrição prioriza pt/pt-BR | ✅ | `start_transcription()` → `languages=["pt", "pt-BR", "en"]` |
+
+---
+
+### 7.3 Resumo Geral
+
+| Grupo | Total | ✅ Implementado | ⚠️ Parcial | ❌ Não implementado |
+|---|:---:|:---:|:---:|:---:|
+| RF01 — Autenticação | 7 | 7 | 0 | 0 |
+| RF02 — Catálogo | 6 | 6 | 0 | 0 |
+| RF03 — Matrícula | 6 | 4 | 2 | 0 |
+| RF04 — Player de Vídeo | 9 | 9 | 0 | 0 |
+| RF05 — Progresso/Gamificação | 7 | 7 | 0 | 0 |
+| RF06 — Quiz (Aluno) | 8 | 7 | 1 | 0 |
+| RF07 — Criação de Cursos | 7 | 7 | 0 | 0 |
+| RF08 — Capítulos | 9 | 9 | 0 | 0 |
+| RF09 — Quizzes (Professor) | 8 | 8 | 0 | 0 |
+| RF10 — Dashboard Professor | 4 | 4 | 0 | 0 |
+| RF11 — Administração | 4 | 2 | 2 | 0 |
+| RF12 — LLM Local | 3 | 3 | 0 | 0 |
+| **Total RF** | **78** | **73** | **5** | **0** |
+| RNF01 — Desempenho | 5 | 3 | 2 | 0 |
+| RNF02 — Segurança | 7 | 6 | 0 | 1 |
+| RNF03 — Usabilidade | 5 | 5 | 0 | 0 |
+| RNF04 — Manutenibilidade | 6 | 5 | 1 | 0 |
+| RNF05 — Disponibilidade | 3 | 2 | 1 | 0 |
+| RNF06 — Compatibilidade | 4 | 3 | 1 | 0 |
+| RNF07 — Internacionalização | 2 | 2 | 0 | 0 |
+| **Total RNF** | **32** | **26** | **5** | **1** |
+| **TOTAL GERAL** | **110** | **99** | **10** | **1** |
+
+---
+
+### 7.4 Pendências Prioritárias
+
+| Prioridade | ID | Descrição |
+|:---:|---|---|
+| 🔴 Alta | RF03.5 / RF03.6 | Ativar bloqueio de capítulos na UI — `isLocked` está hardcoded como `false` em `chapter/page.tsx` |
+| 🔴 Alta | RNF02.7 | Adicionar `__pycache__/` e `*.pyc` ao `.gitignore` e remover do repositório |
+| 🟡 Média | RF06.8 | Implementar bloqueio de avanço de capítulo quando quiz obrigatório não foi aprovado |
+| 🟡 Média | RF11.1 / RF11.2 | Desenvolver UI funcional no painel admin para promoção de usuários |
+| 🟢 Baixa | RNF01.1 / RNF01.3 | Executar testes de carga e documentar benchmarks de performance |
+| 🟢 Baixa | RNF04.3 | Refatorar `chapter/page.tsx` para usar Server Component com fetch no servidor |
+| 🟢 Baixa | RNF05.2 / RNF06.1 | Realizar testes formais de carga e compatibilidade entre navegadores |
+
+---
+
+*Status auditado em Abril de 2026 com base na análise direta do código-fonte.*
