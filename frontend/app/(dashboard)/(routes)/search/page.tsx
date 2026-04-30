@@ -7,6 +7,7 @@ import { Categories } from "./_components/categories";
 import { getCourses } from "@/actions/get-courses";
 import { CoursesList } from "@/components/courses-list";
 import { serverApi } from "@/lib/server-api";
+import { ScrollReveal } from "@/components/scroll-reveal";
 
 interface SearchPageProps {
   searchParams: Promise<{
@@ -37,8 +38,12 @@ const SearchPage = async ({ searchParams }: SearchPageProps) => {
         <SearchInput />
       </div>
       <div className="p-6 space-y-4">
-        <Categories items={categories} />
-        <CoursesList items={courses} />
+        <ScrollReveal delay={0.1}>
+          <Categories items={categories} />
+        </ScrollReveal>
+        <ScrollReveal delay={0.2} yOffset={100}>
+          <CoursesList items={courses} />
+        </ScrollReveal>
       </div>
     </>
   );

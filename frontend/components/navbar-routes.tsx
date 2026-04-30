@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 import { SearchInput } from "./search-input";
 
@@ -79,6 +80,7 @@ export const NavbarRoutes = () => {
             )}
           </div>
         )}
+        <ThemeToggle />
         <UserButton />
       </div>
     </>

@@ -3,11 +3,12 @@
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
+import { GraduationCap } from "lucide-react";
+import Link from "next/link";
 
 export default function SignInPage() {
-    const isNextAuth = process.env.NEXT_PUBLIC_AUTH_PROVIDER === "nextauth";
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -15,14 +16,6 @@ export default function SignInPage() {
     const searchParams = useSearchParams();
 
     const afterSignInUrl = searchParams.get("afterSignInUrl") || "/search";
-
-    if (!isNextAuth) {
-        return (
-            <div className="flex min-h-screen items-center justify-center">
-                <h2>Firebase Sign-In (Coming Soon)</h2>
-            </div>
-        );
-    }
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -48,51 +41,59 @@ export default function SignInPage() {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-slate-100 p-4">
-            <div className="p-8 bg-white border shadow-xl rounded-2xl flex flex-col items-center space-y-6 w-full max-w-md">
-                <div className="text-center space-y-2">
-                    <h1 className="text-3xl font-bold text-slate-800">LMS Login</h1>
-                    <p className="text-slate-500">Entre na sua conta para continuar</p>
+        <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
+            
+            <Link href="/" className="flex items-center gap-2 mb-8 hover:opacity-80 transition">
+                <div className="bg-primary p-2 rounded-none">
+                    <GraduationCap className="h-6 w-6 text-black" />
+                </div>
+                <span className="font-bold text-xl tracking-tighter uppercase text-foreground">LMS PMJG</span>
+            </Link>
+
+            <div className="p-8 bg-card border border-border flex flex-col items-center space-y-8 w-full max-w-md shadow-2xl">
+                <div className="text-center space-y-2 w-full">
+                    <h1 className="text-3xl font-black uppercase tracking-tighter text-foreground">Acessar Conta</h1>
+                    <p className="text-muted-foreground">Insira suas credenciais para continuar</p>
                 </div>
 
-                <form onSubmit={onSubmit} className="w-full space-y-4">
+                <form onSubmit={onSubmit} className="w-full space-y-6">
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-700">E-mail</label>
+                        <label className="text-xs uppercase tracking-widest font-bold text-muted-foreground">E-mail</label>
                         <input
                             type="email"
                             placeholder="exemplo@lms.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-sky-500 outline-none transition"
+                            className="w-full p-4 border border-border bg-background text-foreground focus:border-primary focus:ring-1 focus:ring-primary outline-none transition rounded-none"
                             required
                         />
                     </div>
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-700">Senha</label>
+                        <label className="text-xs uppercase tracking-widest font-bold text-muted-foreground">Senha</label>
                         <input
                             type="password"
                             placeholder="••••••••"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-sky-500 outline-none transition"
+                            className="w-full p-4 border border-border bg-background text-foreground focus:border-primary focus:ring-1 focus:ring-primary outline-none transition rounded-none"
                             required
                         />
                     </div>
                     <Button 
                         type="submit" 
                         disabled={isLoading}
-                        className="w-full py-6 bg-sky-700 hover:bg-sky-800 text-white font-semibold text-lg"
+                        className="w-full py-6 rounded-full bg-primary hover:bg-primary/90 text-black font-semibold text-lg"
                     >
-                        {isLoading ? "Entrando..." : "Entrar com Credenciais"}
+                        {isLoading ? "Autenticando..." : "Entrar"}
                     </Button>
                 </form>
 
-                <div className="relative w-full py-2">
+                <div className="relative w-full py-4">
                     <div className="absolute inset-0 flex items-center">
-                        <span className="w-full border-t" />
+                        <span className="w-full border-t border-border" />
                     </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-white px-2 text-slate-500">Ou continue com</span>
+                    <div className="relative flex justify-center text-xs uppercase font-bold tracking-widest">
+                        <span className="bg-card px-4 text-muted-foreground">Ou continue com</span>
                     </div>
                 </div>
 
@@ -100,7 +101,7 @@ export default function SignInPage() {
                     variant="outline" 
                     onClick={() => signIn("google", { callbackUrl: "/search" })}
                     disabled={isLoading}
-                    className="w-full py-6 border-slate-300 hover:bg-slate-50"
+                    className="w-full py-6 rounded-full border-border hover:bg-muted text-foreground"
                 >
                     <img src="https://authjs.dev/img/providers/google.svg" className="h-5 w-5 mr-2" />
                     Google
