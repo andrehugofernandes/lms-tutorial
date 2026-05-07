@@ -82,7 +82,14 @@ function run(name, command, args, options = {}) {
 }
 
 const pnpmCommand = isWindows ? "pnpm.cmd" : "pnpm";
-const pythonCommand = process.env.PYTHON || "python";
+let pythonCommand = process.env.PYTHON || "python";
+const venvPythonPath = isWindows 
+  ? path.join(rootDir, "backend", "venv", "Scripts", "python.exe")
+  : path.join(rootDir, "backend", "venv", "bin", "python");
+
+if (fs.existsSync(venvPythonPath)) {
+  pythonCommand = venvPythonPath;
+}
 const sharedToken = process.env.BACKEND_INTERNAL_TOKEN || process.env.NEXTAUTH_SECRET || "dev-internal-token";
 const sharedEnv = {
   BACKEND_PORT: backendPort,

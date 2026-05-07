@@ -98,6 +98,26 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  * 
  */
 export type VerificationToken = $Result.DefaultSelection<Prisma.$VerificationTokenPayload>
+/**
+ * Model Achievement
+ * 
+ */
+export type Achievement = $Result.DefaultSelection<Prisma.$AchievementPayload>
+/**
+ * Model Purchase
+ * 
+ */
+export type Purchase = $Result.DefaultSelection<Prisma.$PurchasePayload>
+/**
+ * Model UserNote
+ * 
+ */
+export type UserNote = $Result.DefaultSelection<Prisma.$UserNotePayload>
+/**
+ * Model UserStreak
+ * 
+ */
+export type UserStreak = $Result.DefaultSelection<Prisma.$UserStreakPayload>
 
 /**
  * Enums
@@ -448,6 +468,46 @@ export class PrismaClient<
     * ```
     */
   get verificationToken(): Prisma.VerificationTokenDelegate<ExtArgs>;
+
+  /**
+   * `prisma.achievement`: Exposes CRUD operations for the **Achievement** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Achievements
+    * const achievements = await prisma.achievement.findMany()
+    * ```
+    */
+  get achievement(): Prisma.AchievementDelegate<ExtArgs>;
+
+  /**
+   * `prisma.purchase`: Exposes CRUD operations for the **Purchase** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Purchases
+    * const purchases = await prisma.purchase.findMany()
+    * ```
+    */
+  get purchase(): Prisma.PurchaseDelegate<ExtArgs>;
+
+  /**
+   * `prisma.userNote`: Exposes CRUD operations for the **UserNote** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserNotes
+    * const userNotes = await prisma.userNote.findMany()
+    * ```
+    */
+  get userNote(): Prisma.UserNoteDelegate<ExtArgs>;
+
+  /**
+   * `prisma.userStreak`: Exposes CRUD operations for the **UserStreak** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserStreaks
+    * const userStreaks = await prisma.userStreak.findMany()
+    * ```
+    */
+  get userStreak(): Prisma.UserStreakDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -934,7 +994,11 @@ export namespace Prisma {
     Account: 'Account',
     Session: 'Session',
     User: 'User',
-    VerificationToken: 'VerificationToken'
+    VerificationToken: 'VerificationToken',
+    Achievement: 'Achievement',
+    Purchase: 'Purchase',
+    UserNote: 'UserNote',
+    UserStreak: 'UserStreak'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -951,7 +1015,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: 'profile' | 'course' | 'category' | 'attachment' | 'chapter' | 'muxData' | 'userProgress' | 'quiz' | 'question' | 'option' | 'answer' | 'quizResult' | 'userXP' | 'account' | 'session' | 'user' | 'verificationToken'
+      modelProps: 'profile' | 'course' | 'category' | 'attachment' | 'chapter' | 'muxData' | 'userProgress' | 'quiz' | 'question' | 'option' | 'answer' | 'quizResult' | 'userXP' | 'account' | 'session' | 'user' | 'verificationToken' | 'achievement' | 'purchase' | 'userNote' | 'userStreak'
       txIsolationLevel: Prisma.TransactionIsolationLevel
     },
     model: {
@@ -2074,6 +2138,270 @@ export namespace Prisma {
           count: {
             args: Prisma.VerificationTokenCountArgs<ExtArgs>,
             result: $Utils.Optional<VerificationTokenCountAggregateOutputType> | number
+          }
+        }
+      }
+      Achievement: {
+        payload: Prisma.$AchievementPayload<ExtArgs>
+        fields: Prisma.AchievementFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AchievementFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$AchievementPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AchievementFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$AchievementPayload>
+          }
+          findFirst: {
+            args: Prisma.AchievementFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$AchievementPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AchievementFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$AchievementPayload>
+          }
+          findMany: {
+            args: Prisma.AchievementFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$AchievementPayload>[]
+          }
+          create: {
+            args: Prisma.AchievementCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$AchievementPayload>
+          }
+          createMany: {
+            args: Prisma.AchievementCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.AchievementDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$AchievementPayload>
+          }
+          update: {
+            args: Prisma.AchievementUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$AchievementPayload>
+          }
+          deleteMany: {
+            args: Prisma.AchievementDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AchievementUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.AchievementUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$AchievementPayload>
+          }
+          aggregate: {
+            args: Prisma.AchievementAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateAchievement>
+          }
+          groupBy: {
+            args: Prisma.AchievementGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<AchievementGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AchievementCountArgs<ExtArgs>,
+            result: $Utils.Optional<AchievementCountAggregateOutputType> | number
+          }
+        }
+      }
+      Purchase: {
+        payload: Prisma.$PurchasePayload<ExtArgs>
+        fields: Prisma.PurchaseFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PurchaseFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$PurchasePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PurchaseFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$PurchasePayload>
+          }
+          findFirst: {
+            args: Prisma.PurchaseFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$PurchasePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PurchaseFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$PurchasePayload>
+          }
+          findMany: {
+            args: Prisma.PurchaseFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$PurchasePayload>[]
+          }
+          create: {
+            args: Prisma.PurchaseCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$PurchasePayload>
+          }
+          createMany: {
+            args: Prisma.PurchaseCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.PurchaseDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$PurchasePayload>
+          }
+          update: {
+            args: Prisma.PurchaseUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$PurchasePayload>
+          }
+          deleteMany: {
+            args: Prisma.PurchaseDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PurchaseUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.PurchaseUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$PurchasePayload>
+          }
+          aggregate: {
+            args: Prisma.PurchaseAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregatePurchase>
+          }
+          groupBy: {
+            args: Prisma.PurchaseGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<PurchaseGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PurchaseCountArgs<ExtArgs>,
+            result: $Utils.Optional<PurchaseCountAggregateOutputType> | number
+          }
+        }
+      }
+      UserNote: {
+        payload: Prisma.$UserNotePayload<ExtArgs>
+        fields: Prisma.UserNoteFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserNoteFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserNotePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserNoteFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserNotePayload>
+          }
+          findFirst: {
+            args: Prisma.UserNoteFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserNotePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserNoteFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserNotePayload>
+          }
+          findMany: {
+            args: Prisma.UserNoteFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserNotePayload>[]
+          }
+          create: {
+            args: Prisma.UserNoteCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserNotePayload>
+          }
+          createMany: {
+            args: Prisma.UserNoteCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.UserNoteDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserNotePayload>
+          }
+          update: {
+            args: Prisma.UserNoteUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserNotePayload>
+          }
+          deleteMany: {
+            args: Prisma.UserNoteDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserNoteUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.UserNoteUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserNotePayload>
+          }
+          aggregate: {
+            args: Prisma.UserNoteAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateUserNote>
+          }
+          groupBy: {
+            args: Prisma.UserNoteGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<UserNoteGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserNoteCountArgs<ExtArgs>,
+            result: $Utils.Optional<UserNoteCountAggregateOutputType> | number
+          }
+        }
+      }
+      UserStreak: {
+        payload: Prisma.$UserStreakPayload<ExtArgs>
+        fields: Prisma.UserStreakFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserStreakFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserStreakPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserStreakFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserStreakPayload>
+          }
+          findFirst: {
+            args: Prisma.UserStreakFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserStreakPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserStreakFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserStreakPayload>
+          }
+          findMany: {
+            args: Prisma.UserStreakFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserStreakPayload>[]
+          }
+          create: {
+            args: Prisma.UserStreakCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserStreakPayload>
+          }
+          createMany: {
+            args: Prisma.UserStreakCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.UserStreakDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserStreakPayload>
+          }
+          update: {
+            args: Prisma.UserStreakUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserStreakPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserStreakDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserStreakUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.UserStreakUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserStreakPayload>
+          }
+          aggregate: {
+            args: Prisma.UserStreakAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateUserStreak>
+          }
+          groupBy: {
+            args: Prisma.UserStreakGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<UserStreakGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserStreakCountArgs<ExtArgs>,
+            result: $Utils.Optional<UserStreakCountAggregateOutputType> | number
           }
         }
       }
@@ -3453,8 +3781,18 @@ export namespace Prisma {
 
   export type AggregateCourse = {
     _count: CourseCountAggregateOutputType | null
+    _avg: CourseAvgAggregateOutputType | null
+    _sum: CourseSumAggregateOutputType | null
     _min: CourseMinAggregateOutputType | null
     _max: CourseMaxAggregateOutputType | null
+  }
+
+  export type CourseAvgAggregateOutputType = {
+    price: number | null
+  }
+
+  export type CourseSumAggregateOutputType = {
+    price: number | null
   }
 
   export type CourseMinAggregateOutputType = {
@@ -3467,6 +3805,7 @@ export namespace Prisma {
     categoryId: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    price: number | null
   }
 
   export type CourseMaxAggregateOutputType = {
@@ -3479,6 +3818,7 @@ export namespace Prisma {
     categoryId: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    price: number | null
   }
 
   export type CourseCountAggregateOutputType = {
@@ -3491,9 +3831,18 @@ export namespace Prisma {
     categoryId: number
     createdAt: number
     updatedAt: number
+    price: number
     _all: number
   }
 
+
+  export type CourseAvgAggregateInputType = {
+    price?: true
+  }
+
+  export type CourseSumAggregateInputType = {
+    price?: true
+  }
 
   export type CourseMinAggregateInputType = {
     id?: true
@@ -3505,6 +3854,7 @@ export namespace Prisma {
     categoryId?: true
     createdAt?: true
     updatedAt?: true
+    price?: true
   }
 
   export type CourseMaxAggregateInputType = {
@@ -3517,6 +3867,7 @@ export namespace Prisma {
     categoryId?: true
     createdAt?: true
     updatedAt?: true
+    price?: true
   }
 
   export type CourseCountAggregateInputType = {
@@ -3529,6 +3880,7 @@ export namespace Prisma {
     categoryId?: true
     createdAt?: true
     updatedAt?: true
+    price?: true
     _all?: true
   }
 
@@ -3570,6 +3922,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: CourseAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CourseSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: CourseMinAggregateInputType
@@ -3600,6 +3964,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: CourseCountAggregateInputType | true
+    _avg?: CourseAvgAggregateInputType
+    _sum?: CourseSumAggregateInputType
     _min?: CourseMinAggregateInputType
     _max?: CourseMaxAggregateInputType
   }
@@ -3614,7 +3980,10 @@ export namespace Prisma {
     categoryId: string | null
     createdAt: Date
     updatedAt: Date
+    price: number | null
     _count: CourseCountAggregateOutputType | null
+    _avg: CourseAvgAggregateOutputType | null
+    _sum: CourseSumAggregateOutputType | null
     _min: CourseMinAggregateOutputType | null
     _max: CourseMaxAggregateOutputType | null
   }
@@ -3643,6 +4012,7 @@ export namespace Prisma {
     categoryId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    price?: boolean
     category?: boolean | Course$categoryArgs<ExtArgs>
     chapters?: boolean | Course$chaptersArgs<ExtArgs>
     attachments?: boolean | Course$attachmentsArgs<ExtArgs>
@@ -3659,6 +4029,7 @@ export namespace Prisma {
     categoryId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    price?: boolean
   }
 
   export type CourseInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
@@ -3686,6 +4057,7 @@ export namespace Prisma {
       categoryId: string | null
       createdAt: Date
       updatedAt: Date
+      price: number | null
     }, ExtArgs["result"]["course"]>
     composites: {}
   }
@@ -4094,6 +4466,7 @@ export namespace Prisma {
     readonly categoryId: FieldRef<"Course", 'String'>
     readonly createdAt: FieldRef<"Course", 'DateTime'>
     readonly updatedAt: FieldRef<"Course", 'DateTime'>
+    readonly price: FieldRef<"Course", 'Float'>
   }
     
 
@@ -6330,10 +6703,12 @@ export namespace Prisma {
 
   export type ChapterAvgAggregateOutputType = {
     position: number | null
+    duration: number | null
   }
 
   export type ChapterSumAggregateOutputType = {
     position: number | null
+    duration: number | null
   }
 
   export type ChapterMinAggregateOutputType = {
@@ -6345,14 +6720,15 @@ export namespace Prisma {
     externalUrl: string | null
     embedUrl: string | null
     videoProvider: $Enums.VideoProvider | null
-    transcript: string | null
-    transcriptStatus: $Enums.TranscriptStatus | null
     position: number | null
     isPublished: boolean | null
     isFree: boolean | null
     courseId: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    transcript: string | null
+    transcriptStatus: $Enums.TranscriptStatus | null
+    duration: number | null
   }
 
   export type ChapterMaxAggregateOutputType = {
@@ -6364,14 +6740,15 @@ export namespace Prisma {
     externalUrl: string | null
     embedUrl: string | null
     videoProvider: $Enums.VideoProvider | null
-    transcript: string | null
-    transcriptStatus: $Enums.TranscriptStatus | null
     position: number | null
     isPublished: boolean | null
     isFree: boolean | null
     courseId: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    transcript: string | null
+    transcriptStatus: $Enums.TranscriptStatus | null
+    duration: number | null
   }
 
   export type ChapterCountAggregateOutputType = {
@@ -6383,24 +6760,27 @@ export namespace Prisma {
     externalUrl: number
     embedUrl: number
     videoProvider: number
-    transcript: number
-    transcriptStatus: number
     position: number
     isPublished: number
     isFree: number
     courseId: number
     createdAt: number
     updatedAt: number
+    transcript: number
+    transcriptStatus: number
+    duration: number
     _all: number
   }
 
 
   export type ChapterAvgAggregateInputType = {
     position?: true
+    duration?: true
   }
 
   export type ChapterSumAggregateInputType = {
     position?: true
+    duration?: true
   }
 
   export type ChapterMinAggregateInputType = {
@@ -6412,14 +6792,15 @@ export namespace Prisma {
     externalUrl?: true
     embedUrl?: true
     videoProvider?: true
-    transcript?: true
-    transcriptStatus?: true
     position?: true
     isPublished?: true
     isFree?: true
     courseId?: true
     createdAt?: true
     updatedAt?: true
+    transcript?: true
+    transcriptStatus?: true
+    duration?: true
   }
 
   export type ChapterMaxAggregateInputType = {
@@ -6431,14 +6812,15 @@ export namespace Prisma {
     externalUrl?: true
     embedUrl?: true
     videoProvider?: true
-    transcript?: true
-    transcriptStatus?: true
     position?: true
     isPublished?: true
     isFree?: true
     courseId?: true
     createdAt?: true
     updatedAt?: true
+    transcript?: true
+    transcriptStatus?: true
+    duration?: true
   }
 
   export type ChapterCountAggregateInputType = {
@@ -6450,14 +6832,15 @@ export namespace Prisma {
     externalUrl?: true
     embedUrl?: true
     videoProvider?: true
-    transcript?: true
-    transcriptStatus?: true
     position?: true
     isPublished?: true
     isFree?: true
     courseId?: true
     createdAt?: true
     updatedAt?: true
+    transcript?: true
+    transcriptStatus?: true
+    duration?: true
     _all?: true
   }
 
@@ -6556,14 +6939,15 @@ export namespace Prisma {
     externalUrl: string | null
     embedUrl: string | null
     videoProvider: $Enums.VideoProvider | null
-    transcript: string | null
-    transcriptStatus: $Enums.TranscriptStatus
     position: number
     isPublished: boolean
     isFree: boolean
     courseId: string
     createdAt: Date
     updatedAt: Date
+    transcript: string | null
+    transcriptStatus: $Enums.TranscriptStatus
+    duration: number | null
     _count: ChapterCountAggregateOutputType | null
     _avg: ChapterAvgAggregateOutputType | null
     _sum: ChapterSumAggregateOutputType | null
@@ -6594,14 +6978,15 @@ export namespace Prisma {
     externalUrl?: boolean
     embedUrl?: boolean
     videoProvider?: boolean
-    transcript?: boolean
-    transcriptStatus?: boolean
     position?: boolean
     isPublished?: boolean
     isFree?: boolean
     courseId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    transcript?: boolean
+    transcriptStatus?: boolean
+    duration?: boolean
     muxData?: boolean | Chapter$muxDataArgs<ExtArgs>
     quiz?: boolean | Chapter$quizArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
@@ -6618,14 +7003,15 @@ export namespace Prisma {
     externalUrl?: boolean
     embedUrl?: boolean
     videoProvider?: boolean
-    transcript?: boolean
-    transcriptStatus?: boolean
     position?: boolean
     isPublished?: boolean
     isFree?: boolean
     courseId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    transcript?: boolean
+    transcriptStatus?: boolean
+    duration?: boolean
   }
 
   export type ChapterInclude<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
@@ -6654,14 +7040,15 @@ export namespace Prisma {
       externalUrl: string | null
       embedUrl: string | null
       videoProvider: $Enums.VideoProvider | null
-      transcript: string | null
-      transcriptStatus: $Enums.TranscriptStatus
       position: number
       isPublished: boolean
       isFree: boolean
       courseId: string
       createdAt: Date
       updatedAt: Date
+      transcript: string | null
+      transcriptStatus: $Enums.TranscriptStatus
+      duration: number | null
     }, ExtArgs["result"]["chapter"]>
     composites: {}
   }
@@ -7071,14 +7458,15 @@ export namespace Prisma {
     readonly externalUrl: FieldRef<"Chapter", 'String'>
     readonly embedUrl: FieldRef<"Chapter", 'String'>
     readonly videoProvider: FieldRef<"Chapter", 'VideoProvider'>
-    readonly transcript: FieldRef<"Chapter", 'String'>
-    readonly transcriptStatus: FieldRef<"Chapter", 'TranscriptStatus'>
     readonly position: FieldRef<"Chapter", 'Int'>
     readonly isPublished: FieldRef<"Chapter", 'Boolean'>
     readonly isFree: FieldRef<"Chapter", 'Boolean'>
     readonly courseId: FieldRef<"Chapter", 'String'>
     readonly createdAt: FieldRef<"Chapter", 'DateTime'>
     readonly updatedAt: FieldRef<"Chapter", 'DateTime'>
+    readonly transcript: FieldRef<"Chapter", 'String'>
+    readonly transcriptStatus: FieldRef<"Chapter", 'TranscriptStatus'>
+    readonly duration: FieldRef<"Chapter", 'Int'>
   }
     
 
@@ -18972,6 +19360,3631 @@ export namespace Prisma {
 
 
   /**
+   * Model Achievement
+   */
+
+  export type AggregateAchievement = {
+    _count: AchievementCountAggregateOutputType | null
+    _min: AchievementMinAggregateOutputType | null
+    _max: AchievementMaxAggregateOutputType | null
+  }
+
+  export type AchievementMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    courseId: string | null
+    title: string | null
+    description: string | null
+    icon: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AchievementMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    courseId: string | null
+    title: string | null
+    description: string | null
+    icon: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type AchievementCountAggregateOutputType = {
+    id: number
+    userId: number
+    courseId: number
+    title: number
+    description: number
+    icon: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type AchievementMinAggregateInputType = {
+    id?: true
+    userId?: true
+    courseId?: true
+    title?: true
+    description?: true
+    icon?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AchievementMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    courseId?: true
+    title?: true
+    description?: true
+    icon?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type AchievementCountAggregateInputType = {
+    id?: true
+    userId?: true
+    courseId?: true
+    title?: true
+    description?: true
+    icon?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type AchievementAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Achievement to aggregate.
+     */
+    where?: AchievementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Achievements to fetch.
+     */
+    orderBy?: AchievementOrderByWithRelationAndSearchRelevanceInput | AchievementOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AchievementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Achievements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Achievements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Achievements
+    **/
+    _count?: true | AchievementCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AchievementMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AchievementMaxAggregateInputType
+  }
+
+  export type GetAchievementAggregateType<T extends AchievementAggregateArgs> = {
+        [P in keyof T & keyof AggregateAchievement]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAchievement[P]>
+      : GetScalarType<T[P], AggregateAchievement[P]>
+  }
+
+
+
+
+  export type AchievementGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    where?: AchievementWhereInput
+    orderBy?: AchievementOrderByWithAggregationInput | AchievementOrderByWithAggregationInput[]
+    by: AchievementScalarFieldEnum[] | AchievementScalarFieldEnum
+    having?: AchievementScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AchievementCountAggregateInputType | true
+    _min?: AchievementMinAggregateInputType
+    _max?: AchievementMaxAggregateInputType
+  }
+
+  export type AchievementGroupByOutputType = {
+    id: string
+    userId: string
+    courseId: string
+    title: string
+    description: string | null
+    icon: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: AchievementCountAggregateOutputType | null
+    _min: AchievementMinAggregateOutputType | null
+    _max: AchievementMaxAggregateOutputType | null
+  }
+
+  type GetAchievementGroupByPayload<T extends AchievementGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AchievementGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AchievementGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AchievementGroupByOutputType[P]>
+            : GetScalarType<T[P], AchievementGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AchievementSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    courseId?: boolean
+    title?: boolean
+    description?: boolean
+    icon?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["achievement"]>
+
+  export type AchievementSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    courseId?: boolean
+    title?: boolean
+    description?: boolean
+    icon?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $AchievementPayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    name: "Achievement"
+    objects: {}
+    scalars: $Extensions.GetResult<{
+      id: string
+      userId: string
+      courseId: string
+      title: string
+      description: string | null
+      icon: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["achievement"]>
+    composites: {}
+  }
+
+
+  type AchievementGetPayload<S extends boolean | null | undefined | AchievementDefaultArgs> = $Result.GetResult<Prisma.$AchievementPayload, S>
+
+  type AchievementCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
+    Omit<AchievementFindManyArgs, 'select' | 'include'> & {
+      select?: AchievementCountAggregateInputType | true
+    }
+
+  export interface AchievementDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Achievement'], meta: { name: 'Achievement' } }
+    /**
+     * Find zero or one Achievement that matches the filter.
+     * @param {AchievementFindUniqueArgs} args - Arguments to find a Achievement
+     * @example
+     * // Get one Achievement
+     * const achievement = await prisma.achievement.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends AchievementFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, AchievementFindUniqueArgs<ExtArgs>>
+    ): Prisma__AchievementClient<$Result.GetResult<Prisma.$AchievementPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one Achievement that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {AchievementFindUniqueOrThrowArgs} args - Arguments to find a Achievement
+     * @example
+     * // Get one Achievement
+     * const achievement = await prisma.achievement.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends AchievementFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, AchievementFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__AchievementClient<$Result.GetResult<Prisma.$AchievementPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first Achievement that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AchievementFindFirstArgs} args - Arguments to find a Achievement
+     * @example
+     * // Get one Achievement
+     * const achievement = await prisma.achievement.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends AchievementFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, AchievementFindFirstArgs<ExtArgs>>
+    ): Prisma__AchievementClient<$Result.GetResult<Prisma.$AchievementPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first Achievement that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AchievementFindFirstOrThrowArgs} args - Arguments to find a Achievement
+     * @example
+     * // Get one Achievement
+     * const achievement = await prisma.achievement.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends AchievementFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, AchievementFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__AchievementClient<$Result.GetResult<Prisma.$AchievementPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more Achievements that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AchievementFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Achievements
+     * const achievements = await prisma.achievement.findMany()
+     * 
+     * // Get first 10 Achievements
+     * const achievements = await prisma.achievement.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const achievementWithIdOnly = await prisma.achievement.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends AchievementFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, AchievementFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AchievementPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a Achievement.
+     * @param {AchievementCreateArgs} args - Arguments to create a Achievement.
+     * @example
+     * // Create one Achievement
+     * const Achievement = await prisma.achievement.create({
+     *   data: {
+     *     // ... data to create a Achievement
+     *   }
+     * })
+     * 
+    **/
+    create<T extends AchievementCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, AchievementCreateArgs<ExtArgs>>
+    ): Prisma__AchievementClient<$Result.GetResult<Prisma.$AchievementPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many Achievements.
+     *     @param {AchievementCreateManyArgs} args - Arguments to create many Achievements.
+     *     @example
+     *     // Create many Achievements
+     *     const achievement = await prisma.achievement.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends AchievementCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, AchievementCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Achievement.
+     * @param {AchievementDeleteArgs} args - Arguments to delete one Achievement.
+     * @example
+     * // Delete one Achievement
+     * const Achievement = await prisma.achievement.delete({
+     *   where: {
+     *     // ... filter to delete one Achievement
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends AchievementDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, AchievementDeleteArgs<ExtArgs>>
+    ): Prisma__AchievementClient<$Result.GetResult<Prisma.$AchievementPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one Achievement.
+     * @param {AchievementUpdateArgs} args - Arguments to update one Achievement.
+     * @example
+     * // Update one Achievement
+     * const achievement = await prisma.achievement.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends AchievementUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, AchievementUpdateArgs<ExtArgs>>
+    ): Prisma__AchievementClient<$Result.GetResult<Prisma.$AchievementPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more Achievements.
+     * @param {AchievementDeleteManyArgs} args - Arguments to filter Achievements to delete.
+     * @example
+     * // Delete a few Achievements
+     * const { count } = await prisma.achievement.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends AchievementDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, AchievementDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Achievements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AchievementUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Achievements
+     * const achievement = await prisma.achievement.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends AchievementUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, AchievementUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Achievement.
+     * @param {AchievementUpsertArgs} args - Arguments to update or create a Achievement.
+     * @example
+     * // Update or create a Achievement
+     * const achievement = await prisma.achievement.upsert({
+     *   create: {
+     *     // ... data to create a Achievement
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Achievement we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends AchievementUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, AchievementUpsertArgs<ExtArgs>>
+    ): Prisma__AchievementClient<$Result.GetResult<Prisma.$AchievementPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of Achievements.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AchievementCountArgs} args - Arguments to filter Achievements to count.
+     * @example
+     * // Count the number of Achievements
+     * const count = await prisma.achievement.count({
+     *   where: {
+     *     // ... the filter for the Achievements we want to count
+     *   }
+     * })
+    **/
+    count<T extends AchievementCountArgs>(
+      args?: Subset<T, AchievementCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AchievementCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Achievement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AchievementAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AchievementAggregateArgs>(args: Subset<T, AchievementAggregateArgs>): Prisma.PrismaPromise<GetAchievementAggregateType<T>>
+
+    /**
+     * Group by Achievement.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AchievementGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AchievementGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AchievementGroupByArgs['orderBy'] }
+        : { orderBy?: AchievementGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AchievementGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAchievementGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Achievement model
+   */
+  readonly fields: AchievementFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Achievement.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AchievementClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the Achievement model
+   */ 
+  interface AchievementFieldRefs {
+    readonly id: FieldRef<"Achievement", 'String'>
+    readonly userId: FieldRef<"Achievement", 'String'>
+    readonly courseId: FieldRef<"Achievement", 'String'>
+    readonly title: FieldRef<"Achievement", 'String'>
+    readonly description: FieldRef<"Achievement", 'String'>
+    readonly icon: FieldRef<"Achievement", 'String'>
+    readonly createdAt: FieldRef<"Achievement", 'DateTime'>
+    readonly updatedAt: FieldRef<"Achievement", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * Achievement findUnique
+   */
+  export type AchievementFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Achievement
+     */
+    select?: AchievementSelect<ExtArgs> | null
+    /**
+     * Filter, which Achievement to fetch.
+     */
+    where: AchievementWhereUniqueInput
+  }
+
+
+  /**
+   * Achievement findUniqueOrThrow
+   */
+  export type AchievementFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Achievement
+     */
+    select?: AchievementSelect<ExtArgs> | null
+    /**
+     * Filter, which Achievement to fetch.
+     */
+    where: AchievementWhereUniqueInput
+  }
+
+
+  /**
+   * Achievement findFirst
+   */
+  export type AchievementFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Achievement
+     */
+    select?: AchievementSelect<ExtArgs> | null
+    /**
+     * Filter, which Achievement to fetch.
+     */
+    where?: AchievementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Achievements to fetch.
+     */
+    orderBy?: AchievementOrderByWithRelationAndSearchRelevanceInput | AchievementOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Achievements.
+     */
+    cursor?: AchievementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Achievements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Achievements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Achievements.
+     */
+    distinct?: AchievementScalarFieldEnum | AchievementScalarFieldEnum[]
+  }
+
+
+  /**
+   * Achievement findFirstOrThrow
+   */
+  export type AchievementFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Achievement
+     */
+    select?: AchievementSelect<ExtArgs> | null
+    /**
+     * Filter, which Achievement to fetch.
+     */
+    where?: AchievementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Achievements to fetch.
+     */
+    orderBy?: AchievementOrderByWithRelationAndSearchRelevanceInput | AchievementOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Achievements.
+     */
+    cursor?: AchievementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Achievements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Achievements.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Achievements.
+     */
+    distinct?: AchievementScalarFieldEnum | AchievementScalarFieldEnum[]
+  }
+
+
+  /**
+   * Achievement findMany
+   */
+  export type AchievementFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Achievement
+     */
+    select?: AchievementSelect<ExtArgs> | null
+    /**
+     * Filter, which Achievements to fetch.
+     */
+    where?: AchievementWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Achievements to fetch.
+     */
+    orderBy?: AchievementOrderByWithRelationAndSearchRelevanceInput | AchievementOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Achievements.
+     */
+    cursor?: AchievementWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Achievements from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Achievements.
+     */
+    skip?: number
+    distinct?: AchievementScalarFieldEnum | AchievementScalarFieldEnum[]
+  }
+
+
+  /**
+   * Achievement create
+   */
+  export type AchievementCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Achievement
+     */
+    select?: AchievementSelect<ExtArgs> | null
+    /**
+     * The data needed to create a Achievement.
+     */
+    data: XOR<AchievementCreateInput, AchievementUncheckedCreateInput>
+  }
+
+
+  /**
+   * Achievement createMany
+   */
+  export type AchievementCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Achievements.
+     */
+    data: AchievementCreateManyInput | AchievementCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * Achievement update
+   */
+  export type AchievementUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Achievement
+     */
+    select?: AchievementSelect<ExtArgs> | null
+    /**
+     * The data needed to update a Achievement.
+     */
+    data: XOR<AchievementUpdateInput, AchievementUncheckedUpdateInput>
+    /**
+     * Choose, which Achievement to update.
+     */
+    where: AchievementWhereUniqueInput
+  }
+
+
+  /**
+   * Achievement updateMany
+   */
+  export type AchievementUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Achievements.
+     */
+    data: XOR<AchievementUpdateManyMutationInput, AchievementUncheckedUpdateManyInput>
+    /**
+     * Filter which Achievements to update
+     */
+    where?: AchievementWhereInput
+  }
+
+
+  /**
+   * Achievement upsert
+   */
+  export type AchievementUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Achievement
+     */
+    select?: AchievementSelect<ExtArgs> | null
+    /**
+     * The filter to search for the Achievement to update in case it exists.
+     */
+    where: AchievementWhereUniqueInput
+    /**
+     * In case the Achievement found by the `where` argument doesn't exist, create a new Achievement with this data.
+     */
+    create: XOR<AchievementCreateInput, AchievementUncheckedCreateInput>
+    /**
+     * In case the Achievement was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AchievementUpdateInput, AchievementUncheckedUpdateInput>
+  }
+
+
+  /**
+   * Achievement delete
+   */
+  export type AchievementDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Achievement
+     */
+    select?: AchievementSelect<ExtArgs> | null
+    /**
+     * Filter which Achievement to delete.
+     */
+    where: AchievementWhereUniqueInput
+  }
+
+
+  /**
+   * Achievement deleteMany
+   */
+  export type AchievementDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Achievements to delete
+     */
+    where?: AchievementWhereInput
+  }
+
+
+  /**
+   * Achievement without action
+   */
+  export type AchievementDefaultArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Achievement
+     */
+    select?: AchievementSelect<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model Purchase
+   */
+
+  export type AggregatePurchase = {
+    _count: PurchaseCountAggregateOutputType | null
+    _min: PurchaseMinAggregateOutputType | null
+    _max: PurchaseMaxAggregateOutputType | null
+  }
+
+  export type PurchaseMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    courseId: string | null
+    lastChapterId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PurchaseMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    courseId: string | null
+    lastChapterId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PurchaseCountAggregateOutputType = {
+    id: number
+    userId: number
+    courseId: number
+    lastChapterId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PurchaseMinAggregateInputType = {
+    id?: true
+    userId?: true
+    courseId?: true
+    lastChapterId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PurchaseMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    courseId?: true
+    lastChapterId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PurchaseCountAggregateInputType = {
+    id?: true
+    userId?: true
+    courseId?: true
+    lastChapterId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PurchaseAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Purchase to aggregate.
+     */
+    where?: PurchaseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Purchases to fetch.
+     */
+    orderBy?: PurchaseOrderByWithRelationAndSearchRelevanceInput | PurchaseOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PurchaseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Purchases from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Purchases.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Purchases
+    **/
+    _count?: true | PurchaseCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PurchaseMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PurchaseMaxAggregateInputType
+  }
+
+  export type GetPurchaseAggregateType<T extends PurchaseAggregateArgs> = {
+        [P in keyof T & keyof AggregatePurchase]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePurchase[P]>
+      : GetScalarType<T[P], AggregatePurchase[P]>
+  }
+
+
+
+
+  export type PurchaseGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    where?: PurchaseWhereInput
+    orderBy?: PurchaseOrderByWithAggregationInput | PurchaseOrderByWithAggregationInput[]
+    by: PurchaseScalarFieldEnum[] | PurchaseScalarFieldEnum
+    having?: PurchaseScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PurchaseCountAggregateInputType | true
+    _min?: PurchaseMinAggregateInputType
+    _max?: PurchaseMaxAggregateInputType
+  }
+
+  export type PurchaseGroupByOutputType = {
+    id: string
+    userId: string
+    courseId: string
+    lastChapterId: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: PurchaseCountAggregateOutputType | null
+    _min: PurchaseMinAggregateOutputType | null
+    _max: PurchaseMaxAggregateOutputType | null
+  }
+
+  type GetPurchaseGroupByPayload<T extends PurchaseGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PurchaseGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PurchaseGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PurchaseGroupByOutputType[P]>
+            : GetScalarType<T[P], PurchaseGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PurchaseSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    courseId?: boolean
+    lastChapterId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["purchase"]>
+
+  export type PurchaseSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    courseId?: boolean
+    lastChapterId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $PurchasePayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    name: "Purchase"
+    objects: {}
+    scalars: $Extensions.GetResult<{
+      id: string
+      userId: string
+      courseId: string
+      lastChapterId: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["purchase"]>
+    composites: {}
+  }
+
+
+  type PurchaseGetPayload<S extends boolean | null | undefined | PurchaseDefaultArgs> = $Result.GetResult<Prisma.$PurchasePayload, S>
+
+  type PurchaseCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
+    Omit<PurchaseFindManyArgs, 'select' | 'include'> & {
+      select?: PurchaseCountAggregateInputType | true
+    }
+
+  export interface PurchaseDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Purchase'], meta: { name: 'Purchase' } }
+    /**
+     * Find zero or one Purchase that matches the filter.
+     * @param {PurchaseFindUniqueArgs} args - Arguments to find a Purchase
+     * @example
+     * // Get one Purchase
+     * const purchase = await prisma.purchase.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends PurchaseFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, PurchaseFindUniqueArgs<ExtArgs>>
+    ): Prisma__PurchaseClient<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one Purchase that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {PurchaseFindUniqueOrThrowArgs} args - Arguments to find a Purchase
+     * @example
+     * // Get one Purchase
+     * const purchase = await prisma.purchase.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends PurchaseFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, PurchaseFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__PurchaseClient<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first Purchase that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseFindFirstArgs} args - Arguments to find a Purchase
+     * @example
+     * // Get one Purchase
+     * const purchase = await prisma.purchase.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends PurchaseFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, PurchaseFindFirstArgs<ExtArgs>>
+    ): Prisma__PurchaseClient<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first Purchase that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseFindFirstOrThrowArgs} args - Arguments to find a Purchase
+     * @example
+     * // Get one Purchase
+     * const purchase = await prisma.purchase.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends PurchaseFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, PurchaseFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__PurchaseClient<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more Purchases that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Purchases
+     * const purchases = await prisma.purchase.findMany()
+     * 
+     * // Get first 10 Purchases
+     * const purchases = await prisma.purchase.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const purchaseWithIdOnly = await prisma.purchase.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends PurchaseFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, PurchaseFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a Purchase.
+     * @param {PurchaseCreateArgs} args - Arguments to create a Purchase.
+     * @example
+     * // Create one Purchase
+     * const Purchase = await prisma.purchase.create({
+     *   data: {
+     *     // ... data to create a Purchase
+     *   }
+     * })
+     * 
+    **/
+    create<T extends PurchaseCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, PurchaseCreateArgs<ExtArgs>>
+    ): Prisma__PurchaseClient<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many Purchases.
+     *     @param {PurchaseCreateManyArgs} args - Arguments to create many Purchases.
+     *     @example
+     *     // Create many Purchases
+     *     const purchase = await prisma.purchase.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends PurchaseCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, PurchaseCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Purchase.
+     * @param {PurchaseDeleteArgs} args - Arguments to delete one Purchase.
+     * @example
+     * // Delete one Purchase
+     * const Purchase = await prisma.purchase.delete({
+     *   where: {
+     *     // ... filter to delete one Purchase
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends PurchaseDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, PurchaseDeleteArgs<ExtArgs>>
+    ): Prisma__PurchaseClient<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one Purchase.
+     * @param {PurchaseUpdateArgs} args - Arguments to update one Purchase.
+     * @example
+     * // Update one Purchase
+     * const purchase = await prisma.purchase.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends PurchaseUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, PurchaseUpdateArgs<ExtArgs>>
+    ): Prisma__PurchaseClient<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more Purchases.
+     * @param {PurchaseDeleteManyArgs} args - Arguments to filter Purchases to delete.
+     * @example
+     * // Delete a few Purchases
+     * const { count } = await prisma.purchase.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends PurchaseDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, PurchaseDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Purchases.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Purchases
+     * const purchase = await prisma.purchase.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends PurchaseUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, PurchaseUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Purchase.
+     * @param {PurchaseUpsertArgs} args - Arguments to update or create a Purchase.
+     * @example
+     * // Update or create a Purchase
+     * const purchase = await prisma.purchase.upsert({
+     *   create: {
+     *     // ... data to create a Purchase
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Purchase we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends PurchaseUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, PurchaseUpsertArgs<ExtArgs>>
+    ): Prisma__PurchaseClient<$Result.GetResult<Prisma.$PurchasePayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of Purchases.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseCountArgs} args - Arguments to filter Purchases to count.
+     * @example
+     * // Count the number of Purchases
+     * const count = await prisma.purchase.count({
+     *   where: {
+     *     // ... the filter for the Purchases we want to count
+     *   }
+     * })
+    **/
+    count<T extends PurchaseCountArgs>(
+      args?: Subset<T, PurchaseCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PurchaseCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Purchase.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PurchaseAggregateArgs>(args: Subset<T, PurchaseAggregateArgs>): Prisma.PrismaPromise<GetPurchaseAggregateType<T>>
+
+    /**
+     * Group by Purchase.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PurchaseGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PurchaseGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PurchaseGroupByArgs['orderBy'] }
+        : { orderBy?: PurchaseGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PurchaseGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPurchaseGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Purchase model
+   */
+  readonly fields: PurchaseFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Purchase.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PurchaseClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the Purchase model
+   */ 
+  interface PurchaseFieldRefs {
+    readonly id: FieldRef<"Purchase", 'String'>
+    readonly userId: FieldRef<"Purchase", 'String'>
+    readonly courseId: FieldRef<"Purchase", 'String'>
+    readonly lastChapterId: FieldRef<"Purchase", 'String'>
+    readonly createdAt: FieldRef<"Purchase", 'DateTime'>
+    readonly updatedAt: FieldRef<"Purchase", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * Purchase findUnique
+   */
+  export type PurchaseFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purchase
+     */
+    select?: PurchaseSelect<ExtArgs> | null
+    /**
+     * Filter, which Purchase to fetch.
+     */
+    where: PurchaseWhereUniqueInput
+  }
+
+
+  /**
+   * Purchase findUniqueOrThrow
+   */
+  export type PurchaseFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purchase
+     */
+    select?: PurchaseSelect<ExtArgs> | null
+    /**
+     * Filter, which Purchase to fetch.
+     */
+    where: PurchaseWhereUniqueInput
+  }
+
+
+  /**
+   * Purchase findFirst
+   */
+  export type PurchaseFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purchase
+     */
+    select?: PurchaseSelect<ExtArgs> | null
+    /**
+     * Filter, which Purchase to fetch.
+     */
+    where?: PurchaseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Purchases to fetch.
+     */
+    orderBy?: PurchaseOrderByWithRelationAndSearchRelevanceInput | PurchaseOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Purchases.
+     */
+    cursor?: PurchaseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Purchases from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Purchases.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Purchases.
+     */
+    distinct?: PurchaseScalarFieldEnum | PurchaseScalarFieldEnum[]
+  }
+
+
+  /**
+   * Purchase findFirstOrThrow
+   */
+  export type PurchaseFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purchase
+     */
+    select?: PurchaseSelect<ExtArgs> | null
+    /**
+     * Filter, which Purchase to fetch.
+     */
+    where?: PurchaseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Purchases to fetch.
+     */
+    orderBy?: PurchaseOrderByWithRelationAndSearchRelevanceInput | PurchaseOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Purchases.
+     */
+    cursor?: PurchaseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Purchases from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Purchases.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Purchases.
+     */
+    distinct?: PurchaseScalarFieldEnum | PurchaseScalarFieldEnum[]
+  }
+
+
+  /**
+   * Purchase findMany
+   */
+  export type PurchaseFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purchase
+     */
+    select?: PurchaseSelect<ExtArgs> | null
+    /**
+     * Filter, which Purchases to fetch.
+     */
+    where?: PurchaseWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Purchases to fetch.
+     */
+    orderBy?: PurchaseOrderByWithRelationAndSearchRelevanceInput | PurchaseOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Purchases.
+     */
+    cursor?: PurchaseWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Purchases from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Purchases.
+     */
+    skip?: number
+    distinct?: PurchaseScalarFieldEnum | PurchaseScalarFieldEnum[]
+  }
+
+
+  /**
+   * Purchase create
+   */
+  export type PurchaseCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purchase
+     */
+    select?: PurchaseSelect<ExtArgs> | null
+    /**
+     * The data needed to create a Purchase.
+     */
+    data: XOR<PurchaseCreateInput, PurchaseUncheckedCreateInput>
+  }
+
+
+  /**
+   * Purchase createMany
+   */
+  export type PurchaseCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Purchases.
+     */
+    data: PurchaseCreateManyInput | PurchaseCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * Purchase update
+   */
+  export type PurchaseUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purchase
+     */
+    select?: PurchaseSelect<ExtArgs> | null
+    /**
+     * The data needed to update a Purchase.
+     */
+    data: XOR<PurchaseUpdateInput, PurchaseUncheckedUpdateInput>
+    /**
+     * Choose, which Purchase to update.
+     */
+    where: PurchaseWhereUniqueInput
+  }
+
+
+  /**
+   * Purchase updateMany
+   */
+  export type PurchaseUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Purchases.
+     */
+    data: XOR<PurchaseUpdateManyMutationInput, PurchaseUncheckedUpdateManyInput>
+    /**
+     * Filter which Purchases to update
+     */
+    where?: PurchaseWhereInput
+  }
+
+
+  /**
+   * Purchase upsert
+   */
+  export type PurchaseUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purchase
+     */
+    select?: PurchaseSelect<ExtArgs> | null
+    /**
+     * The filter to search for the Purchase to update in case it exists.
+     */
+    where: PurchaseWhereUniqueInput
+    /**
+     * In case the Purchase found by the `where` argument doesn't exist, create a new Purchase with this data.
+     */
+    create: XOR<PurchaseCreateInput, PurchaseUncheckedCreateInput>
+    /**
+     * In case the Purchase was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PurchaseUpdateInput, PurchaseUncheckedUpdateInput>
+  }
+
+
+  /**
+   * Purchase delete
+   */
+  export type PurchaseDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purchase
+     */
+    select?: PurchaseSelect<ExtArgs> | null
+    /**
+     * Filter which Purchase to delete.
+     */
+    where: PurchaseWhereUniqueInput
+  }
+
+
+  /**
+   * Purchase deleteMany
+   */
+  export type PurchaseDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Purchases to delete
+     */
+    where?: PurchaseWhereInput
+  }
+
+
+  /**
+   * Purchase without action
+   */
+  export type PurchaseDefaultArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Purchase
+     */
+    select?: PurchaseSelect<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model UserNote
+   */
+
+  export type AggregateUserNote = {
+    _count: UserNoteCountAggregateOutputType | null
+    _avg: UserNoteAvgAggregateOutputType | null
+    _sum: UserNoteSumAggregateOutputType | null
+    _min: UserNoteMinAggregateOutputType | null
+    _max: UserNoteMaxAggregateOutputType | null
+  }
+
+  export type UserNoteAvgAggregateOutputType = {
+    timestamp: number | null
+  }
+
+  export type UserNoteSumAggregateOutputType = {
+    timestamp: number | null
+  }
+
+  export type UserNoteMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    chapterId: string | null
+    content: string | null
+    timestamp: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserNoteMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    chapterId: string | null
+    content: string | null
+    timestamp: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserNoteCountAggregateOutputType = {
+    id: number
+    userId: number
+    chapterId: number
+    content: number
+    timestamp: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type UserNoteAvgAggregateInputType = {
+    timestamp?: true
+  }
+
+  export type UserNoteSumAggregateInputType = {
+    timestamp?: true
+  }
+
+  export type UserNoteMinAggregateInputType = {
+    id?: true
+    userId?: true
+    chapterId?: true
+    content?: true
+    timestamp?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserNoteMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    chapterId?: true
+    content?: true
+    timestamp?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserNoteCountAggregateInputType = {
+    id?: true
+    userId?: true
+    chapterId?: true
+    content?: true
+    timestamp?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type UserNoteAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserNote to aggregate.
+     */
+    where?: UserNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserNotes to fetch.
+     */
+    orderBy?: UserNoteOrderByWithRelationAndSearchRelevanceInput | UserNoteOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserNotes
+    **/
+    _count?: true | UserNoteCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UserNoteAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserNoteSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserNoteMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserNoteMaxAggregateInputType
+  }
+
+  export type GetUserNoteAggregateType<T extends UserNoteAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserNote]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserNote[P]>
+      : GetScalarType<T[P], AggregateUserNote[P]>
+  }
+
+
+
+
+  export type UserNoteGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    where?: UserNoteWhereInput
+    orderBy?: UserNoteOrderByWithAggregationInput | UserNoteOrderByWithAggregationInput[]
+    by: UserNoteScalarFieldEnum[] | UserNoteScalarFieldEnum
+    having?: UserNoteScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserNoteCountAggregateInputType | true
+    _avg?: UserNoteAvgAggregateInputType
+    _sum?: UserNoteSumAggregateInputType
+    _min?: UserNoteMinAggregateInputType
+    _max?: UserNoteMaxAggregateInputType
+  }
+
+  export type UserNoteGroupByOutputType = {
+    id: string
+    userId: string
+    chapterId: string
+    content: string
+    timestamp: number
+    createdAt: Date
+    updatedAt: Date
+    _count: UserNoteCountAggregateOutputType | null
+    _avg: UserNoteAvgAggregateOutputType | null
+    _sum: UserNoteSumAggregateOutputType | null
+    _min: UserNoteMinAggregateOutputType | null
+    _max: UserNoteMaxAggregateOutputType | null
+  }
+
+  type GetUserNoteGroupByPayload<T extends UserNoteGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserNoteGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserNoteGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserNoteGroupByOutputType[P]>
+            : GetScalarType<T[P], UserNoteGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserNoteSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    chapterId?: boolean
+    content?: boolean
+    timestamp?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["userNote"]>
+
+  export type UserNoteSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    chapterId?: boolean
+    content?: boolean
+    timestamp?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $UserNotePayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    name: "UserNote"
+    objects: {}
+    scalars: $Extensions.GetResult<{
+      id: string
+      userId: string
+      chapterId: string
+      content: string
+      timestamp: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["userNote"]>
+    composites: {}
+  }
+
+
+  type UserNoteGetPayload<S extends boolean | null | undefined | UserNoteDefaultArgs> = $Result.GetResult<Prisma.$UserNotePayload, S>
+
+  type UserNoteCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
+    Omit<UserNoteFindManyArgs, 'select' | 'include'> & {
+      select?: UserNoteCountAggregateInputType | true
+    }
+
+  export interface UserNoteDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserNote'], meta: { name: 'UserNote' } }
+    /**
+     * Find zero or one UserNote that matches the filter.
+     * @param {UserNoteFindUniqueArgs} args - Arguments to find a UserNote
+     * @example
+     * // Get one UserNote
+     * const userNote = await prisma.userNote.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends UserNoteFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, UserNoteFindUniqueArgs<ExtArgs>>
+    ): Prisma__UserNoteClient<$Result.GetResult<Prisma.$UserNotePayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one UserNote that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {UserNoteFindUniqueOrThrowArgs} args - Arguments to find a UserNote
+     * @example
+     * // Get one UserNote
+     * const userNote = await prisma.userNote.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends UserNoteFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserNoteFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__UserNoteClient<$Result.GetResult<Prisma.$UserNotePayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first UserNote that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserNoteFindFirstArgs} args - Arguments to find a UserNote
+     * @example
+     * // Get one UserNote
+     * const userNote = await prisma.userNote.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends UserNoteFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserNoteFindFirstArgs<ExtArgs>>
+    ): Prisma__UserNoteClient<$Result.GetResult<Prisma.$UserNotePayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first UserNote that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserNoteFindFirstOrThrowArgs} args - Arguments to find a UserNote
+     * @example
+     * // Get one UserNote
+     * const userNote = await prisma.userNote.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends UserNoteFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserNoteFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__UserNoteClient<$Result.GetResult<Prisma.$UserNotePayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more UserNotes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserNoteFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserNotes
+     * const userNotes = await prisma.userNote.findMany()
+     * 
+     * // Get first 10 UserNotes
+     * const userNotes = await prisma.userNote.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userNoteWithIdOnly = await prisma.userNote.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends UserNoteFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserNoteFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserNotePayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a UserNote.
+     * @param {UserNoteCreateArgs} args - Arguments to create a UserNote.
+     * @example
+     * // Create one UserNote
+     * const UserNote = await prisma.userNote.create({
+     *   data: {
+     *     // ... data to create a UserNote
+     *   }
+     * })
+     * 
+    **/
+    create<T extends UserNoteCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, UserNoteCreateArgs<ExtArgs>>
+    ): Prisma__UserNoteClient<$Result.GetResult<Prisma.$UserNotePayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many UserNotes.
+     *     @param {UserNoteCreateManyArgs} args - Arguments to create many UserNotes.
+     *     @example
+     *     // Create many UserNotes
+     *     const userNote = await prisma.userNote.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends UserNoteCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserNoteCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a UserNote.
+     * @param {UserNoteDeleteArgs} args - Arguments to delete one UserNote.
+     * @example
+     * // Delete one UserNote
+     * const UserNote = await prisma.userNote.delete({
+     *   where: {
+     *     // ... filter to delete one UserNote
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends UserNoteDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, UserNoteDeleteArgs<ExtArgs>>
+    ): Prisma__UserNoteClient<$Result.GetResult<Prisma.$UserNotePayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one UserNote.
+     * @param {UserNoteUpdateArgs} args - Arguments to update one UserNote.
+     * @example
+     * // Update one UserNote
+     * const userNote = await prisma.userNote.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends UserNoteUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, UserNoteUpdateArgs<ExtArgs>>
+    ): Prisma__UserNoteClient<$Result.GetResult<Prisma.$UserNotePayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more UserNotes.
+     * @param {UserNoteDeleteManyArgs} args - Arguments to filter UserNotes to delete.
+     * @example
+     * // Delete a few UserNotes
+     * const { count } = await prisma.userNote.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends UserNoteDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserNoteDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserNotes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserNoteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserNotes
+     * const userNote = await prisma.userNote.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends UserNoteUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, UserNoteUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one UserNote.
+     * @param {UserNoteUpsertArgs} args - Arguments to update or create a UserNote.
+     * @example
+     * // Update or create a UserNote
+     * const userNote = await prisma.userNote.upsert({
+     *   create: {
+     *     // ... data to create a UserNote
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserNote we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends UserNoteUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, UserNoteUpsertArgs<ExtArgs>>
+    ): Prisma__UserNoteClient<$Result.GetResult<Prisma.$UserNotePayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of UserNotes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserNoteCountArgs} args - Arguments to filter UserNotes to count.
+     * @example
+     * // Count the number of UserNotes
+     * const count = await prisma.userNote.count({
+     *   where: {
+     *     // ... the filter for the UserNotes we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserNoteCountArgs>(
+      args?: Subset<T, UserNoteCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserNoteCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserNote.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserNoteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserNoteAggregateArgs>(args: Subset<T, UserNoteAggregateArgs>): Prisma.PrismaPromise<GetUserNoteAggregateType<T>>
+
+    /**
+     * Group by UserNote.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserNoteGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserNoteGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserNoteGroupByArgs['orderBy'] }
+        : { orderBy?: UserNoteGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserNoteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserNoteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserNote model
+   */
+  readonly fields: UserNoteFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserNote.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserNoteClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the UserNote model
+   */ 
+  interface UserNoteFieldRefs {
+    readonly id: FieldRef<"UserNote", 'String'>
+    readonly userId: FieldRef<"UserNote", 'String'>
+    readonly chapterId: FieldRef<"UserNote", 'String'>
+    readonly content: FieldRef<"UserNote", 'String'>
+    readonly timestamp: FieldRef<"UserNote", 'Int'>
+    readonly createdAt: FieldRef<"UserNote", 'DateTime'>
+    readonly updatedAt: FieldRef<"UserNote", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * UserNote findUnique
+   */
+  export type UserNoteFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserNote
+     */
+    select?: UserNoteSelect<ExtArgs> | null
+    /**
+     * Filter, which UserNote to fetch.
+     */
+    where: UserNoteWhereUniqueInput
+  }
+
+
+  /**
+   * UserNote findUniqueOrThrow
+   */
+  export type UserNoteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserNote
+     */
+    select?: UserNoteSelect<ExtArgs> | null
+    /**
+     * Filter, which UserNote to fetch.
+     */
+    where: UserNoteWhereUniqueInput
+  }
+
+
+  /**
+   * UserNote findFirst
+   */
+  export type UserNoteFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserNote
+     */
+    select?: UserNoteSelect<ExtArgs> | null
+    /**
+     * Filter, which UserNote to fetch.
+     */
+    where?: UserNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserNotes to fetch.
+     */
+    orderBy?: UserNoteOrderByWithRelationAndSearchRelevanceInput | UserNoteOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserNotes.
+     */
+    cursor?: UserNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserNotes.
+     */
+    distinct?: UserNoteScalarFieldEnum | UserNoteScalarFieldEnum[]
+  }
+
+
+  /**
+   * UserNote findFirstOrThrow
+   */
+  export type UserNoteFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserNote
+     */
+    select?: UserNoteSelect<ExtArgs> | null
+    /**
+     * Filter, which UserNote to fetch.
+     */
+    where?: UserNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserNotes to fetch.
+     */
+    orderBy?: UserNoteOrderByWithRelationAndSearchRelevanceInput | UserNoteOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserNotes.
+     */
+    cursor?: UserNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserNotes.
+     */
+    distinct?: UserNoteScalarFieldEnum | UserNoteScalarFieldEnum[]
+  }
+
+
+  /**
+   * UserNote findMany
+   */
+  export type UserNoteFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserNote
+     */
+    select?: UserNoteSelect<ExtArgs> | null
+    /**
+     * Filter, which UserNotes to fetch.
+     */
+    where?: UserNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserNotes to fetch.
+     */
+    orderBy?: UserNoteOrderByWithRelationAndSearchRelevanceInput | UserNoteOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserNotes.
+     */
+    cursor?: UserNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserNotes.
+     */
+    skip?: number
+    distinct?: UserNoteScalarFieldEnum | UserNoteScalarFieldEnum[]
+  }
+
+
+  /**
+   * UserNote create
+   */
+  export type UserNoteCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserNote
+     */
+    select?: UserNoteSelect<ExtArgs> | null
+    /**
+     * The data needed to create a UserNote.
+     */
+    data: XOR<UserNoteCreateInput, UserNoteUncheckedCreateInput>
+  }
+
+
+  /**
+   * UserNote createMany
+   */
+  export type UserNoteCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserNotes.
+     */
+    data: UserNoteCreateManyInput | UserNoteCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * UserNote update
+   */
+  export type UserNoteUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserNote
+     */
+    select?: UserNoteSelect<ExtArgs> | null
+    /**
+     * The data needed to update a UserNote.
+     */
+    data: XOR<UserNoteUpdateInput, UserNoteUncheckedUpdateInput>
+    /**
+     * Choose, which UserNote to update.
+     */
+    where: UserNoteWhereUniqueInput
+  }
+
+
+  /**
+   * UserNote updateMany
+   */
+  export type UserNoteUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserNotes.
+     */
+    data: XOR<UserNoteUpdateManyMutationInput, UserNoteUncheckedUpdateManyInput>
+    /**
+     * Filter which UserNotes to update
+     */
+    where?: UserNoteWhereInput
+  }
+
+
+  /**
+   * UserNote upsert
+   */
+  export type UserNoteUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserNote
+     */
+    select?: UserNoteSelect<ExtArgs> | null
+    /**
+     * The filter to search for the UserNote to update in case it exists.
+     */
+    where: UserNoteWhereUniqueInput
+    /**
+     * In case the UserNote found by the `where` argument doesn't exist, create a new UserNote with this data.
+     */
+    create: XOR<UserNoteCreateInput, UserNoteUncheckedCreateInput>
+    /**
+     * In case the UserNote was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserNoteUpdateInput, UserNoteUncheckedUpdateInput>
+  }
+
+
+  /**
+   * UserNote delete
+   */
+  export type UserNoteDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserNote
+     */
+    select?: UserNoteSelect<ExtArgs> | null
+    /**
+     * Filter which UserNote to delete.
+     */
+    where: UserNoteWhereUniqueInput
+  }
+
+
+  /**
+   * UserNote deleteMany
+   */
+  export type UserNoteDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserNotes to delete
+     */
+    where?: UserNoteWhereInput
+  }
+
+
+  /**
+   * UserNote without action
+   */
+  export type UserNoteDefaultArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserNote
+     */
+    select?: UserNoteSelect<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model UserStreak
+   */
+
+  export type AggregateUserStreak = {
+    _count: UserStreakCountAggregateOutputType | null
+    _avg: UserStreakAvgAggregateOutputType | null
+    _sum: UserStreakSumAggregateOutputType | null
+    _min: UserStreakMinAggregateOutputType | null
+    _max: UserStreakMaxAggregateOutputType | null
+  }
+
+  export type UserStreakAvgAggregateOutputType = {
+    count: number | null
+  }
+
+  export type UserStreakSumAggregateOutputType = {
+    count: number | null
+  }
+
+  export type UserStreakMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    count: number | null
+    lastVisit: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserStreakMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    count: number | null
+    lastVisit: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserStreakCountAggregateOutputType = {
+    id: number
+    userId: number
+    count: number
+    lastVisit: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type UserStreakAvgAggregateInputType = {
+    count?: true
+  }
+
+  export type UserStreakSumAggregateInputType = {
+    count?: true
+  }
+
+  export type UserStreakMinAggregateInputType = {
+    id?: true
+    userId?: true
+    count?: true
+    lastVisit?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserStreakMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    count?: true
+    lastVisit?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserStreakCountAggregateInputType = {
+    id?: true
+    userId?: true
+    count?: true
+    lastVisit?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type UserStreakAggregateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserStreak to aggregate.
+     */
+    where?: UserStreakWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserStreaks to fetch.
+     */
+    orderBy?: UserStreakOrderByWithRelationAndSearchRelevanceInput | UserStreakOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserStreakWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserStreaks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserStreaks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserStreaks
+    **/
+    _count?: true | UserStreakCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UserStreakAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserStreakSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserStreakMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserStreakMaxAggregateInputType
+  }
+
+  export type GetUserStreakAggregateType<T extends UserStreakAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserStreak]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserStreak[P]>
+      : GetScalarType<T[P], AggregateUserStreak[P]>
+  }
+
+
+
+
+  export type UserStreakGroupByArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    where?: UserStreakWhereInput
+    orderBy?: UserStreakOrderByWithAggregationInput | UserStreakOrderByWithAggregationInput[]
+    by: UserStreakScalarFieldEnum[] | UserStreakScalarFieldEnum
+    having?: UserStreakScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserStreakCountAggregateInputType | true
+    _avg?: UserStreakAvgAggregateInputType
+    _sum?: UserStreakSumAggregateInputType
+    _min?: UserStreakMinAggregateInputType
+    _max?: UserStreakMaxAggregateInputType
+  }
+
+  export type UserStreakGroupByOutputType = {
+    id: string
+    userId: string
+    count: number
+    lastVisit: Date
+    createdAt: Date
+    updatedAt: Date
+    _count: UserStreakCountAggregateOutputType | null
+    _avg: UserStreakAvgAggregateOutputType | null
+    _sum: UserStreakSumAggregateOutputType | null
+    _min: UserStreakMinAggregateOutputType | null
+    _max: UserStreakMaxAggregateOutputType | null
+  }
+
+  type GetUserStreakGroupByPayload<T extends UserStreakGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserStreakGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserStreakGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserStreakGroupByOutputType[P]>
+            : GetScalarType<T[P], UserStreakGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserStreakSelect<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    count?: boolean
+    lastVisit?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["userStreak"]>
+
+  export type UserStreakSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    count?: boolean
+    lastVisit?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+
+  export type $UserStreakPayload<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    name: "UserStreak"
+    objects: {}
+    scalars: $Extensions.GetResult<{
+      id: string
+      userId: string
+      count: number
+      lastVisit: Date
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["userStreak"]>
+    composites: {}
+  }
+
+
+  type UserStreakGetPayload<S extends boolean | null | undefined | UserStreakDefaultArgs> = $Result.GetResult<Prisma.$UserStreakPayload, S>
+
+  type UserStreakCountArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = 
+    Omit<UserStreakFindManyArgs, 'select' | 'include'> & {
+      select?: UserStreakCountAggregateInputType | true
+    }
+
+  export interface UserStreakDelegate<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserStreak'], meta: { name: 'UserStreak' } }
+    /**
+     * Find zero or one UserStreak that matches the filter.
+     * @param {UserStreakFindUniqueArgs} args - Arguments to find a UserStreak
+     * @example
+     * // Get one UserStreak
+     * const userStreak = await prisma.userStreak.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends UserStreakFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, UserStreakFindUniqueArgs<ExtArgs>>
+    ): Prisma__UserStreakClient<$Result.GetResult<Prisma.$UserStreakPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one UserStreak that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {UserStreakFindUniqueOrThrowArgs} args - Arguments to find a UserStreak
+     * @example
+     * // Get one UserStreak
+     * const userStreak = await prisma.userStreak.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends UserStreakFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserStreakFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__UserStreakClient<$Result.GetResult<Prisma.$UserStreakPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first UserStreak that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserStreakFindFirstArgs} args - Arguments to find a UserStreak
+     * @example
+     * // Get one UserStreak
+     * const userStreak = await prisma.userStreak.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends UserStreakFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserStreakFindFirstArgs<ExtArgs>>
+    ): Prisma__UserStreakClient<$Result.GetResult<Prisma.$UserStreakPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first UserStreak that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserStreakFindFirstOrThrowArgs} args - Arguments to find a UserStreak
+     * @example
+     * // Get one UserStreak
+     * const userStreak = await prisma.userStreak.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends UserStreakFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserStreakFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__UserStreakClient<$Result.GetResult<Prisma.$UserStreakPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more UserStreaks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserStreakFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserStreaks
+     * const userStreaks = await prisma.userStreak.findMany()
+     * 
+     * // Get first 10 UserStreaks
+     * const userStreaks = await prisma.userStreak.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userStreakWithIdOnly = await prisma.userStreak.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends UserStreakFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserStreakFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserStreakPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a UserStreak.
+     * @param {UserStreakCreateArgs} args - Arguments to create a UserStreak.
+     * @example
+     * // Create one UserStreak
+     * const UserStreak = await prisma.userStreak.create({
+     *   data: {
+     *     // ... data to create a UserStreak
+     *   }
+     * })
+     * 
+    **/
+    create<T extends UserStreakCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, UserStreakCreateArgs<ExtArgs>>
+    ): Prisma__UserStreakClient<$Result.GetResult<Prisma.$UserStreakPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many UserStreaks.
+     *     @param {UserStreakCreateManyArgs} args - Arguments to create many UserStreaks.
+     *     @example
+     *     // Create many UserStreaks
+     *     const userStreak = await prisma.userStreak.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends UserStreakCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserStreakCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a UserStreak.
+     * @param {UserStreakDeleteArgs} args - Arguments to delete one UserStreak.
+     * @example
+     * // Delete one UserStreak
+     * const UserStreak = await prisma.userStreak.delete({
+     *   where: {
+     *     // ... filter to delete one UserStreak
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends UserStreakDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, UserStreakDeleteArgs<ExtArgs>>
+    ): Prisma__UserStreakClient<$Result.GetResult<Prisma.$UserStreakPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one UserStreak.
+     * @param {UserStreakUpdateArgs} args - Arguments to update one UserStreak.
+     * @example
+     * // Update one UserStreak
+     * const userStreak = await prisma.userStreak.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends UserStreakUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, UserStreakUpdateArgs<ExtArgs>>
+    ): Prisma__UserStreakClient<$Result.GetResult<Prisma.$UserStreakPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more UserStreaks.
+     * @param {UserStreakDeleteManyArgs} args - Arguments to filter UserStreaks to delete.
+     * @example
+     * // Delete a few UserStreaks
+     * const { count } = await prisma.userStreak.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends UserStreakDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserStreakDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserStreaks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserStreakUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserStreaks
+     * const userStreak = await prisma.userStreak.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends UserStreakUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, UserStreakUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one UserStreak.
+     * @param {UserStreakUpsertArgs} args - Arguments to update or create a UserStreak.
+     * @example
+     * // Update or create a UserStreak
+     * const userStreak = await prisma.userStreak.upsert({
+     *   create: {
+     *     // ... data to create a UserStreak
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserStreak we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends UserStreakUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, UserStreakUpsertArgs<ExtArgs>>
+    ): Prisma__UserStreakClient<$Result.GetResult<Prisma.$UserStreakPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of UserStreaks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserStreakCountArgs} args - Arguments to filter UserStreaks to count.
+     * @example
+     * // Count the number of UserStreaks
+     * const count = await prisma.userStreak.count({
+     *   where: {
+     *     // ... the filter for the UserStreaks we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserStreakCountArgs>(
+      args?: Subset<T, UserStreakCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserStreakCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserStreak.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserStreakAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserStreakAggregateArgs>(args: Subset<T, UserStreakAggregateArgs>): Prisma.PrismaPromise<GetUserStreakAggregateType<T>>
+
+    /**
+     * Group by UserStreak.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserStreakGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserStreakGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserStreakGroupByArgs['orderBy'] }
+        : { orderBy?: UserStreakGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserStreakGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserStreakGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserStreak model
+   */
+  readonly fields: UserStreakFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserStreak.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserStreakClient<T, Null = never, ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the UserStreak model
+   */ 
+  interface UserStreakFieldRefs {
+    readonly id: FieldRef<"UserStreak", 'String'>
+    readonly userId: FieldRef<"UserStreak", 'String'>
+    readonly count: FieldRef<"UserStreak", 'Int'>
+    readonly lastVisit: FieldRef<"UserStreak", 'DateTime'>
+    readonly createdAt: FieldRef<"UserStreak", 'DateTime'>
+    readonly updatedAt: FieldRef<"UserStreak", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * UserStreak findUnique
+   */
+  export type UserStreakFindUniqueArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserStreak
+     */
+    select?: UserStreakSelect<ExtArgs> | null
+    /**
+     * Filter, which UserStreak to fetch.
+     */
+    where: UserStreakWhereUniqueInput
+  }
+
+
+  /**
+   * UserStreak findUniqueOrThrow
+   */
+  export type UserStreakFindUniqueOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserStreak
+     */
+    select?: UserStreakSelect<ExtArgs> | null
+    /**
+     * Filter, which UserStreak to fetch.
+     */
+    where: UserStreakWhereUniqueInput
+  }
+
+
+  /**
+   * UserStreak findFirst
+   */
+  export type UserStreakFindFirstArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserStreak
+     */
+    select?: UserStreakSelect<ExtArgs> | null
+    /**
+     * Filter, which UserStreak to fetch.
+     */
+    where?: UserStreakWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserStreaks to fetch.
+     */
+    orderBy?: UserStreakOrderByWithRelationAndSearchRelevanceInput | UserStreakOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserStreaks.
+     */
+    cursor?: UserStreakWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserStreaks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserStreaks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserStreaks.
+     */
+    distinct?: UserStreakScalarFieldEnum | UserStreakScalarFieldEnum[]
+  }
+
+
+  /**
+   * UserStreak findFirstOrThrow
+   */
+  export type UserStreakFindFirstOrThrowArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserStreak
+     */
+    select?: UserStreakSelect<ExtArgs> | null
+    /**
+     * Filter, which UserStreak to fetch.
+     */
+    where?: UserStreakWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserStreaks to fetch.
+     */
+    orderBy?: UserStreakOrderByWithRelationAndSearchRelevanceInput | UserStreakOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserStreaks.
+     */
+    cursor?: UserStreakWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserStreaks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserStreaks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserStreaks.
+     */
+    distinct?: UserStreakScalarFieldEnum | UserStreakScalarFieldEnum[]
+  }
+
+
+  /**
+   * UserStreak findMany
+   */
+  export type UserStreakFindManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserStreak
+     */
+    select?: UserStreakSelect<ExtArgs> | null
+    /**
+     * Filter, which UserStreaks to fetch.
+     */
+    where?: UserStreakWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserStreaks to fetch.
+     */
+    orderBy?: UserStreakOrderByWithRelationAndSearchRelevanceInput | UserStreakOrderByWithRelationAndSearchRelevanceInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserStreaks.
+     */
+    cursor?: UserStreakWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserStreaks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserStreaks.
+     */
+    skip?: number
+    distinct?: UserStreakScalarFieldEnum | UserStreakScalarFieldEnum[]
+  }
+
+
+  /**
+   * UserStreak create
+   */
+  export type UserStreakCreateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserStreak
+     */
+    select?: UserStreakSelect<ExtArgs> | null
+    /**
+     * The data needed to create a UserStreak.
+     */
+    data: XOR<UserStreakCreateInput, UserStreakUncheckedCreateInput>
+  }
+
+
+  /**
+   * UserStreak createMany
+   */
+  export type UserStreakCreateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserStreaks.
+     */
+    data: UserStreakCreateManyInput | UserStreakCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * UserStreak update
+   */
+  export type UserStreakUpdateArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserStreak
+     */
+    select?: UserStreakSelect<ExtArgs> | null
+    /**
+     * The data needed to update a UserStreak.
+     */
+    data: XOR<UserStreakUpdateInput, UserStreakUncheckedUpdateInput>
+    /**
+     * Choose, which UserStreak to update.
+     */
+    where: UserStreakWhereUniqueInput
+  }
+
+
+  /**
+   * UserStreak updateMany
+   */
+  export type UserStreakUpdateManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserStreaks.
+     */
+    data: XOR<UserStreakUpdateManyMutationInput, UserStreakUncheckedUpdateManyInput>
+    /**
+     * Filter which UserStreaks to update
+     */
+    where?: UserStreakWhereInput
+  }
+
+
+  /**
+   * UserStreak upsert
+   */
+  export type UserStreakUpsertArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserStreak
+     */
+    select?: UserStreakSelect<ExtArgs> | null
+    /**
+     * The filter to search for the UserStreak to update in case it exists.
+     */
+    where: UserStreakWhereUniqueInput
+    /**
+     * In case the UserStreak found by the `where` argument doesn't exist, create a new UserStreak with this data.
+     */
+    create: XOR<UserStreakCreateInput, UserStreakUncheckedCreateInput>
+    /**
+     * In case the UserStreak was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserStreakUpdateInput, UserStreakUncheckedUpdateInput>
+  }
+
+
+  /**
+   * UserStreak delete
+   */
+  export type UserStreakDeleteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserStreak
+     */
+    select?: UserStreakSelect<ExtArgs> | null
+    /**
+     * Filter which UserStreak to delete.
+     */
+    where: UserStreakWhereUniqueInput
+  }
+
+
+  /**
+   * UserStreak deleteMany
+   */
+  export type UserStreakDeleteManyArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserStreaks to delete
+     */
+    where?: UserStreakWhereInput
+  }
+
+
+  /**
+   * UserStreak without action
+   */
+  export type UserStreakDefaultArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserStreak
+     */
+    select?: UserStreakSelect<ExtArgs> | null
+  }
+
+
+
+  /**
    * Enums
    */
 
@@ -19007,7 +23020,8 @@ export namespace Prisma {
     isPublished: 'isPublished',
     categoryId: 'categoryId',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    price: 'price'
   };
 
   export type CourseScalarFieldEnum = (typeof CourseScalarFieldEnum)[keyof typeof CourseScalarFieldEnum]
@@ -19042,14 +23056,15 @@ export namespace Prisma {
     externalUrl: 'externalUrl',
     embedUrl: 'embedUrl',
     videoProvider: 'videoProvider',
-    transcript: 'transcript',
-    transcriptStatus: 'transcriptStatus',
     position: 'position',
     isPublished: 'isPublished',
     isFree: 'isFree',
     courseId: 'courseId',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    transcript: 'transcript',
+    transcriptStatus: 'transcriptStatus',
+    duration: 'duration'
   };
 
   export type ChapterScalarFieldEnum = (typeof ChapterScalarFieldEnum)[keyof typeof ChapterScalarFieldEnum]
@@ -19204,6 +23219,57 @@ export namespace Prisma {
   export type VerificationTokenScalarFieldEnum = (typeof VerificationTokenScalarFieldEnum)[keyof typeof VerificationTokenScalarFieldEnum]
 
 
+  export const AchievementScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    courseId: 'courseId',
+    title: 'title',
+    description: 'description',
+    icon: 'icon',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type AchievementScalarFieldEnum = (typeof AchievementScalarFieldEnum)[keyof typeof AchievementScalarFieldEnum]
+
+
+  export const PurchaseScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    courseId: 'courseId',
+    lastChapterId: 'lastChapterId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PurchaseScalarFieldEnum = (typeof PurchaseScalarFieldEnum)[keyof typeof PurchaseScalarFieldEnum]
+
+
+  export const UserNoteScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    chapterId: 'chapterId',
+    content: 'content',
+    timestamp: 'timestamp',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type UserNoteScalarFieldEnum = (typeof UserNoteScalarFieldEnum)[keyof typeof UserNoteScalarFieldEnum]
+
+
+  export const UserStreakScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    count: 'count',
+    lastVisit: 'lastVisit',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type UserStreakScalarFieldEnum = (typeof UserStreakScalarFieldEnum)[keyof typeof UserStreakScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -19275,8 +23341,8 @@ export namespace Prisma {
     videoUrl: 'videoUrl',
     externalUrl: 'externalUrl',
     embedUrl: 'embedUrl',
-    transcript: 'transcript',
-    courseId: 'courseId'
+    courseId: 'courseId',
+    transcript: 'transcript'
   };
 
   export type ChapterOrderByRelevanceFieldEnum = (typeof ChapterOrderByRelevanceFieldEnum)[keyof typeof ChapterOrderByRelevanceFieldEnum]
@@ -19399,6 +23465,46 @@ export namespace Prisma {
   export type VerificationTokenOrderByRelevanceFieldEnum = (typeof VerificationTokenOrderByRelevanceFieldEnum)[keyof typeof VerificationTokenOrderByRelevanceFieldEnum]
 
 
+  export const AchievementOrderByRelevanceFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    courseId: 'courseId',
+    title: 'title',
+    description: 'description',
+    icon: 'icon'
+  };
+
+  export type AchievementOrderByRelevanceFieldEnum = (typeof AchievementOrderByRelevanceFieldEnum)[keyof typeof AchievementOrderByRelevanceFieldEnum]
+
+
+  export const PurchaseOrderByRelevanceFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    courseId: 'courseId',
+    lastChapterId: 'lastChapterId'
+  };
+
+  export type PurchaseOrderByRelevanceFieldEnum = (typeof PurchaseOrderByRelevanceFieldEnum)[keyof typeof PurchaseOrderByRelevanceFieldEnum]
+
+
+  export const UserNoteOrderByRelevanceFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    chapterId: 'chapterId',
+    content: 'content'
+  };
+
+  export type UserNoteOrderByRelevanceFieldEnum = (typeof UserNoteOrderByRelevanceFieldEnum)[keyof typeof UserNoteOrderByRelevanceFieldEnum]
+
+
+  export const UserStreakOrderByRelevanceFieldEnum: {
+    id: 'id',
+    userId: 'userId'
+  };
+
+  export type UserStreakOrderByRelevanceFieldEnum = (typeof UserStreakOrderByRelevanceFieldEnum)[keyof typeof UserStreakOrderByRelevanceFieldEnum]
+
+
   /**
    * Field references 
    */
@@ -19454,6 +23560,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+  /**
    * Reference to a field of type 'VideoSourceType'
    */
   export type EnumVideoSourceTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'VideoSourceType'>
@@ -19482,20 +23602,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'TranscriptStatus'
-   */
-  export type EnumTranscriptStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TranscriptStatus'>
-    
-
-
-  /**
-   * Reference to a field of type 'TranscriptStatus[]'
-   */
-  export type ListEnumTranscriptStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TranscriptStatus[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -19510,16 +23616,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Float'
+   * Reference to a field of type 'TranscriptStatus'
    */
-  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+  export type EnumTranscriptStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TranscriptStatus'>
     
 
 
   /**
-   * Reference to a field of type 'Float[]'
+   * Reference to a field of type 'TranscriptStatus[]'
    */
-  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+  export type ListEnumTranscriptStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TranscriptStatus[]'>
     
   /**
    * Deep Input Types
@@ -19605,6 +23711,7 @@ export namespace Prisma {
     categoryId?: StringNullableFilter<"Course"> | string | null
     createdAt?: DateTimeFilter<"Course"> | Date | string
     updatedAt?: DateTimeFilter<"Course"> | Date | string
+    price?: FloatNullableFilter<"Course"> | number | null
     category?: XOR<CategoryNullableRelationFilter, CategoryWhereInput> | null
     chapters?: ChapterListRelationFilter
     attachments?: AttachmentListRelationFilter
@@ -19620,6 +23727,7 @@ export namespace Prisma {
     categoryId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    price?: SortOrderInput | SortOrder
     category?: CategoryOrderByWithRelationAndSearchRelevanceInput
     chapters?: ChapterOrderByRelationAggregateInput
     attachments?: AttachmentOrderByRelationAggregateInput
@@ -19639,6 +23747,7 @@ export namespace Prisma {
     categoryId?: StringNullableFilter<"Course"> | string | null
     createdAt?: DateTimeFilter<"Course"> | Date | string
     updatedAt?: DateTimeFilter<"Course"> | Date | string
+    price?: FloatNullableFilter<"Course"> | number | null
     category?: XOR<CategoryNullableRelationFilter, CategoryWhereInput> | null
     chapters?: ChapterListRelationFilter
     attachments?: AttachmentListRelationFilter
@@ -19654,9 +23763,12 @@ export namespace Prisma {
     categoryId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    price?: SortOrderInput | SortOrder
     _count?: CourseCountOrderByAggregateInput
+    _avg?: CourseAvgOrderByAggregateInput
     _max?: CourseMaxOrderByAggregateInput
     _min?: CourseMinOrderByAggregateInput
+    _sum?: CourseSumOrderByAggregateInput
   }
 
   export type CourseScalarWhereWithAggregatesInput = {
@@ -19672,6 +23784,7 @@ export namespace Prisma {
     categoryId?: StringNullableWithAggregatesFilter<"Course"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Course"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Course"> | Date | string
+    price?: FloatNullableWithAggregatesFilter<"Course"> | number | null
   }
 
   export type CategoryWhereInput = {
@@ -19788,14 +23901,15 @@ export namespace Prisma {
     externalUrl?: StringNullableFilter<"Chapter"> | string | null
     embedUrl?: StringNullableFilter<"Chapter"> | string | null
     videoProvider?: EnumVideoProviderNullableFilter<"Chapter"> | $Enums.VideoProvider | null
-    transcript?: StringNullableFilter<"Chapter"> | string | null
-    transcriptStatus?: EnumTranscriptStatusFilter<"Chapter"> | $Enums.TranscriptStatus
     position?: IntFilter<"Chapter"> | number
     isPublished?: BoolFilter<"Chapter"> | boolean
     isFree?: BoolFilter<"Chapter"> | boolean
     courseId?: StringFilter<"Chapter"> | string
     createdAt?: DateTimeFilter<"Chapter"> | Date | string
     updatedAt?: DateTimeFilter<"Chapter"> | Date | string
+    transcript?: StringNullableFilter<"Chapter"> | string | null
+    transcriptStatus?: EnumTranscriptStatusFilter<"Chapter"> | $Enums.TranscriptStatus
+    duration?: IntNullableFilter<"Chapter"> | number | null
     muxData?: XOR<MuxDataNullableRelationFilter, MuxDataWhereInput> | null
     quiz?: XOR<QuizNullableRelationFilter, QuizWhereInput> | null
     course?: XOR<CourseRelationFilter, CourseWhereInput>
@@ -19811,14 +23925,15 @@ export namespace Prisma {
     externalUrl?: SortOrderInput | SortOrder
     embedUrl?: SortOrderInput | SortOrder
     videoProvider?: SortOrderInput | SortOrder
-    transcript?: SortOrderInput | SortOrder
-    transcriptStatus?: SortOrder
     position?: SortOrder
     isPublished?: SortOrder
     isFree?: SortOrder
     courseId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    transcript?: SortOrderInput | SortOrder
+    transcriptStatus?: SortOrder
+    duration?: SortOrderInput | SortOrder
     muxData?: MuxDataOrderByWithRelationAndSearchRelevanceInput
     quiz?: QuizOrderByWithRelationAndSearchRelevanceInput
     course?: CourseOrderByWithRelationAndSearchRelevanceInput
@@ -19838,14 +23953,15 @@ export namespace Prisma {
     externalUrl?: StringNullableFilter<"Chapter"> | string | null
     embedUrl?: StringNullableFilter<"Chapter"> | string | null
     videoProvider?: EnumVideoProviderNullableFilter<"Chapter"> | $Enums.VideoProvider | null
-    transcript?: StringNullableFilter<"Chapter"> | string | null
-    transcriptStatus?: EnumTranscriptStatusFilter<"Chapter"> | $Enums.TranscriptStatus
     position?: IntFilter<"Chapter"> | number
     isPublished?: BoolFilter<"Chapter"> | boolean
     isFree?: BoolFilter<"Chapter"> | boolean
     courseId?: StringFilter<"Chapter"> | string
     createdAt?: DateTimeFilter<"Chapter"> | Date | string
     updatedAt?: DateTimeFilter<"Chapter"> | Date | string
+    transcript?: StringNullableFilter<"Chapter"> | string | null
+    transcriptStatus?: EnumTranscriptStatusFilter<"Chapter"> | $Enums.TranscriptStatus
+    duration?: IntNullableFilter<"Chapter"> | number | null
     muxData?: XOR<MuxDataNullableRelationFilter, MuxDataWhereInput> | null
     quiz?: XOR<QuizNullableRelationFilter, QuizWhereInput> | null
     course?: XOR<CourseRelationFilter, CourseWhereInput>
@@ -19861,14 +23977,15 @@ export namespace Prisma {
     externalUrl?: SortOrderInput | SortOrder
     embedUrl?: SortOrderInput | SortOrder
     videoProvider?: SortOrderInput | SortOrder
-    transcript?: SortOrderInput | SortOrder
-    transcriptStatus?: SortOrder
     position?: SortOrder
     isPublished?: SortOrder
     isFree?: SortOrder
     courseId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    transcript?: SortOrderInput | SortOrder
+    transcriptStatus?: SortOrder
+    duration?: SortOrderInput | SortOrder
     _count?: ChapterCountOrderByAggregateInput
     _avg?: ChapterAvgOrderByAggregateInput
     _max?: ChapterMaxOrderByAggregateInput
@@ -19888,14 +24005,15 @@ export namespace Prisma {
     externalUrl?: StringNullableWithAggregatesFilter<"Chapter"> | string | null
     embedUrl?: StringNullableWithAggregatesFilter<"Chapter"> | string | null
     videoProvider?: EnumVideoProviderNullableWithAggregatesFilter<"Chapter"> | $Enums.VideoProvider | null
-    transcript?: StringNullableWithAggregatesFilter<"Chapter"> | string | null
-    transcriptStatus?: EnumTranscriptStatusWithAggregatesFilter<"Chapter"> | $Enums.TranscriptStatus
     position?: IntWithAggregatesFilter<"Chapter"> | number
     isPublished?: BoolWithAggregatesFilter<"Chapter"> | boolean
     isFree?: BoolWithAggregatesFilter<"Chapter"> | boolean
     courseId?: StringWithAggregatesFilter<"Chapter"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Chapter"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Chapter"> | Date | string
+    transcript?: StringNullableWithAggregatesFilter<"Chapter"> | string | null
+    transcriptStatus?: EnumTranscriptStatusWithAggregatesFilter<"Chapter"> | $Enums.TranscriptStatus
+    duration?: IntNullableWithAggregatesFilter<"Chapter"> | number | null
   }
 
   export type MuxDataWhereInput = {
@@ -20688,6 +24806,259 @@ export namespace Prisma {
     expires?: DateTimeWithAggregatesFilter<"VerificationToken"> | Date | string
   }
 
+  export type AchievementWhereInput = {
+    AND?: AchievementWhereInput | AchievementWhereInput[]
+    OR?: AchievementWhereInput[]
+    NOT?: AchievementWhereInput | AchievementWhereInput[]
+    id?: StringFilter<"Achievement"> | string
+    userId?: StringFilter<"Achievement"> | string
+    courseId?: StringFilter<"Achievement"> | string
+    title?: StringFilter<"Achievement"> | string
+    description?: StringNullableFilter<"Achievement"> | string | null
+    icon?: StringNullableFilter<"Achievement"> | string | null
+    createdAt?: DateTimeFilter<"Achievement"> | Date | string
+    updatedAt?: DateTimeFilter<"Achievement"> | Date | string
+  }
+
+  export type AchievementOrderByWithRelationAndSearchRelevanceInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    icon?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _relevance?: AchievementOrderByRelevanceInput
+  }
+
+  export type AchievementWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_courseId?: AchievementUserIdCourseIdCompoundUniqueInput
+    AND?: AchievementWhereInput | AchievementWhereInput[]
+    OR?: AchievementWhereInput[]
+    NOT?: AchievementWhereInput | AchievementWhereInput[]
+    userId?: StringFilter<"Achievement"> | string
+    courseId?: StringFilter<"Achievement"> | string
+    title?: StringFilter<"Achievement"> | string
+    description?: StringNullableFilter<"Achievement"> | string | null
+    icon?: StringNullableFilter<"Achievement"> | string | null
+    createdAt?: DateTimeFilter<"Achievement"> | Date | string
+    updatedAt?: DateTimeFilter<"Achievement"> | Date | string
+  }, "id" | "userId_courseId">
+
+  export type AchievementOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    title?: SortOrder
+    description?: SortOrderInput | SortOrder
+    icon?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: AchievementCountOrderByAggregateInput
+    _max?: AchievementMaxOrderByAggregateInput
+    _min?: AchievementMinOrderByAggregateInput
+  }
+
+  export type AchievementScalarWhereWithAggregatesInput = {
+    AND?: AchievementScalarWhereWithAggregatesInput | AchievementScalarWhereWithAggregatesInput[]
+    OR?: AchievementScalarWhereWithAggregatesInput[]
+    NOT?: AchievementScalarWhereWithAggregatesInput | AchievementScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Achievement"> | string
+    userId?: StringWithAggregatesFilter<"Achievement"> | string
+    courseId?: StringWithAggregatesFilter<"Achievement"> | string
+    title?: StringWithAggregatesFilter<"Achievement"> | string
+    description?: StringNullableWithAggregatesFilter<"Achievement"> | string | null
+    icon?: StringNullableWithAggregatesFilter<"Achievement"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Achievement"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Achievement"> | Date | string
+  }
+
+  export type PurchaseWhereInput = {
+    AND?: PurchaseWhereInput | PurchaseWhereInput[]
+    OR?: PurchaseWhereInput[]
+    NOT?: PurchaseWhereInput | PurchaseWhereInput[]
+    id?: StringFilter<"Purchase"> | string
+    userId?: StringFilter<"Purchase"> | string
+    courseId?: StringFilter<"Purchase"> | string
+    lastChapterId?: StringNullableFilter<"Purchase"> | string | null
+    createdAt?: DateTimeFilter<"Purchase"> | Date | string
+    updatedAt?: DateTimeFilter<"Purchase"> | Date | string
+  }
+
+  export type PurchaseOrderByWithRelationAndSearchRelevanceInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    lastChapterId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _relevance?: PurchaseOrderByRelevanceInput
+  }
+
+  export type PurchaseWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_courseId?: PurchaseUserIdCourseIdCompoundUniqueInput
+    AND?: PurchaseWhereInput | PurchaseWhereInput[]
+    OR?: PurchaseWhereInput[]
+    NOT?: PurchaseWhereInput | PurchaseWhereInput[]
+    userId?: StringFilter<"Purchase"> | string
+    courseId?: StringFilter<"Purchase"> | string
+    lastChapterId?: StringNullableFilter<"Purchase"> | string | null
+    createdAt?: DateTimeFilter<"Purchase"> | Date | string
+    updatedAt?: DateTimeFilter<"Purchase"> | Date | string
+  }, "id" | "userId_courseId">
+
+  export type PurchaseOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    lastChapterId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PurchaseCountOrderByAggregateInput
+    _max?: PurchaseMaxOrderByAggregateInput
+    _min?: PurchaseMinOrderByAggregateInput
+  }
+
+  export type PurchaseScalarWhereWithAggregatesInput = {
+    AND?: PurchaseScalarWhereWithAggregatesInput | PurchaseScalarWhereWithAggregatesInput[]
+    OR?: PurchaseScalarWhereWithAggregatesInput[]
+    NOT?: PurchaseScalarWhereWithAggregatesInput | PurchaseScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Purchase"> | string
+    userId?: StringWithAggregatesFilter<"Purchase"> | string
+    courseId?: StringWithAggregatesFilter<"Purchase"> | string
+    lastChapterId?: StringNullableWithAggregatesFilter<"Purchase"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Purchase"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Purchase"> | Date | string
+  }
+
+  export type UserNoteWhereInput = {
+    AND?: UserNoteWhereInput | UserNoteWhereInput[]
+    OR?: UserNoteWhereInput[]
+    NOT?: UserNoteWhereInput | UserNoteWhereInput[]
+    id?: StringFilter<"UserNote"> | string
+    userId?: StringFilter<"UserNote"> | string
+    chapterId?: StringFilter<"UserNote"> | string
+    content?: StringFilter<"UserNote"> | string
+    timestamp?: IntFilter<"UserNote"> | number
+    createdAt?: DateTimeFilter<"UserNote"> | Date | string
+    updatedAt?: DateTimeFilter<"UserNote"> | Date | string
+  }
+
+  export type UserNoteOrderByWithRelationAndSearchRelevanceInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    chapterId?: SortOrder
+    content?: SortOrder
+    timestamp?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _relevance?: UserNoteOrderByRelevanceInput
+  }
+
+  export type UserNoteWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: UserNoteWhereInput | UserNoteWhereInput[]
+    OR?: UserNoteWhereInput[]
+    NOT?: UserNoteWhereInput | UserNoteWhereInput[]
+    userId?: StringFilter<"UserNote"> | string
+    chapterId?: StringFilter<"UserNote"> | string
+    content?: StringFilter<"UserNote"> | string
+    timestamp?: IntFilter<"UserNote"> | number
+    createdAt?: DateTimeFilter<"UserNote"> | Date | string
+    updatedAt?: DateTimeFilter<"UserNote"> | Date | string
+  }, "id">
+
+  export type UserNoteOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    chapterId?: SortOrder
+    content?: SortOrder
+    timestamp?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: UserNoteCountOrderByAggregateInput
+    _avg?: UserNoteAvgOrderByAggregateInput
+    _max?: UserNoteMaxOrderByAggregateInput
+    _min?: UserNoteMinOrderByAggregateInput
+    _sum?: UserNoteSumOrderByAggregateInput
+  }
+
+  export type UserNoteScalarWhereWithAggregatesInput = {
+    AND?: UserNoteScalarWhereWithAggregatesInput | UserNoteScalarWhereWithAggregatesInput[]
+    OR?: UserNoteScalarWhereWithAggregatesInput[]
+    NOT?: UserNoteScalarWhereWithAggregatesInput | UserNoteScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserNote"> | string
+    userId?: StringWithAggregatesFilter<"UserNote"> | string
+    chapterId?: StringWithAggregatesFilter<"UserNote"> | string
+    content?: StringWithAggregatesFilter<"UserNote"> | string
+    timestamp?: IntWithAggregatesFilter<"UserNote"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"UserNote"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"UserNote"> | Date | string
+  }
+
+  export type UserStreakWhereInput = {
+    AND?: UserStreakWhereInput | UserStreakWhereInput[]
+    OR?: UserStreakWhereInput[]
+    NOT?: UserStreakWhereInput | UserStreakWhereInput[]
+    id?: StringFilter<"UserStreak"> | string
+    userId?: StringFilter<"UserStreak"> | string
+    count?: IntFilter<"UserStreak"> | number
+    lastVisit?: DateTimeFilter<"UserStreak"> | Date | string
+    createdAt?: DateTimeFilter<"UserStreak"> | Date | string
+    updatedAt?: DateTimeFilter<"UserStreak"> | Date | string
+  }
+
+  export type UserStreakOrderByWithRelationAndSearchRelevanceInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    count?: SortOrder
+    lastVisit?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _relevance?: UserStreakOrderByRelevanceInput
+  }
+
+  export type UserStreakWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId?: string
+    AND?: UserStreakWhereInput | UserStreakWhereInput[]
+    OR?: UserStreakWhereInput[]
+    NOT?: UserStreakWhereInput | UserStreakWhereInput[]
+    count?: IntFilter<"UserStreak"> | number
+    lastVisit?: DateTimeFilter<"UserStreak"> | Date | string
+    createdAt?: DateTimeFilter<"UserStreak"> | Date | string
+    updatedAt?: DateTimeFilter<"UserStreak"> | Date | string
+  }, "id" | "userId">
+
+  export type UserStreakOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    count?: SortOrder
+    lastVisit?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: UserStreakCountOrderByAggregateInput
+    _avg?: UserStreakAvgOrderByAggregateInput
+    _max?: UserStreakMaxOrderByAggregateInput
+    _min?: UserStreakMinOrderByAggregateInput
+    _sum?: UserStreakSumOrderByAggregateInput
+  }
+
+  export type UserStreakScalarWhereWithAggregatesInput = {
+    AND?: UserStreakScalarWhereWithAggregatesInput | UserStreakScalarWhereWithAggregatesInput[]
+    OR?: UserStreakScalarWhereWithAggregatesInput[]
+    NOT?: UserStreakScalarWhereWithAggregatesInput | UserStreakScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserStreak"> | string
+    userId?: StringWithAggregatesFilter<"UserStreak"> | string
+    count?: IntWithAggregatesFilter<"UserStreak"> | number
+    lastVisit?: DateTimeWithAggregatesFilter<"UserStreak"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"UserStreak"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"UserStreak"> | Date | string
+  }
+
   export type ProfileCreateInput = {
     id?: string
     name?: string | null
@@ -20766,6 +25137,7 @@ export namespace Prisma {
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    price?: number | null
     category?: CategoryCreateNestedOneWithoutCoursesInput
     chapters?: ChapterCreateNestedManyWithoutCourseInput
     attachments?: AttachmentCreateNestedManyWithoutCourseInput
@@ -20781,6 +25153,7 @@ export namespace Prisma {
     categoryId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    price?: number | null
     chapters?: ChapterUncheckedCreateNestedManyWithoutCourseInput
     attachments?: AttachmentUncheckedCreateNestedManyWithoutCourseInput
   }
@@ -20794,6 +25167,7 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
     category?: CategoryUpdateOneWithoutCoursesNestedInput
     chapters?: ChapterUpdateManyWithoutCourseNestedInput
     attachments?: AttachmentUpdateManyWithoutCourseNestedInput
@@ -20809,6 +25183,7 @@ export namespace Prisma {
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
     chapters?: ChapterUncheckedUpdateManyWithoutCourseNestedInput
     attachments?: AttachmentUncheckedUpdateManyWithoutCourseNestedInput
   }
@@ -20823,6 +25198,7 @@ export namespace Prisma {
     categoryId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    price?: number | null
   }
 
   export type CourseUpdateManyMutationInput = {
@@ -20834,6 +25210,7 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type CourseUncheckedUpdateManyInput = {
@@ -20846,6 +25223,7 @@ export namespace Prisma {
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type CategoryCreateInput = {
@@ -20958,13 +25336,14 @@ export namespace Prisma {
     externalUrl?: string | null
     embedUrl?: string | null
     videoProvider?: $Enums.VideoProvider | null
-    transcript?: string | null
-    transcriptStatus?: $Enums.TranscriptStatus
     position: number
     isPublished?: boolean
     isFree?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    transcript?: string | null
+    transcriptStatus?: $Enums.TranscriptStatus
+    duration?: number | null
     muxData?: MuxDataCreateNestedOneWithoutChapterInput
     quiz?: QuizCreateNestedOneWithoutChapterInput
     course: CourseCreateNestedOneWithoutChaptersInput
@@ -20980,14 +25359,15 @@ export namespace Prisma {
     externalUrl?: string | null
     embedUrl?: string | null
     videoProvider?: $Enums.VideoProvider | null
-    transcript?: string | null
-    transcriptStatus?: $Enums.TranscriptStatus
     position: number
     isPublished?: boolean
     isFree?: boolean
     courseId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    transcript?: string | null
+    transcriptStatus?: $Enums.TranscriptStatus
+    duration?: number | null
     muxData?: MuxDataUncheckedCreateNestedOneWithoutChapterInput
     quiz?: QuizUncheckedCreateNestedOneWithoutChapterInput
     userProgress?: UserProgressUncheckedCreateNestedManyWithoutChapterInput
@@ -21002,13 +25382,14 @@ export namespace Prisma {
     externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
     embedUrl?: NullableStringFieldUpdateOperationsInput | string | null
     videoProvider?: NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
-    transcript?: NullableStringFieldUpdateOperationsInput | string | null
-    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
     position?: IntFieldUpdateOperationsInput | number
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     muxData?: MuxDataUpdateOneWithoutChapterNestedInput
     quiz?: QuizUpdateOneWithoutChapterNestedInput
     course?: CourseUpdateOneRequiredWithoutChaptersNestedInput
@@ -21024,14 +25405,15 @@ export namespace Prisma {
     externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
     embedUrl?: NullableStringFieldUpdateOperationsInput | string | null
     videoProvider?: NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
-    transcript?: NullableStringFieldUpdateOperationsInput | string | null
-    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
     position?: IntFieldUpdateOperationsInput | number
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     courseId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     muxData?: MuxDataUncheckedUpdateOneWithoutChapterNestedInput
     quiz?: QuizUncheckedUpdateOneWithoutChapterNestedInput
     userProgress?: UserProgressUncheckedUpdateManyWithoutChapterNestedInput
@@ -21046,14 +25428,15 @@ export namespace Prisma {
     externalUrl?: string | null
     embedUrl?: string | null
     videoProvider?: $Enums.VideoProvider | null
-    transcript?: string | null
-    transcriptStatus?: $Enums.TranscriptStatus
     position: number
     isPublished?: boolean
     isFree?: boolean
     courseId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    transcript?: string | null
+    transcriptStatus?: $Enums.TranscriptStatus
+    duration?: number | null
   }
 
   export type ChapterUpdateManyMutationInput = {
@@ -21065,13 +25448,14 @@ export namespace Prisma {
     externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
     embedUrl?: NullableStringFieldUpdateOperationsInput | string | null
     videoProvider?: NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
-    transcript?: NullableStringFieldUpdateOperationsInput | string | null
-    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
     position?: IntFieldUpdateOperationsInput | number
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type ChapterUncheckedUpdateManyInput = {
@@ -21083,14 +25467,15 @@ export namespace Prisma {
     externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
     embedUrl?: NullableStringFieldUpdateOperationsInput | string | null
     videoProvider?: NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
-    transcript?: NullableStringFieldUpdateOperationsInput | string | null
-    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
     position?: IntFieldUpdateOperationsInput | number
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     courseId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type MuxDataCreateInput = {
@@ -21906,6 +26291,279 @@ export namespace Prisma {
     expires?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type AchievementCreateInput = {
+    id: string
+    userId: string
+    courseId: string
+    title: string
+    description?: string | null
+    icon?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AchievementUncheckedCreateInput = {
+    id: string
+    userId: string
+    courseId: string
+    title: string
+    description?: string | null
+    icon?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AchievementUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AchievementUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AchievementCreateManyInput = {
+    id: string
+    userId: string
+    courseId: string
+    title: string
+    description?: string | null
+    icon?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type AchievementUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AchievementUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PurchaseCreateInput = {
+    id: string
+    userId: string
+    courseId: string
+    lastChapterId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PurchaseUncheckedCreateInput = {
+    id: string
+    userId: string
+    courseId: string
+    lastChapterId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PurchaseUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    lastChapterId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PurchaseUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    lastChapterId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PurchaseCreateManyInput = {
+    id: string
+    userId: string
+    courseId: string
+    lastChapterId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PurchaseUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    lastChapterId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PurchaseUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    lastChapterId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserNoteCreateInput = {
+    id: string
+    userId: string
+    chapterId: string
+    content: string
+    timestamp?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserNoteUncheckedCreateInput = {
+    id: string
+    userId: string
+    chapterId: string
+    content: string
+    timestamp?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserNoteUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    chapterId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    timestamp?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserNoteUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    chapterId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    timestamp?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserNoteCreateManyInput = {
+    id: string
+    userId: string
+    chapterId: string
+    content: string
+    timestamp?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserNoteUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    chapterId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    timestamp?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserNoteUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    chapterId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    timestamp?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserStreakCreateInput = {
+    id: string
+    userId: string
+    count?: number
+    lastVisit?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserStreakUncheckedCreateInput = {
+    id: string
+    userId: string
+    count?: number
+    lastVisit?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserStreakUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    count?: IntFieldUpdateOperationsInput | number
+    lastVisit?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserStreakUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    count?: IntFieldUpdateOperationsInput | number
+    lastVisit?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserStreakCreateManyInput = {
+    id: string
+    userId: string
+    count?: number
+    lastVisit?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type UserStreakUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    count?: IntFieldUpdateOperationsInput | number
+    lastVisit?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserStreakUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    count?: IntFieldUpdateOperationsInput | number
+    lastVisit?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -22069,6 +26727,17 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type CategoryNullableRelationFilter = {
     is?: CategoryWhereInput | null
     isNot?: CategoryWhereInput | null
@@ -22110,6 +26779,11 @@ export namespace Prisma {
     categoryId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    price?: SortOrder
+  }
+
+  export type CourseAvgOrderByAggregateInput = {
+    price?: SortOrder
   }
 
   export type CourseMaxOrderByAggregateInput = {
@@ -22122,6 +26796,7 @@ export namespace Prisma {
     categoryId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    price?: SortOrder
   }
 
   export type CourseMinOrderByAggregateInput = {
@@ -22134,6 +26809,11 @@ export namespace Prisma {
     categoryId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    price?: SortOrder
+  }
+
+  export type CourseSumOrderByAggregateInput = {
+    price?: SortOrder
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -22142,6 +26822,22 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type CourseListRelationFilter = {
@@ -22227,13 +26923,6 @@ export namespace Prisma {
     not?: NestedEnumVideoProviderNullableFilter<$PrismaModel> | $Enums.VideoProvider | null
   }
 
-  export type EnumTranscriptStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.TranscriptStatus | EnumTranscriptStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TranscriptStatus[] | ListEnumTranscriptStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TranscriptStatus[] | ListEnumTranscriptStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumTranscriptStatusFilter<$PrismaModel> | $Enums.TranscriptStatus
-  }
-
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -22243,6 +26932,24 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type EnumTranscriptStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TranscriptStatus | EnumTranscriptStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TranscriptStatus[] | ListEnumTranscriptStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TranscriptStatus[] | ListEnumTranscriptStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTranscriptStatusFilter<$PrismaModel> | $Enums.TranscriptStatus
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type MuxDataNullableRelationFilter = {
@@ -22280,18 +26987,20 @@ export namespace Prisma {
     externalUrl?: SortOrder
     embedUrl?: SortOrder
     videoProvider?: SortOrder
-    transcript?: SortOrder
-    transcriptStatus?: SortOrder
     position?: SortOrder
     isPublished?: SortOrder
     isFree?: SortOrder
     courseId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    transcript?: SortOrder
+    transcriptStatus?: SortOrder
+    duration?: SortOrder
   }
 
   export type ChapterAvgOrderByAggregateInput = {
     position?: SortOrder
+    duration?: SortOrder
   }
 
   export type ChapterMaxOrderByAggregateInput = {
@@ -22303,14 +27012,15 @@ export namespace Prisma {
     externalUrl?: SortOrder
     embedUrl?: SortOrder
     videoProvider?: SortOrder
-    transcript?: SortOrder
-    transcriptStatus?: SortOrder
     position?: SortOrder
     isPublished?: SortOrder
     isFree?: SortOrder
     courseId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    transcript?: SortOrder
+    transcriptStatus?: SortOrder
+    duration?: SortOrder
   }
 
   export type ChapterMinOrderByAggregateInput = {
@@ -22322,18 +27032,20 @@ export namespace Prisma {
     externalUrl?: SortOrder
     embedUrl?: SortOrder
     videoProvider?: SortOrder
-    transcript?: SortOrder
-    transcriptStatus?: SortOrder
     position?: SortOrder
     isPublished?: SortOrder
     isFree?: SortOrder
     courseId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    transcript?: SortOrder
+    transcriptStatus?: SortOrder
+    duration?: SortOrder
   }
 
   export type ChapterSumOrderByAggregateInput = {
     position?: SortOrder
+    duration?: SortOrder
   }
 
   export type EnumVideoSourceTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -22356,16 +27068,6 @@ export namespace Prisma {
     _max?: NestedEnumVideoProviderNullableFilter<$PrismaModel>
   }
 
-  export type EnumTranscriptStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TranscriptStatus | EnumTranscriptStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TranscriptStatus[] | ListEnumTranscriptStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TranscriptStatus[] | ListEnumTranscriptStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumTranscriptStatusWithAggregatesFilter<$PrismaModel> | $Enums.TranscriptStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTranscriptStatusFilter<$PrismaModel>
-    _max?: NestedEnumTranscriptStatusFilter<$PrismaModel>
-  }
-
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -22380,6 +27082,32 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type EnumTranscriptStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TranscriptStatus | EnumTranscriptStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TranscriptStatus[] | ListEnumTranscriptStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TranscriptStatus[] | ListEnumTranscriptStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTranscriptStatusWithAggregatesFilter<$PrismaModel> | $Enums.TranscriptStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTranscriptStatusFilter<$PrismaModel>
+    _max?: NestedEnumTranscriptStatusFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type ChapterRelationFilter = {
@@ -22450,17 +27178,6 @@ export namespace Prisma {
     isCompleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type QuestionListRelationFilter = {
@@ -22535,22 +27252,6 @@ export namespace Prisma {
     maxQuestions?: SortOrder
     passingScore?: SortOrder
     timeLimit?: SortOrder
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type FloatFilter<$PrismaModel = never> = {
@@ -23034,6 +27735,173 @@ export namespace Prisma {
     expires?: SortOrder
   }
 
+  export type AchievementOrderByRelevanceInput = {
+    fields: AchievementOrderByRelevanceFieldEnum | AchievementOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type AchievementUserIdCourseIdCompoundUniqueInput = {
+    userId: string
+    courseId: string
+  }
+
+  export type AchievementCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    icon?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AchievementMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    icon?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AchievementMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    title?: SortOrder
+    description?: SortOrder
+    icon?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PurchaseOrderByRelevanceInput = {
+    fields: PurchaseOrderByRelevanceFieldEnum | PurchaseOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type PurchaseUserIdCourseIdCompoundUniqueInput = {
+    userId: string
+    courseId: string
+  }
+
+  export type PurchaseCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    lastChapterId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PurchaseMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    lastChapterId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PurchaseMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    lastChapterId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserNoteOrderByRelevanceInput = {
+    fields: UserNoteOrderByRelevanceFieldEnum | UserNoteOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type UserNoteCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    chapterId?: SortOrder
+    content?: SortOrder
+    timestamp?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserNoteAvgOrderByAggregateInput = {
+    timestamp?: SortOrder
+  }
+
+  export type UserNoteMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    chapterId?: SortOrder
+    content?: SortOrder
+    timestamp?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserNoteMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    chapterId?: SortOrder
+    content?: SortOrder
+    timestamp?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserNoteSumOrderByAggregateInput = {
+    timestamp?: SortOrder
+  }
+
+  export type UserStreakOrderByRelevanceInput = {
+    fields: UserStreakOrderByRelevanceFieldEnum | UserStreakOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type UserStreakCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    count?: SortOrder
+    lastVisit?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserStreakAvgOrderByAggregateInput = {
+    count?: SortOrder
+  }
+
+  export type UserStreakMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    count?: SortOrder
+    lastVisit?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserStreakMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    count?: SortOrder
+    lastVisit?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type UserStreakSumOrderByAggregateInput = {
+    count?: SortOrder
+  }
+
   export type UserCreateNestedOneWithoutProfileInput = {
     create?: XOR<UserCreateWithoutProfileInput, UserUncheckedCreateWithoutProfileInput>
     connectOrCreate?: UserCreateOrConnectWithoutProfileInput
@@ -23100,6 +27968,14 @@ export namespace Prisma {
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type CategoryUpdateOneWithoutCoursesNestedInput = {
@@ -23276,12 +28152,20 @@ export namespace Prisma {
     set?: $Enums.VideoProvider | null
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type EnumTranscriptStatusFieldUpdateOperationsInput = {
     set?: $Enums.TranscriptStatus
   }
 
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
     increment?: number
     decrement?: number
     multiply?: number
@@ -23424,14 +28308,6 @@ export namespace Prisma {
     connectOrCreate?: QuizResultCreateOrConnectWithoutQuizInput | QuizResultCreateOrConnectWithoutQuizInput[]
     createMany?: QuizResultCreateManyQuizInputEnvelope
     connect?: QuizResultWhereUniqueInput | QuizResultWhereUniqueInput[]
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type ChapterUpdateOneRequiredWithoutQuizNestedInput = {
@@ -23985,12 +28861,39 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumVideoSourceTypeNullableFilter<$PrismaModel = never> = {
@@ -24034,16 +28937,6 @@ export namespace Prisma {
     _max?: NestedEnumVideoProviderNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumTranscriptStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.TranscriptStatus | EnumTranscriptStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.TranscriptStatus[] | ListEnumTranscriptStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.TranscriptStatus[] | ListEnumTranscriptStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumTranscriptStatusWithAggregatesFilter<$PrismaModel> | $Enums.TranscriptStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumTranscriptStatusFilter<$PrismaModel>
-    _max?: NestedEnumTranscriptStatusFilter<$PrismaModel>
-  }
-
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -24071,6 +28964,16 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedEnumTranscriptStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TranscriptStatus | EnumTranscriptStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TranscriptStatus[] | ListEnumTranscriptStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TranscriptStatus[] | ListEnumTranscriptStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTranscriptStatusWithAggregatesFilter<$PrismaModel> | $Enums.TranscriptStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTranscriptStatusFilter<$PrismaModel>
+    _max?: NestedEnumTranscriptStatusFilter<$PrismaModel>
+  }
+
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -24085,17 +28988,6 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -24223,13 +29115,14 @@ export namespace Prisma {
     externalUrl?: string | null
     embedUrl?: string | null
     videoProvider?: $Enums.VideoProvider | null
-    transcript?: string | null
-    transcriptStatus?: $Enums.TranscriptStatus
     position: number
     isPublished?: boolean
     isFree?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    transcript?: string | null
+    transcriptStatus?: $Enums.TranscriptStatus
+    duration?: number | null
     muxData?: MuxDataCreateNestedOneWithoutChapterInput
     quiz?: QuizCreateNestedOneWithoutChapterInput
     userProgress?: UserProgressCreateNestedManyWithoutChapterInput
@@ -24244,13 +29137,14 @@ export namespace Prisma {
     externalUrl?: string | null
     embedUrl?: string | null
     videoProvider?: $Enums.VideoProvider | null
-    transcript?: string | null
-    transcriptStatus?: $Enums.TranscriptStatus
     position: number
     isPublished?: boolean
     isFree?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    transcript?: string | null
+    transcriptStatus?: $Enums.TranscriptStatus
+    duration?: number | null
     muxData?: MuxDataUncheckedCreateNestedOneWithoutChapterInput
     quiz?: QuizUncheckedCreateNestedOneWithoutChapterInput
     userProgress?: UserProgressUncheckedCreateNestedManyWithoutChapterInput
@@ -24341,14 +29235,15 @@ export namespace Prisma {
     externalUrl?: StringNullableFilter<"Chapter"> | string | null
     embedUrl?: StringNullableFilter<"Chapter"> | string | null
     videoProvider?: EnumVideoProviderNullableFilter<"Chapter"> | $Enums.VideoProvider | null
-    transcript?: StringNullableFilter<"Chapter"> | string | null
-    transcriptStatus?: EnumTranscriptStatusFilter<"Chapter"> | $Enums.TranscriptStatus
     position?: IntFilter<"Chapter"> | number
     isPublished?: BoolFilter<"Chapter"> | boolean
     isFree?: BoolFilter<"Chapter"> | boolean
     courseId?: StringFilter<"Chapter"> | string
     createdAt?: DateTimeFilter<"Chapter"> | Date | string
     updatedAt?: DateTimeFilter<"Chapter"> | Date | string
+    transcript?: StringNullableFilter<"Chapter"> | string | null
+    transcriptStatus?: EnumTranscriptStatusFilter<"Chapter"> | $Enums.TranscriptStatus
+    duration?: IntNullableFilter<"Chapter"> | number | null
   }
 
   export type AttachmentUpsertWithWhereUniqueWithoutCourseInput = {
@@ -24388,6 +29283,7 @@ export namespace Prisma {
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    price?: number | null
     chapters?: ChapterCreateNestedManyWithoutCourseInput
     attachments?: AttachmentCreateNestedManyWithoutCourseInput
   }
@@ -24401,6 +29297,7 @@ export namespace Prisma {
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    price?: number | null
     chapters?: ChapterUncheckedCreateNestedManyWithoutCourseInput
     attachments?: AttachmentUncheckedCreateNestedManyWithoutCourseInput
   }
@@ -24444,6 +29341,7 @@ export namespace Prisma {
     categoryId?: StringNullableFilter<"Course"> | string | null
     createdAt?: DateTimeFilter<"Course"> | Date | string
     updatedAt?: DateTimeFilter<"Course"> | Date | string
+    price?: FloatNullableFilter<"Course"> | number | null
   }
 
   export type CourseCreateWithoutAttachmentsInput = {
@@ -24455,6 +29353,7 @@ export namespace Prisma {
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    price?: number | null
     category?: CategoryCreateNestedOneWithoutCoursesInput
     chapters?: ChapterCreateNestedManyWithoutCourseInput
   }
@@ -24469,6 +29368,7 @@ export namespace Prisma {
     categoryId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    price?: number | null
     chapters?: ChapterUncheckedCreateNestedManyWithoutCourseInput
   }
 
@@ -24497,6 +29397,7 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
     category?: CategoryUpdateOneWithoutCoursesNestedInput
     chapters?: ChapterUpdateManyWithoutCourseNestedInput
   }
@@ -24511,6 +29412,7 @@ export namespace Prisma {
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
     chapters?: ChapterUncheckedUpdateManyWithoutCourseNestedInput
   }
 
@@ -24571,6 +29473,7 @@ export namespace Prisma {
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    price?: number | null
     category?: CategoryCreateNestedOneWithoutCoursesInput
     attachments?: AttachmentCreateNestedManyWithoutCourseInput
   }
@@ -24585,6 +29488,7 @@ export namespace Prisma {
     categoryId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    price?: number | null
     attachments?: AttachmentUncheckedCreateNestedManyWithoutCourseInput
   }
 
@@ -24699,6 +29603,7 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
     category?: CategoryUpdateOneWithoutCoursesNestedInput
     attachments?: AttachmentUpdateManyWithoutCourseNestedInput
   }
@@ -24713,6 +29618,7 @@ export namespace Prisma {
     categoryId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
     attachments?: AttachmentUncheckedUpdateManyWithoutCourseNestedInput
   }
 
@@ -24753,13 +29659,14 @@ export namespace Prisma {
     externalUrl?: string | null
     embedUrl?: string | null
     videoProvider?: $Enums.VideoProvider | null
-    transcript?: string | null
-    transcriptStatus?: $Enums.TranscriptStatus
     position: number
     isPublished?: boolean
     isFree?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    transcript?: string | null
+    transcriptStatus?: $Enums.TranscriptStatus
+    duration?: number | null
     quiz?: QuizCreateNestedOneWithoutChapterInput
     course: CourseCreateNestedOneWithoutChaptersInput
     userProgress?: UserProgressCreateNestedManyWithoutChapterInput
@@ -24774,14 +29681,15 @@ export namespace Prisma {
     externalUrl?: string | null
     embedUrl?: string | null
     videoProvider?: $Enums.VideoProvider | null
-    transcript?: string | null
-    transcriptStatus?: $Enums.TranscriptStatus
     position: number
     isPublished?: boolean
     isFree?: boolean
     courseId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    transcript?: string | null
+    transcriptStatus?: $Enums.TranscriptStatus
+    duration?: number | null
     quiz?: QuizUncheckedCreateNestedOneWithoutChapterInput
     userProgress?: UserProgressUncheckedCreateNestedManyWithoutChapterInput
   }
@@ -24811,13 +29719,14 @@ export namespace Prisma {
     externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
     embedUrl?: NullableStringFieldUpdateOperationsInput | string | null
     videoProvider?: NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
-    transcript?: NullableStringFieldUpdateOperationsInput | string | null
-    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
     position?: IntFieldUpdateOperationsInput | number
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     quiz?: QuizUpdateOneWithoutChapterNestedInput
     course?: CourseUpdateOneRequiredWithoutChaptersNestedInput
     userProgress?: UserProgressUpdateManyWithoutChapterNestedInput
@@ -24832,14 +29741,15 @@ export namespace Prisma {
     externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
     embedUrl?: NullableStringFieldUpdateOperationsInput | string | null
     videoProvider?: NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
-    transcript?: NullableStringFieldUpdateOperationsInput | string | null
-    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
     position?: IntFieldUpdateOperationsInput | number
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     courseId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     quiz?: QuizUncheckedUpdateOneWithoutChapterNestedInput
     userProgress?: UserProgressUncheckedUpdateManyWithoutChapterNestedInput
   }
@@ -24853,13 +29763,14 @@ export namespace Prisma {
     externalUrl?: string | null
     embedUrl?: string | null
     videoProvider?: $Enums.VideoProvider | null
-    transcript?: string | null
-    transcriptStatus?: $Enums.TranscriptStatus
     position: number
     isPublished?: boolean
     isFree?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    transcript?: string | null
+    transcriptStatus?: $Enums.TranscriptStatus
+    duration?: number | null
     muxData?: MuxDataCreateNestedOneWithoutChapterInput
     quiz?: QuizCreateNestedOneWithoutChapterInput
     course: CourseCreateNestedOneWithoutChaptersInput
@@ -24874,14 +29785,15 @@ export namespace Prisma {
     externalUrl?: string | null
     embedUrl?: string | null
     videoProvider?: $Enums.VideoProvider | null
-    transcript?: string | null
-    transcriptStatus?: $Enums.TranscriptStatus
     position: number
     isPublished?: boolean
     isFree?: boolean
     courseId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    transcript?: string | null
+    transcriptStatus?: $Enums.TranscriptStatus
+    duration?: number | null
     muxData?: MuxDataUncheckedCreateNestedOneWithoutChapterInput
     quiz?: QuizUncheckedCreateNestedOneWithoutChapterInput
   }
@@ -24911,13 +29823,14 @@ export namespace Prisma {
     externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
     embedUrl?: NullableStringFieldUpdateOperationsInput | string | null
     videoProvider?: NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
-    transcript?: NullableStringFieldUpdateOperationsInput | string | null
-    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
     position?: IntFieldUpdateOperationsInput | number
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     muxData?: MuxDataUpdateOneWithoutChapterNestedInput
     quiz?: QuizUpdateOneWithoutChapterNestedInput
     course?: CourseUpdateOneRequiredWithoutChaptersNestedInput
@@ -24932,14 +29845,15 @@ export namespace Prisma {
     externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
     embedUrl?: NullableStringFieldUpdateOperationsInput | string | null
     videoProvider?: NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
-    transcript?: NullableStringFieldUpdateOperationsInput | string | null
-    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
     position?: IntFieldUpdateOperationsInput | number
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     courseId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     muxData?: MuxDataUncheckedUpdateOneWithoutChapterNestedInput
     quiz?: QuizUncheckedUpdateOneWithoutChapterNestedInput
   }
@@ -24953,13 +29867,14 @@ export namespace Prisma {
     externalUrl?: string | null
     embedUrl?: string | null
     videoProvider?: $Enums.VideoProvider | null
-    transcript?: string | null
-    transcriptStatus?: $Enums.TranscriptStatus
     position: number
     isPublished?: boolean
     isFree?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    transcript?: string | null
+    transcriptStatus?: $Enums.TranscriptStatus
+    duration?: number | null
     muxData?: MuxDataCreateNestedOneWithoutChapterInput
     course: CourseCreateNestedOneWithoutChaptersInput
     userProgress?: UserProgressCreateNestedManyWithoutChapterInput
@@ -24974,14 +29889,15 @@ export namespace Prisma {
     externalUrl?: string | null
     embedUrl?: string | null
     videoProvider?: $Enums.VideoProvider | null
-    transcript?: string | null
-    transcriptStatus?: $Enums.TranscriptStatus
     position: number
     isPublished?: boolean
     isFree?: boolean
     courseId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    transcript?: string | null
+    transcriptStatus?: $Enums.TranscriptStatus
+    duration?: number | null
     muxData?: MuxDataUncheckedCreateNestedOneWithoutChapterInput
     userProgress?: UserProgressUncheckedCreateNestedManyWithoutChapterInput
   }
@@ -25075,13 +29991,14 @@ export namespace Prisma {
     externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
     embedUrl?: NullableStringFieldUpdateOperationsInput | string | null
     videoProvider?: NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
-    transcript?: NullableStringFieldUpdateOperationsInput | string | null
-    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
     position?: IntFieldUpdateOperationsInput | number
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     muxData?: MuxDataUpdateOneWithoutChapterNestedInput
     course?: CourseUpdateOneRequiredWithoutChaptersNestedInput
     userProgress?: UserProgressUpdateManyWithoutChapterNestedInput
@@ -25096,14 +30013,15 @@ export namespace Prisma {
     externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
     embedUrl?: NullableStringFieldUpdateOperationsInput | string | null
     videoProvider?: NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
-    transcript?: NullableStringFieldUpdateOperationsInput | string | null
-    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
     position?: IntFieldUpdateOperationsInput | number
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     courseId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     muxData?: MuxDataUncheckedUpdateOneWithoutChapterNestedInput
     userProgress?: UserProgressUncheckedUpdateManyWithoutChapterNestedInput
   }
@@ -25945,13 +30863,14 @@ export namespace Prisma {
     externalUrl?: string | null
     embedUrl?: string | null
     videoProvider?: $Enums.VideoProvider | null
-    transcript?: string | null
-    transcriptStatus?: $Enums.TranscriptStatus
     position: number
     isPublished?: boolean
     isFree?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    transcript?: string | null
+    transcriptStatus?: $Enums.TranscriptStatus
+    duration?: number | null
   }
 
   export type AttachmentCreateManyCourseInput = {
@@ -25971,13 +30890,14 @@ export namespace Prisma {
     externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
     embedUrl?: NullableStringFieldUpdateOperationsInput | string | null
     videoProvider?: NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
-    transcript?: NullableStringFieldUpdateOperationsInput | string | null
-    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
     position?: IntFieldUpdateOperationsInput | number
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     muxData?: MuxDataUpdateOneWithoutChapterNestedInput
     quiz?: QuizUpdateOneWithoutChapterNestedInput
     userProgress?: UserProgressUpdateManyWithoutChapterNestedInput
@@ -25992,13 +30912,14 @@ export namespace Prisma {
     externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
     embedUrl?: NullableStringFieldUpdateOperationsInput | string | null
     videoProvider?: NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
-    transcript?: NullableStringFieldUpdateOperationsInput | string | null
-    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
     position?: IntFieldUpdateOperationsInput | number
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
     muxData?: MuxDataUncheckedUpdateOneWithoutChapterNestedInput
     quiz?: QuizUncheckedUpdateOneWithoutChapterNestedInput
     userProgress?: UserProgressUncheckedUpdateManyWithoutChapterNestedInput
@@ -26013,13 +30934,14 @@ export namespace Prisma {
     externalUrl?: NullableStringFieldUpdateOperationsInput | string | null
     embedUrl?: NullableStringFieldUpdateOperationsInput | string | null
     videoProvider?: NullableEnumVideoProviderFieldUpdateOperationsInput | $Enums.VideoProvider | null
-    transcript?: NullableStringFieldUpdateOperationsInput | string | null
-    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
     position?: IntFieldUpdateOperationsInput | number
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     isFree?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transcript?: NullableStringFieldUpdateOperationsInput | string | null
+    transcriptStatus?: EnumTranscriptStatusFieldUpdateOperationsInput | $Enums.TranscriptStatus
+    duration?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type AttachmentUpdateWithoutCourseInput = {
@@ -26055,6 +30977,7 @@ export namespace Prisma {
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    price?: number | null
   }
 
   export type CourseUpdateWithoutCategoryInput = {
@@ -26066,6 +30989,7 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
     chapters?: ChapterUpdateManyWithoutCourseNestedInput
     attachments?: AttachmentUpdateManyWithoutCourseNestedInput
   }
@@ -26079,6 +31003,7 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
     chapters?: ChapterUncheckedUpdateManyWithoutCourseNestedInput
     attachments?: AttachmentUncheckedUpdateManyWithoutCourseNestedInput
   }
@@ -26092,6 +31017,7 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    price?: NullableFloatFieldUpdateOperationsInput | number | null
   }
 
   export type UserProgressCreateManyChapterInput = {
@@ -26489,6 +31415,22 @@ export namespace Prisma {
      * @deprecated Use VerificationTokenDefaultArgs instead
      */
     export type VerificationTokenArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = VerificationTokenDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use AchievementDefaultArgs instead
+     */
+    export type AchievementArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = AchievementDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PurchaseDefaultArgs instead
+     */
+    export type PurchaseArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = PurchaseDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use UserNoteDefaultArgs instead
+     */
+    export type UserNoteArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = UserNoteDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use UserStreakDefaultArgs instead
+     */
+    export type UserStreakArgs<ExtArgs extends $Extensions.Args = $Extensions.DefaultArgs> = UserStreakDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

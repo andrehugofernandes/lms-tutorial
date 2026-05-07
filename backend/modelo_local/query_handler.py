@@ -12,8 +12,8 @@ import requests
 import httpx
 
 # ---------- Config mínima ----------
-HOST = os.getenv("LLM_HOST", "10.85.3.24")          # troque p/ "localhost" se for local
-ALLOC_PORT = os.getenv("LLM_ALLOC_PORT", "6639")
+HOST = os.getenv("LLM_HOST")          # troque p/ "localhost" se for local
+ALLOC_PORT = os.getenv("LLM_ALLOC_PORT")
 CHAT_PATH = "/api/chat"
 HTTP_TIMEOUT = None          # streaming sem timeout total (None = sem timeouts)
 REMOTE_API_BASE = os.getenv("LLM_ALLOC_BASE_URL", f"http://{HOST}:{ALLOC_PORT}/api")
