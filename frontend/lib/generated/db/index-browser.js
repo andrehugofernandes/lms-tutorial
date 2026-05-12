@@ -126,7 +126,8 @@ exports.Prisma.CourseScalarFieldEnum = {
   isPublished: 'isPublished',
   categoryId: 'categoryId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  price: 'price'
 };
 
 exports.Prisma.CategoryScalarFieldEnum = {
@@ -152,14 +153,15 @@ exports.Prisma.ChapterScalarFieldEnum = {
   externalUrl: 'externalUrl',
   embedUrl: 'embedUrl',
   videoProvider: 'videoProvider',
-  transcript: 'transcript',
-  transcriptStatus: 'transcriptStatus',
   position: 'position',
   isPublished: 'isPublished',
   isFree: 'isFree',
   courseId: 'courseId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  transcript: 'transcript',
+  transcriptStatus: 'transcriptStatus',
+  duration: 'duration'
 };
 
 exports.Prisma.MuxDataScalarFieldEnum = {
@@ -275,6 +277,45 @@ exports.Prisma.VerificationTokenScalarFieldEnum = {
   expires: 'expires'
 };
 
+exports.Prisma.AchievementScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  courseId: 'courseId',
+  title: 'title',
+  description: 'description',
+  icon: 'icon',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PurchaseScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  courseId: 'courseId',
+  lastChapterId: 'lastChapterId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserNoteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  chapterId: 'chapterId',
+  content: 'content',
+  timestamp: 'timestamp',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserStreakScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  count: 'count',
+  lastVisit: 'lastVisit',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -325,8 +366,8 @@ exports.Prisma.ChapterOrderByRelevanceFieldEnum = {
   videoUrl: 'videoUrl',
   externalUrl: 'externalUrl',
   embedUrl: 'embedUrl',
-  transcript: 'transcript',
-  courseId: 'courseId'
+  courseId: 'courseId',
+  transcript: 'transcript'
 };
 
 exports.Prisma.MuxDataOrderByRelevanceFieldEnum = {
@@ -409,6 +450,34 @@ exports.Prisma.VerificationTokenOrderByRelevanceFieldEnum = {
   identifier: 'identifier',
   token: 'token'
 };
+
+exports.Prisma.AchievementOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  courseId: 'courseId',
+  title: 'title',
+  description: 'description',
+  icon: 'icon'
+};
+
+exports.Prisma.PurchaseOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  courseId: 'courseId',
+  lastChapterId: 'lastChapterId'
+};
+
+exports.Prisma.UserNoteOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  chapterId: 'chapterId',
+  content: 'content'
+};
+
+exports.Prisma.UserStreakOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId'
+};
 exports.Role = exports.$Enums.Role = {
   ADMIN: 'ADMIN',
   TEACHER: 'TEACHER',
@@ -451,7 +520,11 @@ exports.Prisma.ModelName = {
   Account: 'Account',
   Session: 'Session',
   User: 'User',
-  VerificationToken: 'VerificationToken'
+  VerificationToken: 'VerificationToken',
+  Achievement: 'Achievement',
+  Purchase: 'Purchase',
+  UserNote: 'UserNote',
+  UserStreak: 'UserStreak'
 };
 
 /**

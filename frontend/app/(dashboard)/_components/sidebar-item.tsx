@@ -33,32 +33,23 @@ const SidebarItem = ({
       onClick={onClick}
       type="button"
       className={cn(
-        `flex items-center gap-x-2 text-slate-500 text-sm
-        font-[500] pl-6 transition-all hover:text-slate-600
-        hover:bg-slate-300/30`, 
-        isActive && `text-sky-700 bg-sky-200/30
-         hover:bg-sky-200/20 hover:text-sky-700`
+        `flex items-center gap-x-2 text-muted-foreground text-sm
+        font-[500] px-4 mx-4 my-1 h-12 transition-all hover:text-foreground
+        hover:bg-card border border-transparent rounded-xl`, 
+        isActive && `text-primary bg-card/50
+         hover:bg-card/80 hover:text-primary border-primary/50 shadow-[0_0_15px_rgba(245,158,11,0.1)]`
         )}
     >
-      <div className="flex items-center gap-x-2 py-4">
+      <div className="flex items-center gap-x-2 w-full">
         <Icon 
           size={22}
           className={cn(
-            `text-slate`,
-            isActive && `text-sky-700`
-          
+            `text-muted-foreground transition-colors`,
+            isActive && `text-primary`
           )}
-        
         />
         <span>{label}</span>
       </div>
-      <div 
-        className={cn(
-          `ml-auto opacity-0 border-2 border-sky-700 h-full
-          transition-all`, 
-          isActive && `opacity-100`
-        )}
-      />
     </button>
   )
 }
