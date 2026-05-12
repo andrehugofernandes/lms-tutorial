@@ -12,7 +12,7 @@ import requests
 import httpx
 
 # ---------- Config mínima ----------
-HOST = os.getenv("LLM_HOST", "10.85.3.24")          # troque p/ "localhost" se for local
+HOST = os.getenv("LLM_HOST", "10.85.3.26")          # troque p/ "localhost" se for local
 ALLOC_PORT = os.getenv("LLM_ALLOC_PORT", "6639")
 CHAT_PATH = "/api/chat"
 HTTP_TIMEOUT = None          # streaming sem timeout total (None = sem timeouts)
