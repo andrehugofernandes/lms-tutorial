@@ -2,7 +2,8 @@ from dataclasses import dataclass
 
 from flask import current_app, request
 
-from .models import Profile, RoleEnum
+from .extensions import fdb
+from .models import RoleEnum
 
 
 @dataclass
@@ -31,12 +32,25 @@ def get_current_user(optional: bool = False) -> dict | None:
     }
 
 
-def get_user_profile(user_id: str) -> Profile | None:
-    return Profile.query.filter_by(userId=user_id).first()
+def get_user_profile(user_id: str, email: str | None = None) -> dict | None:
+    # First try by userId
+    profile_query = fdb.collection('profiles').where('userId', '==', user_id).limit(1).get()
+    if profile_query:
+        return profile_query[0].to_dict()
+    
+    # If not found and email is provided, try by email
+    if email:
+        profile_query = fdb.collection('profiles').where('email', '==', email).limit(1).get()
+        if profile_query:
+            return profile_query[0].to_dict()
+            
+    return None
 
 
-def require_roles(user_id: str, allowed_roles: list[RoleEnum]) -> Profile:
+def require_roles(user_id: str, allowed_roles: list[RoleEnum]) -> dict:
     profile = get_user_profile(user_id)
-    if not profile or profile.role not in allowed_roles:
+    # RoleEnum in Firestore is stored as string value
+    role_values = [role.value if hasattr(role, 'value') else role for role in allowed_roles]
+    if not profile or profile.get("role") not in role_values:
         raise AuthError("Unauthorized", 401)
     return profile

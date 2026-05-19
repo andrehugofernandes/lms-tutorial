@@ -3,22 +3,13 @@ import threading
 from datetime import date, datetime, timedelta
 
 from flask import current_app
-from sqlalchemy import func
 
-from .extensions import db
+from .extensions import fdb
 from .models import (
-    Achievement,
-    Chapter,
-    Course,
-    MuxData,
-    Profile,
-    Purchase,
     RoleEnum,
     TranscriptStatusEnum,
-    UserProgress,
-    UserStreak,
-    UserXP,
     VideoProviderEnum,
+    VideoSourceTypeEnum,
 )
 
 
@@ -87,20 +78,19 @@ def get_level_progress(total_xp: int) -> dict:
 
 
 def get_progress(user_id: str, course_id: str) -> float:
-    published_chapters = Chapter.query.filter_by(courseId=course_id, isPublished=True).all()
+    published_chapters = fdb.collection('chapters').where('courseId', '==', course_id).where('isPublished', '==', True).get()
     if not published_chapters:
         return 0
 
     chapter_ids = [chapter.id for chapter in published_chapters]
-    completed = (
-        UserProgress.query.filter(
-            UserProgress.userId == user_id,
-            UserProgress.chapterId.in_(chapter_ids),
-            UserProgress.isCompleted.is_(True),
-        )
-        .count()
-    )
-    return round((completed / len(published_chapters)) * 100, 2)
+    completed_query = fdb.collection('userProgress')\
+        .where('userId', '==', user_id)\
+        .where('chapterId', 'in', chapter_ids)\
+        .where('isCompleted', '==', True)\
+        .get()
+    
+    completed_count = len(completed_query)
+    return round((completed_count / len(published_chapters)) * 100, 2)
 
 
 def build_embed(video_url: str) -> tuple[str, VideoProviderEnum]:
@@ -133,12 +123,12 @@ def start_transcription(chapter_id: str, video_provider: VideoProviderEnum | Non
 
     def worker():
         with app.app_context():
-            chapter = Chapter.query.filter_by(id=chapter_id).first()
-            if not chapter:
+            chapter_ref = fdb.collection('chapters').document(chapter_id)
+            chapter_doc = chapter_ref.get()
+            if not chapter_doc.exists:
                 return
 
-            chapter.transcriptStatus = TranscriptStatusEnum.PROCESSING
-            db.session.commit()
+            chapter_ref.update({"transcriptStatus": TranscriptStatusEnum.PROCESSING.value})
 
             try:
                 from youtube_transcript_api import YouTubeTranscriptApi
@@ -151,14 +141,15 @@ def start_transcription(chapter_id: str, video_provider: VideoProviderEnum | Non
                     video_id,
                     languages=["pt", "pt-BR", "en"],
                 )
-                chapter.transcript = " ".join(
-                    chunk["text"] for chunk in transcript.to_raw_data()
-                )
-                chapter.transcriptStatus = TranscriptStatusEnum.COMPLETED
-                db.session.commit()
-            except Exception:
-                chapter.transcriptStatus = TranscriptStatusEnum.FAILED
-                db.session.commit()
+                transcript_text = " ".join(chunk["text"] for chunk in transcript)
+                
+                chapter_ref.update({
+                    "transcript": transcript_text,
+                    "transcriptStatus": TranscriptStatusEnum.COMPLETED.value
+                })
+            except Exception as e:
+                print(f"Transcription error: {str(e)}")
+                chapter_ref.update({"transcriptStatus": TranscriptStatusEnum.FAILED.value})
 
     threading.Thread(target=worker, daemon=True).start()
 
@@ -231,75 +222,101 @@ REGRAS:
     return json.loads(text)
 
 
-def update_user_streak(user_id: str) -> UserStreak:
+def update_user_streak(user_id: str) -> dict:
     today = date.today()
-    streak = UserStreak.query.filter_by(userId=user_id).first()
+    streak_ref = fdb.collection('userStreaks').document(user_id)
+    streak_doc = streak_ref.get()
 
-    if not streak:
-        streak = UserStreak(userId=user_id, count=1, lastVisit=datetime.utcnow())
-        db.session.add(streak)
-        db.session.commit()
-        return streak
+    if not streak_doc.exists:
+        streak_data = {
+            "userId": user_id,
+            "count": 1,
+            "lastActivity": datetime.utcnow()
+        }
+        streak_ref.set(streak_data)
+        return streak_data
 
-    last_visit = streak.lastVisit.date()
+    streak = streak_doc.to_dict()
+    # lastActivity in Firestore is a datetime object when retrieved by Python SDK
+    last_activity = streak["lastActivity"]
+    if hasattr(last_activity, 'date'):
+        last_visit = last_activity.date()
+    else:
+        # Fallback if it's already a date or other format
+        last_visit = last_activity
+
     if last_visit == today:
         return streak
 
     if last_visit == today - timedelta(days=1):
-        streak.count += 1
+        streak["count"] += 1
     else:
-        streak.count = 1
+        streak["count"] = 1
 
-    streak.lastVisit = datetime.utcnow()
-    db.session.commit()
+    streak["lastActivity"] = datetime.utcnow()
+    streak_ref.set(streak)
     return streak
 
 
-def ensure_student_profile(user_id: str, email: str | None, name: str | None) -> Profile:
-    profile = Profile.query.filter_by(userId=user_id).first()
-    if profile:
-        return profile
+def ensure_student_profile(user_id: str, email: str | None, name: str | None) -> dict:
+    profile_query = fdb.collection('profiles').where('userId', '==', user_id).limit(1).get()
+    if profile_query:
+        return profile_query[0].to_dict()
 
-    profile = Profile(
-        userId=user_id,
-        email=email,
-        name=name or "Aluno",
-        role=RoleEnum.STUDENT,
-    )
-    db.session.add(profile)
-    db.session.commit()
-    return profile
-
-
-def ensure_teacher_profile(user_id: str, email: str | None, name: str | None) -> Profile:
-    profile = Profile.query.filter_by(userId=user_id).first()
-    if not profile:
-        profile = Profile(
-            userId=user_id,
-            email=email,
-            name=name or "Professor",
-            role=RoleEnum.TEACHER,
-        )
-        db.session.add(profile)
-    elif profile.role == RoleEnum.STUDENT:
-        profile.role = RoleEnum.TEACHER
-
-    db.session.commit()
-    return profile
+    profile_data = {
+        "userId": user_id,
+        "email": email,
+        "name": name or "Aluno",
+        "role": RoleEnum.STUDENT.value,
+        "createdAt": datetime.utcnow(),
+        "updatedAt": datetime.utcnow()
+    }
+    fdb.collection('profiles').add(profile_data)
+    return profile_data
 
 
-def promote_admin_profile(user_id: str, email: str | None, name: str | None) -> Profile:
-    profile = Profile.query.filter_by(userId=user_id).first()
-    if not profile:
-        profile = Profile(
-            userId=user_id,
-            email=email,
-            name=name or "Administrador",
-            role=RoleEnum.ADMIN,
-        )
-        db.session.add(profile)
-    else:
-        profile.role = RoleEnum.ADMIN
+def ensure_teacher_profile(user_id: str, email: str | None, name: str | None) -> dict:
+    profile_query = fdb.collection('profiles').where('userId', '==', user_id).limit(1).get()
+    
+    if not profile_query:
+        profile_data = {
+            "userId": user_id,
+            "email": email,
+            "name": name or "Professor",
+            "role": RoleEnum.TEACHER.value,
+            "createdAt": datetime.utcnow(),
+            "updatedAt": datetime.utcnow()
+        }
+        fdb.collection('profiles').add(profile_data)
+        return profile_data
+    
+    profile_doc = profile_query[0]
+    profile_data = profile_doc.to_dict()
+    if profile_data.get("role") == RoleEnum.STUDENT.value:
+        profile_data["role"] = RoleEnum.TEACHER.value
+        profile_doc.reference.update({"role": RoleEnum.TEACHER.value})
 
-    db.session.commit()
-    return profile
+    return profile_data
+
+
+def promote_admin_profile(user_id: str, email: str | None, name: str | None) -> dict:
+    profile_query = fdb.collection('profiles').where('userId', '==', user_id).limit(1).get()
+    
+    if not profile_query:
+        profile_data = {
+            "userId": user_id,
+            "email": email,
+            "name": name or "Administrador",
+            "role": RoleEnum.ADMIN.value,
+            "createdAt": datetime.utcnow(),
+            "updatedAt": datetime.utcnow()
+        }
+        fdb.collection('profiles').add(profile_data)
+        return profile_data
+    
+    profile_doc = profile_query[0]
+    profile_data = profile_doc.to_dict()
+    profile_data["role"] = RoleEnum.ADMIN.value
+    profile_doc.reference.update({"role": RoleEnum.ADMIN.value})
+
+    return profile_data

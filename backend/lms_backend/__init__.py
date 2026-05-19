@@ -1,16 +1,12 @@
 from pathlib import Path
-
 from flask import Flask, jsonify
 from flask_cors import CORS
-
 from .auth import AuthError
-from .extensions import db
-from .models import ensure_schema
 from .routes import api_bp
 
 try:
     from dotenv import load_dotenv
-except ImportError:  # pragma: no cover - optional in local boot
+except ImportError:
     load_dotenv = None
 
 
@@ -29,12 +25,6 @@ def create_app() -> Flask:
         resources={r"/api/*": {"origins": [app.config["FRONTEND_URL"], "http://localhost:3000"]}},
         supports_credentials=True,
     )
-
-    db.init_app(app)
-
-    with app.app_context():
-        ensure_schema()
-        db.create_all()
 
     @app.errorhandler(AuthError)
     def handle_auth_error(error: AuthError):

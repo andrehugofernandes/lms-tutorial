@@ -1,13 +1,12 @@
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { db } from "./db";
-
-console.log("DEBUG: USANDO DB INSTANCIA...");
+import { FirestoreAdapter } from "@auth/firebase-adapter";
+import { adminDb } from "./firebase-admin";
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(db) as any,
+  // @ts-ignore
+  adapter: FirestoreAdapter(adminDb),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -25,31 +24,24 @@ export const authOptions: NextAuthOptions = {
                 return null;
             }
 
-            let user = await db.user.findUnique({
-                where: { email: credentials.email }
-            });
+            if (!adminDb) return null;
+
+            // Search for user in Firestore
+            const userQuery = await adminDb.collection("users")
+                .where("email", "==", credentials.email)
+                .limit(1)
+                .get();
             
-            if (!user) {
-                user = await db.user.create({
-                    data: {
-                        email: credentials.email,
-                        // @ts-ignore
-                        password: credentials.password,
-                        name: credentials.email.split('@')[0],
-                    }
-                });
-                
-                await db.profile.create({
-                    data: {
-                        userId: user.id,
-                        name: user.name || "Aluno",
-                        email: user.email,
-                        role: "STUDENT",
-                    }
-                });
+            let user: any = null;
+
+            if (userQuery.empty) {
+                // Do NOT create user. Only allow existing migrated users.
+                console.log("Sign-in attempt for non-existent user:", credentials.email);
+                return null;
             }
 
-            // @ts-ignore
+            user = { id: userQuery.docs[0].id, ...userQuery.docs[0].data() };
+
             if (user.password === credentials.password) {
                 return user;
             }
@@ -58,8 +50,6 @@ export const authOptions: NextAuthOptions = {
         } catch (error: any) {
             console.error("CRITICAL AUTH ERROR:", error.message);
             return null;
-        } finally {
-            console.log("--- AUTH DEBUG END ---");
         }
       }
     })

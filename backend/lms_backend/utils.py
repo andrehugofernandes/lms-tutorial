@@ -1,208 +1,197 @@
 from datetime import datetime
+from google.cloud import firestore
 
-from .models import (
-    Achievement,
-    Attachment,
-    Category,
-    Chapter,
-    Course,
-    MuxData,
-    Option,
-    Profile,
-    Question,
-    Quiz,
-    QuizResult,
-    UserNote,
-    UserProgress,
-    UserXP,
-)
+def iso(dt):
+    if not dt:
+        return None
+    if hasattr(dt, 'isoformat'):
+        return dt.isoformat()
+    # Handle Firestore timestamps
+    if hasattr(dt, 'to_datetime'):
+        return dt.to_datetime().isoformat()
+    return str(dt)
 
-
-def iso(value: datetime | None) -> str | None:
-    return value.isoformat() if value else None
-
-
-def serialize_profile(profile: Profile | None) -> dict | None:
+def serialize_profile(profile: dict | None) -> dict | None:
     if not profile:
         return None
     return {
-        "id": profile.id,
-        "userId": profile.userId,
-        "name": profile.name,
-        "email": profile.email,
-        "role": profile.role.value if hasattr(profile.role, "value") else profile.role,
-        "createdAt": iso(profile.createdAt),
-        "updatedAt": iso(profile.updatedAt),
+        "id": profile.get("id"),
+        "userId": profile.get("userId"),
+        "name": profile.get("name"),
+        "email": profile.get("email"),
+        "role": profile.get("role"),
+        "createdAt": iso(profile.get("createdAt")),
+        "updatedAt": iso(profile.get("updatedAt")),
     }
 
 
-def serialize_category(category: Category | None) -> dict | None:
+def serialize_category(category: dict | None) -> dict | None:
     if not category:
         return None
-    return {"id": category.id, "name": category.name}
+    return {"id": category.get("id"), "name": category.get("name")}
 
 
-def serialize_attachment(attachment: Attachment) -> dict:
+def serialize_attachment(attachment: dict) -> dict:
     return {
-        "id": attachment.id,
-        "name": attachment.name,
-        "url": attachment.url,
-        "courseId": attachment.courseId,
-        "createdAt": iso(attachment.createdAt),
-        "updatedAt": iso(attachment.updatedAt),
+        "id": attachment.get("id"),
+        "name": attachment.get("name"),
+        "url": attachment.get("url"),
+        "courseId": attachment.get("courseId"),
+        "createdAt": iso(attachment.get("createdAt")),
+        "updatedAt": iso(attachment.get("updatedAt")),
     }
 
 
-def serialize_mux_data(mux_data: MuxData | None) -> dict | None:
+def serialize_mux_data(mux_data: dict | None) -> dict | None:
     if not mux_data:
         return None
     return {
-        "id": mux_data.id,
-        "assetId": mux_data.assetId,
-        "playbackId": mux_data.playbackId,
-        "chapterId": mux_data.chapterId,
+        "id": mux_data.get("id"),
+        "assetId": mux_data.get("assetId"),
+        "playbackId": mux_data.get("playbackId"),
+        "chapterId": mux_data.get("chapterId"),
     }
 
 
-def serialize_option(option: Option, include_correct: bool = True) -> dict:
-    payload = {"id": option.id, "text": option.text}
+def serialize_option(option: dict, include_correct: bool = True) -> dict:
+    payload = {"id": option.get("id"), "text": option.get("text")}
     if include_correct:
-        payload["isCorrect"] = option.isCorrect
+        payload["isCorrect"] = option.get("isCorrect")
     return payload
 
 
-def serialize_question(question: Question, include_correct: bool = True) -> dict:
+def serialize_question(question: dict, include_correct: bool = True) -> dict:
     return {
-        "id": question.id,
-        "quizId": question.quizId,
-        "prompt": question.prompt,
-        "position": question.position,
-        "isBonus": question.isBonus,
-        "bonusPoints": question.bonusPoints,
-        "pointWeight": question.pointWeight,
-        "options": [serialize_option(option, include_correct) for option in sorted(question.options, key=lambda item: item.createdAt or datetime.utcnow())],
+        "id": question.get("id"),
+        "quizId": question.get("quizId"),
+        "prompt": question.get("prompt"),
+        "position": question.get("position"),
+        "isBonus": question.get("isBonus"),
+        "bonusPoints": question.get("bonusPoints"),
+        "pointWeight": question.get("pointWeight"),
+        "options": [serialize_option(opt, include_correct) for opt in question.get("options", [])],
     }
 
 
-def serialize_quiz(quiz: Quiz | None, include_correct: bool = True) -> dict | None:
+def serialize_quiz(quiz: dict | None, include_correct: bool = True) -> dict | None:
     if not quiz:
         return None
     return {
-        "id": quiz.id,
-        "chapterId": quiz.chapterId,
-        "isPublished": quiz.isPublished,
-        "isRequired": quiz.isRequired,
-        "maxQuestions": quiz.maxQuestions,
-        "passingScore": quiz.passingScore,
-        "timeLimit": quiz.timeLimit,
-        "createdAt": iso(quiz.createdAt),
-        "updatedAt": iso(quiz.updatedAt),
-        "questions": [serialize_question(question, include_correct) for question in sorted(quiz.questions, key=lambda item: item.position)],
+        "id": quiz.get("id"),
+        "chapterId": quiz.get("chapterId"),
+        "isPublished": quiz.get("isPublished"),
+        "isRequired": quiz.get("isRequired"),
+        "maxQuestions": quiz.get("maxQuestions"),
+        "passingScore": quiz.get("passingScore"),
+        "timeLimit": quiz.get("timeLimit"),
+        "createdAt": iso(quiz.get("createdAt")),
+        "updatedAt": iso(quiz.get("updatedAt")),
+        "questions": [serialize_question(q, include_correct) for q in quiz.get("questions", [])],
     }
 
 
-def serialize_progress(progress: UserProgress | None) -> dict | None:
+def serialize_progress(progress: dict | None) -> dict | None:
     if not progress:
         return None
     return {
-        "id": progress.id,
-        "userId": progress.userId,
-        "chapterId": progress.chapterId,
-        "isCompleted": progress.isCompleted,
-        "createdAt": iso(progress.createdAt),
-        "updatedAt": iso(progress.updatedAt),
+        "id": progress.get("id"),
+        "userId": progress.get("userId"),
+        "chapterId": progress.get("chapterId"),
+        "isCompleted": progress.get("isCompleted"),
+        "createdAt": iso(progress.get("createdAt")),
+        "updatedAt": iso(progress.get("updatedAt")),
     }
 
 
-def serialize_chapter(chapter: Chapter, include_relations: bool = False, progress_map: dict | None = None) -> dict:
+def serialize_chapter(chapter: dict, include_relations: bool = False, progress_map: dict | None = None) -> dict:
     payload = {
-        "id": chapter.id,
-        "title": chapter.title,
-        "description": chapter.description,
-        "duration": chapter.duration,
-        "videoSourceType": chapter.videoSourceType.value if chapter.videoSourceType else None,
-        "videoUrl": chapter.videoUrl,
-        "externalUrl": chapter.externalUrl,
-        "embedUrl": chapter.embedUrl,
-        "videoProvider": chapter.videoProvider.value if chapter.videoProvider else None,
-        "transcript": chapter.transcript,
-        "transcriptStatus": chapter.transcriptStatus.value if chapter.transcriptStatus else None,
-        "position": chapter.position,
-        "isPublished": chapter.isPublished,
-        "isFree": chapter.isFree,
-        "courseId": chapter.courseId,
-        "createdAt": iso(chapter.createdAt),
-        "updatedAt": iso(chapter.updatedAt),
+        "id": chapter.get("id"),
+        "title": chapter.get("title"),
+        "description": chapter.get("description"),
+        "duration": chapter.get("duration"),
+        "videoSourceType": chapter.get("videoSourceType"),
+        "videoUrl": chapter.get("videoUrl"),
+        "externalUrl": chapter.get("externalUrl"),
+        "embedUrl": chapter.get("embedUrl"),
+        "videoProvider": chapter.get("videoProvider"),
+        "transcript": chapter.get("transcript"),
+        "transcriptStatus": chapter.get("transcriptStatus"),
+        "position": chapter.get("position"),
+        "isPublished": chapter.get("isPublished"),
+        "isFree": chapter.get("isFree"),
+        "courseId": chapter.get("courseId"),
+        "createdAt": iso(chapter.get("createdAt")),
+        "updatedAt": iso(chapter.get("updatedAt")),
     }
     if include_relations:
-        payload["muxData"] = serialize_mux_data(chapter.muxData)
-        payload["quiz"] = serialize_quiz(chapter.quiz, include_correct=True) if chapter.quiz else None
+        payload["muxData"] = chapter.get("muxData")
+        payload["quiz"] = chapter.get("quiz")
     if progress_map is not None:
-        payload["userProgress"] = progress_map.get(chapter.id, [])
+        payload["userProgress"] = progress_map.get(chapter.get("id"), [])
     return payload
 
 
-def serialize_course(course: Course, include_relations: bool = False, progress: float | None = None) -> dict:
+def serialize_course(course: dict, include_relations: bool = False, progress: float | None = None) -> dict:
     payload = {
-        "id": course.id,
-        "userId": course.userId,
-        "title": course.title,
-        "description": course.description,
-        "imageUrl": course.imageUrl,
-        "price": course.price,
-        "isPublished": course.isPublished,
-        "categoryId": course.categoryId,
-        "createdAt": iso(course.createdAt),
-        "updatedAt": iso(course.updatedAt),
-        "category": serialize_category(course.category) if course.category else None,
+        "id": course.get("id"),
+        "userId": course.get("userId"),
+        "title": course.get("title"),
+        "description": course.get("description"),
+        "imageUrl": course.get("imageUrl"),
+        "price": course.get("price"),
+        "isPublished": course.get("isPublished"),
+        "categoryId": course.get("categoryId"),
+        "createdAt": iso(course.get("createdAt")),
+        "updatedAt": iso(course.get("updatedAt")),
+        "category": course.get("category"),
     }
     if include_relations:
-        payload["chapters"] = [serialize_chapter(chapter, include_relations=True) for chapter in sorted(course.chapters, key=lambda item: item.position)]
-        payload["attachments"] = [serialize_attachment(attachment) for attachment in sorted(course.attachments, key=lambda item: item.createdAt or datetime.utcnow(), reverse=True)]
+        payload["chapters"] = course.get("chapters", [])
+        payload["attachments"] = course.get("attachments", [])
     if progress is not None:
         payload["progress"] = progress
     return payload
 
 
-def serialize_note(note: UserNote) -> dict:
+def serialize_note(note: dict) -> dict:
     return {
-        "id": note.id,
-        "userId": note.userId,
-        "chapterId": note.chapterId,
-        "content": note.content,
-        "timestamp": note.timestamp,
-        "createdAt": iso(note.createdAt),
-        "updatedAt": iso(note.updatedAt),
+        "id": note.get("id"),
+        "userId": note.get("userId"),
+        "chapterId": note.get("chapterId"),
+        "content": note.get("content"),
+        "timestamp": note.get("timestamp"),
+        "createdAt": iso(note.get("createdAt")),
+        "updatedAt": iso(note.get("updatedAt")),
     }
 
 
-def serialize_user_xp(user_xp: UserXP | None) -> dict:
+def serialize_user_xp(user_xp: dict | None) -> dict:
     if not user_xp:
         return {"totalXp": 0, "level": 1}
-    return {"totalXp": user_xp.totalXp, "level": user_xp.level}
+    return {"totalXp": user_xp.get("totalXp", 0), "level": user_xp.get("level", 1)}
 
 
-def serialize_quiz_result(result: QuizResult | None) -> dict | None:
+def serialize_quiz_result(result: dict | None) -> dict | None:
     if not result:
         return None
     return {
-        "id": result.id,
-        "userId": result.userId,
-        "quizId": result.quizId,
-        "score": result.score,
-        "xpEarned": result.xpEarned,
-        "passed": result.passed,
-        "completedAt": iso(result.completedAt),
+        "id": result.get("id"),
+        "userId": result.get("userId"),
+        "quizId": result.get("quizId"),
+        "score": result.get("score"),
+        "xpEarned": result.get("xpEarned"),
+        "passed": result.get("passed"),
+        "createdAt": iso(result.get("createdAt")),
     }
 
 
-def serialize_achievement(achievement: Achievement) -> dict:
+def serialize_achievement(achievement: dict) -> dict:
     return {
-        "id": achievement.id,
-        "userId": achievement.userId,
-        "courseId": achievement.courseId,
-        "title": achievement.title,
-        "description": achievement.description,
-        "icon": achievement.icon,
-        "createdAt": iso(achievement.createdAt),
+        "id": achievement.get("id"),
+        "userId": achievement.get("userId"),
+        "courseId": achievement.get("courseId"),
+        "title": achievement.get("title"),
+        "description": achievement.get("description"),
+        "icon": achievement.get("icon"),
+        "createdAt": iso(achievement.get("createdAt")),
     }

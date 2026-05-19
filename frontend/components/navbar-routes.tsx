@@ -49,10 +49,10 @@ export const NavbarRoutes = () => {
       )}
       <div className="flex gap-x-2 ml-auto">
         {isTeacherPage || isCoursePage || isAdminPage ? (
-          <Link href="/search">
+          <Link href="/">
             <Button size="sm" variant="outline">
               <LogOut className="h-4 w-4 mr-2" />
-              Sair
+              Sair do Modo
             </Button>
           </Link>
         ) : (

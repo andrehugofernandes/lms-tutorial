@@ -6,6 +6,8 @@ import { forcePromoteToAdmin } from "@/actions/promote-admin";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { KnowledgeBrain } from "@/components/knowledge-brain";
 import Image from "next/image";
+import { HomeNavbar } from "@/components/home-navbar";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
 export default async function Home() {
     const { userId } = await auth();
@@ -14,42 +16,7 @@ export default async function Home() {
         <div className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-white flex flex-col">
             
             {/* Top Navigation */}
-            <nav className="w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-                <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <div className="bg-primary p-2 rounded-none">
-                            <GraduationCap className="h-6 w-6 text-black" />
-                        </div>
-                        <span className="font-bold text-xl tracking-tighter uppercase">LMS PMJG</span>
-                    </div>
-                    
-                    <div className="flex items-center gap-4">
-                        {!userId ? (
-                            <>
-                                <Link href="/sign-in?afterSignInUrl=/student/onboarding">
-                                    <Button variant="ghost" className="rounded-full hidden md:inline-flex group">
-                                        Entrar como Aluno
-                                        <ArrowRight className="ml-2 h-4 w-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-                                    </Button>
-                                </Link>
-                                <Link href="/sign-in?afterSignInUrl=/teacher/onboarding">
-                                    <Button className="rounded-full bg-primary text-black hover:bg-primary/90 font-semibold px-6 group">
-                                        Sou Professor
-                                        <ArrowRight className="ml-2 h-4 w-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-                                    </Button>
-                                </Link>
-                            </>
-                        ) : (
-                            <Link href="/dashboard">
-                                <Button className="rounded-full bg-primary text-black hover:bg-primary/90 font-semibold px-8 group">
-                                    Ir para o Painel 
-                                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                                </Button>
-                            </Link>
-                        )}
-                    </div>
-                </div>
-            </nav>
+            <HomeNavbar userId={userId} />
 
             {/* Hero Section */}
             <main className="flex-1">
@@ -85,12 +52,24 @@ export default async function Home() {
                                     </p>
                                 </div>
                                 {!userId && (
-                                    <Link href="/sign-in?afterSignInUrl=/student/onboarding">
-                                        <Button size="lg" className="rounded-full bg-white text-black hover:bg-white/90 w-fit text-lg h-14 px-8 mt-4 group">
-                                            Começar Agora 
-                                            <ArrowUpRight className="ml-2 h-5 w-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                                        </Button>
-                                    </Link>
+                                    <div className="flex flex-wrap gap-4 mt-4">
+                                        <Link href="/sign-up">
+                                            <Button size="lg" className="rounded-full bg-primary text-black hover:bg-primary/90 text-lg h-14 px-8 group font-bold">
+                                                Quero me cadastrar
+                                                <ArrowUpRight className="ml-2 h-5 w-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                            </Button>
+                                        </Link>
+                                        <Link href="/sign-in">
+                                            <Button size="lg" variant="outline" className="rounded-full border-white/20 text-white hover:bg-white/10 hover:text-white text-lg h-14 px-8 group">
+                                                Já sou aluno
+                                            </Button>
+                                        </Link>
+                                        <Link href="/sign-in">
+                                            <Button size="lg" variant="outline" className="rounded-full border-white/20 text-white hover:bg-white/10 hover:text-white text-lg h-14 px-8 group">
+                                                Sou Professor
+                                            </Button>
+                                        </Link>
+                                    </div>
                                 )}
                             </div>
                         </div>

@@ -8,5 +8,8 @@
     "frontend:dev": "pnpm --dir frontend dev",
     "backend:dev": "python backend/app.py",
     "frontend:prisma:generate": "pnpm --dir frontend prisma:generate"
+  },
+  "devDependencies": {
+    "tsx": "^4.21.0"
   }
 }

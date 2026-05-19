@@ -23,12 +23,12 @@ export const UserButton = () => {
 
     const handleSignOut = async () => {
         if (isNextAuth) {
-            await signOut({ callbackUrl: "/sign-in" });
+            await signOut({ callbackUrl: "/" });
         } else {
             if (auth) {
                 await firebaseSignOut(auth);
             }
-            router.push("/sign-in");
+            router.push("/");
         }
     };
 
