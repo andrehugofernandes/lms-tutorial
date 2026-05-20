@@ -21,5 +21,10 @@ if not firebase_admin._apps:
         print("DEBUG: firebase_admin.initialize_app called (production)")
 
 print("DEBUG: Getting firestore client...")
-fdb = firestore.client()
+db_id = os.environ.get("FIRESTORE_DATABASE_ID", "(default)")
+if db_id and db_id != "(default)":
+    print(f"DEBUG: Using named database: {db_id}")
+    fdb = firestore.client(database=db_id)
+else:
+    fdb = firestore.client()
 print("DEBUG: firestore client obtained")
