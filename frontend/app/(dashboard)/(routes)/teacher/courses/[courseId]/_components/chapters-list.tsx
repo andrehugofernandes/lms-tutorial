@@ -8,7 +8,7 @@ import {
   Draggable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { Grip, Pencil } from "lucide-react";
+import { Gamepad2, Grip, Pencil } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -17,12 +17,12 @@ interface ChaptersListProps {
   items: Chapter[];
   onReorder: (updateData: { id: string; position: number }[]) => void;
   onEdit: (id: string) => void;
-};
+}
 
 export const ChaptersList = ({
   items,
   onReorder,
-  onEdit
+  onEdit,
 }: ChaptersListProps) => {
   const [isMounted, setIsMounted] = useState(false);
   const [chapters, setChapters] = useState(items);
@@ -51,11 +51,11 @@ export const ChaptersList = ({
 
     const bulkUpdateData = updatedChapters.map((chapter) => ({
       id: chapter.id,
-      position: items.findIndex((item) => item.id === chapter.id)
+      position: items.findIndex((item) => item.id === chapter.id),
     }));
 
     onReorder(bulkUpdateData);
-  }
+  };
 
   if (!isMounted) {
     return null;
@@ -67,54 +67,46 @@ export const ChaptersList = ({
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
             {chapters.map((chapter, index) => (
-              <Draggable 
-                key={chapter.id} 
-                draggableId={chapter.id} 
-                index={index}
-              >
+              <Draggable key={chapter.id} draggableId={chapter.id} index={index}>
                 {(provided) => (
                   <div
-                    className={cn(
-                      "flex items-center gap-x-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md mb-4 text-sm",
-                      chapter.isPublished && "bg-sky-100 border-sky-200 text-sky-700"
-                    )}
+                    className="mb-3 flex items-center gap-x-3 rounded-lg border border-[#333333] bg-black px-4 py-3 text-sm text-white transition hover:border-[#FF9F00]/60"
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                   >
                     <div
-                      className={cn(
-                        "px-2 py-3 border-r border-r-slate-200 hover:bg-slate-300 rounded-l-md transition",
-                        chapter.isPublished && "border-r-sky-200 hover:bg-sky-200"
-                      )}
+                      className="rounded-md p-1 text-[#A1A1AA] transition hover:bg-[#181818] hover:text-white"
                       {...provided.dragHandleProps}
                     >
-                      <Grip
-                        className="h-5 w-5"
-                      />
+                      <Grip className="h-5 w-5" />
                     </div>
-                    {chapter.title}
-                    <div className="ml-auto pr-2 flex items-center gap-x-2">
+                    <span className="min-w-0 flex-1 truncate text-base font-medium">
+                      {chapter.title}
+                    </span>
+                    <div className="ml-auto flex items-center gap-x-2">
                       {chapter.isFree && (
-                        <Badge>
+                        <Badge className="border-none bg-[#FF9F00] text-black hover:bg-[#FF9F00]">
                           Free
                         </Badge>
                       )}
                       {(chapter as any).quiz && (
-                        <Badge className="bg-amber-500 hover:bg-amber-600 border-none">
-                          Quiz 🎮
+                        <Badge className="border border-[#FF9F00]/40 bg-[#FF9F00]/10 text-[#FF9F00] hover:bg-[#FF9F00]/10">
+                          <Gamepad2 className="mr-1 h-3 w-3" />
+                          Quiz
                         </Badge>
                       )}
                       <Badge
                         className={cn(
-                          "bg-slate-500",
-                          chapter.isPublished && "bg-sky-700"
+                          "border border-[#7A7A7A]/40 bg-[#242424] text-[#B5B5B5] hover:bg-[#242424]",
+                          chapter.isPublished &&
+                            "border-[#0066B3]/50 bg-[#0066B3]/20 text-sky-300 hover:bg-[#0066B3]/20"
                         )}
                       >
-                        {chapter.isPublished ? "Published" : "Draft"}
+                        {chapter.isPublished ? "Publicado" : "Rascunho"}
                       </Badge>
                       <Pencil
                         onClick={() => onEdit(chapter.id)}
-                        className="w-4 h-4 cursor-pointer hover:opacity-75 transition"
+                        className="h-4 w-4 cursor-pointer text-[#B5B5B5] transition hover:text-[#FF9F00]"
                       />
                     </div>
                   </div>
@@ -126,6 +118,5 @@ export const ChaptersList = ({
         )}
       </Droppable>
     </DragDropContext>
-  )
-}
-
+  );
+};

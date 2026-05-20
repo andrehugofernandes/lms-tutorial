@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import * as z from "zod";
 import axios from "axios";
 import { useState } from "react";
@@ -7,102 +8,107 @@ import { useRouter } from "next/navigation";
 import type { Attachment, Course } from "@/lib/types";
 
 import { Button } from "@/components/ui/button";
-import { PlusCircle, File, X } from "lucide-react";
+import { File, FolderOpen, PlusCircle, X } from "lucide-react";
 import FileUpload from "@/components/file-upload";
 
-
-
 interface AttachmentFormProps {
-  initialData: Course & { attachments: Attachment[]};
+  initialData: Course & { attachments: Attachment[] };
   courseId: string;
 }
 
 const formSchema = z.object({
   url: z.string().min(1),
-  });
+});
 
 export const AttachmentForm = ({
   initialData,
-  courseId
+  courseId,
 }: AttachmentFormProps) => {
-
   const [isEditing, setIsEditing] = useState(false);
-  const [deletingId, setDeletingId ] = useState<string | null>(null)
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const router = useRouter();
 
   const toggleEdit = () => setIsEditing((current) => !current);
-  const router = useRouter();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post(`/api/courses/${courseId}/attachments`, values);
-      toast.success("Anexo do curso atualizado!");
+      toast.success("Anexo do curso atualizado.");
       toggleEdit();
       router.refresh();
-
     } catch {
-      toast.error("Algo deu errado!")
+      toast.error("Algo deu errado.");
     }
-  }
+  };
 
   const onDelete = async (id: string) => {
     try {
-      setDeletingId(id)
+      setDeletingId(id);
       await axios.delete(`/api/courses/${courseId}/attachments/${id}`);
-      toast.success("Anexo do curso excluído!");
+      toast.success("Anexo do curso excluído.");
       router.refresh();
     } catch {
-      toast.error("Algo deu errado!")
-    }
-    finally{
+      toast.error("Algo deu errado.");
+    } finally {
       setDeletingId(null);
     }
-  }
+  };
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
-      <div className="font-medium flex items-center justify-between mb-4">
-        Anexos do curso
-        <Button onClick={toggleEdit} variant="outline">
-          {isEditing && (
-            <>Cancelar</>
-          )}
-          {!isEditing && (
+    <div className="rounded-xl border border-[#242424] bg-[#0B0B0B] p-5">
+      <div className="mb-5 flex items-center justify-between gap-4">
+        <div>
+          <p className="text-sm font-semibold text-[#B5B5B5]">
+            Anexos do curso
+          </p>
+          <p className="mt-1 text-xs text-[#7A7A7A]">
+            Arquivos complementares para apoiar o aprendizado.
+          </p>
+        </div>
+        <Button
+          onClick={toggleEdit}
+          className="bg-[#FF9F00] text-black hover:bg-[#E68F00]"
+        >
+          {isEditing ? (
+            "Cancelar"
+          ) : (
             <>
-              <PlusCircle className="w-4 h-4 mr-2" />
+              <PlusCircle className="mr-2 h-4 w-4" />
               Adicionar um arquivo
             </>
           )}
-   
         </Button>
       </div>
       {!isEditing && (
         <>
           {initialData.attachments.length === 0 && (
-            <p className="text-sm mt-2 text-slate-500 italic">
-              Nenhum anexo ainda.
-            </p>
+            <div className="flex min-h-[210px] flex-col items-center justify-center rounded-xl border border-dashed border-[#333333] bg-[#111111] p-8 text-center">
+              <span className="flex h-16 w-16 items-center justify-center rounded-xl border border-[#7A7A7A]/50 text-[#B5B5B5]">
+                <FolderOpen className="h-8 w-8" />
+              </span>
+              <p className="mt-5 text-lg font-bold text-white">
+                Nenhum anexo adicionado.
+              </p>
+              <p className="mt-2 max-w-md text-sm text-[#A1A1AA]">
+                Adicione arquivos complementares para enriquecer o aprendizado.
+              </p>
+            </div>
           )}
           {initialData.attachments.length > 0 && (
-            <div className="space-y-2 mb-2">
+            <div className="space-y-2">
               {initialData.attachments.map((attachment) => (
-                <div 
-                  key={attachment.id} 
-                  className="flex items-center p-3 w-full bg-sky-100
-                  border-sky-200 border text-sky-700 rounded-md">
-                  <File 
-                    className="h-4 w-4 mr-2 flex-shrink-0"
-                  />
-                  <p className=" text-xs line-clamp-1">
-                    {attachment.name}
-                  </p>
+                <div
+                  key={attachment.id}
+                  className="flex w-full items-center rounded-lg border border-[#333333] bg-black p-3 text-[#D4D4D8]"
+                >
+                  <File className="mr-2 h-4 w-4 flex-shrink-0 text-[#FF9F00]" />
+                  <p className="line-clamp-1 text-xs">{attachment.name}</p>
                   {deletingId !== attachment.id && (
-                    <button 
+                    <button
                       onClick={() => onDelete(attachment.id)}
-                      className="ml-auto hover:opacity-75 transition">
-                      <X 
-                        className="w-4 h-4"
-                        onClick={() => setDeletingId(attachment.id)}
-                      />
+                      className="ml-auto text-[#B5B5B5] transition hover:text-[#FF4D4D]"
+                    >
+                      <X className="h-4 w-4" />
                     </button>
                   )}
                 </div>
@@ -110,25 +116,22 @@ export const AttachmentForm = ({
             </div>
           )}
         </>
-        
       )}
       {isEditing && (
         <div>
-          <FileUpload 
+          <FileUpload
             endpoint="courseAttachment"
             onChange={(url) => {
               if (url) {
-                onSubmit({ url: url})
+                void onSubmit({ url });
               }
             }}
           />
-          <div className="text-xs text-muted-foreground mt-4">
+          <div className="mt-4 text-xs text-[#A1A1AA]">
             Adicione qualquer recurso que seus alunos possam precisar.
           </div>
         </div>
       )}
-     </div>
-  )
-}
-
-// export default AttachmentForm
+    </div>
+  );
+};

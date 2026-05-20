@@ -23,3 +23,4 @@ class TranscriptStatusEnum(str, Enum):
     COMPLETED = "COMPLETED"
     FAILED = "FAILED"
     NOT_AVAILABLE = "NOT_AVAILABLE"
+

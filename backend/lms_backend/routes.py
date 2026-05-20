@@ -1,6 +1,7 @@
-from flask import Blueprint, jsonify, request
-import time
 from datetime import datetime
+
+import time
+
 
 from firebase_admin import firestore
 from .auth import AuthError, get_current_user, get_user_profile, require_roles
@@ -22,6 +23,7 @@ from .services import (
     ensure_student_profile,
     ensure_teacher_profile,
     generate_quiz_questions,
+    generate_replacement_questions,
     get_level_progress,
     get_progress,
     promote_admin_profile,
@@ -34,6 +36,7 @@ from .utils import (
     serialize_category,
     serialize_chapter,
     serialize_course,
+    serialize_forum_post,
     serialize_mux_data,
     serialize_note,
     serialize_profile,
@@ -57,6 +60,15 @@ def health():
 
 def text_response(message: str, status: int):
     return message, status, {"Content-Type": "text/plain; charset=utf-8"}
+
+
+def transcript_status_payload(chapter: dict, status: str, message: str) -> dict:
+    return {
+        "status": status,
+        "message": message,
+        "transcriptStatus": chapter.get("transcriptStatus"),
+        "hasTranscript": bool((chapter.get("transcript") or "").strip()),
+    }
 
 
 def require_user():
@@ -134,6 +146,18 @@ def ensure_purchase(user_id: str, course_id: str, last_chapter_id: str | None = 
         return purchase_data
 
 
+def can_access_course(user_id: str, course: dict | None) -> bool:
+    if not course:
+        return False
+    if course.get("userId") == user_id:
+        return True
+    purchase_query = fdb.collection('purchases')\
+        .where('userId', '==', user_id)\
+        .where('courseId', '==', course.get("id"))\
+        .limit(1).get()
+    return bool(purchase_query)
+
+
 def build_catalog_payload(user_id: str, title: str | None, category_id: str | None):
     query = fdb.collection('courses').where('isPublished', '==', True)
     
@@ -163,17 +187,166 @@ def build_catalog_payload(user_id: str, title: str | None, category_id: str | No
             course["category"] = cat_doc.to_dict() if cat_doc.exists else None
         
         course_payload = serialize_course(course, progress=progress)
-        
         # Chapters
         chapters = [c.to_dict() for c in fdb.collection('chapters')
                     .where('courseId', '==', course["id"])
                     .where('isPublished', '==', True)
                     .get()]
-        course_payload["chapters"] = [serialize_chapter(c) for c in sorted(chapters, key=lambda x: x.get("position", 0))]
-        
+        course_payload["chapters"] = [serialize_chapter({**c, "id": c.get("id")}, include_transcript=False) for c in sorted(chapters, key=lambda x: x.get("position", 0))]
         payload.append(course_payload)
         
     return payload
+
+
+def build_course_leaderboard(course_id: str, current_user_id: str, limit: int = 10) -> dict:
+    chapters = fdb.collection('chapters').where('courseId', '==', course_id).get()
+    chapter_ids = {c.id for c in chapters}
+    
+    quizzes = fdb.collection('quizzes').get()
+    quiz_ids = {q.id for q in quizzes if q.to_dict().get("chapterId") in chapter_ids}
+    
+    if not quiz_ids:
+        return {
+            "top": [],
+            "currentUser": None,
+            "totalParticipants": 0,
+        }
+
+    results_docs = fdb.collection('quizResults').get()
+    results = [r.to_dict() for r in results_docs if r.to_dict().get("quizId") in quiz_ids]
+
+    user_aggregates = {}
+    for r in results:
+        u_id = r.get("userId")
+        if not u_id:
+            continue
+        if u_id not in user_aggregates:
+            user_aggregates[u_id] = {
+                "userId": u_id,
+                "totalXp": 0,
+                "totalScore": 0,
+                "count": 0,
+                "passedCount": 0
+            }
+        agg = user_aggregates[u_id]
+        agg["totalXp"] += r.get("xpEarned", 0)
+        agg["totalScore"] += r.get("score", 0)
+        agg["count"] += 1
+        if r.get("passed"):
+            agg["passedCount"] += 1
+
+    rows = []
+    for u_id, agg in user_aggregates.items():
+        rows.append({
+            "userId": u_id,
+            "totalXp": agg["totalXp"],
+            "averageScore": agg["totalScore"] / agg["count"] if agg["count"] > 0 else 0,
+            "quizzesCompleted": agg["count"],
+            "passedCount": agg["passedCount"]
+        })
+        
+    rows.sort(key=lambda x: (-x["totalXp"], -x["averageScore"], -x["quizzesCompleted"]))
+
+    user_ids = [row["userId"] for row in rows]
+    profile_map = {}
+    if user_ids:
+        for i in range(0, len(user_ids), 30):
+            chunk = user_ids[i:i+30]
+            p_docs = fdb.collection('profiles').where('userId', 'in', chunk).get()
+            for p_doc in p_docs:
+                p_data = p_doc.to_dict()
+                profile_map[p_data.get("userId")] = p_data
+
+    ranked = []
+    for rank, row in enumerate(rows, start=1):
+        profile = profile_map.get(row["userId"])
+        ranked.append(
+            {
+                "rank": rank,
+                "userId": row["userId"],
+                "name": (profile.get("name") or profile.get("email") if profile else None) or "Aluno",
+                "totalXp": int(row["totalXp"] or 0),
+                "averageScore": round(float(row["averageScore"] or 0), 1),
+                "quizzesCompleted": int(row["quizzesCompleted"] or 0),
+                "passedCount": int(row["passedCount"] or 0),
+                "isCurrentUser": row["userId"] == current_user_id,
+            }
+        )
+
+    return {
+        "top": ranked[:limit],
+        "currentUser": next((item for item in ranked if item["userId"] == current_user_id), None),
+        "totalParticipants": len(ranked),
+    }
+
+
+def build_global_leaderboard(current_user_id: str, limit: int = 20) -> dict:
+    results_docs = fdb.collection('quizResults').get()
+    results = [r.to_dict() for r in results_docs]
+
+    user_aggregates = {}
+    for r in results:
+        u_id = r.get("userId")
+        if not u_id:
+            continue
+        if u_id not in user_aggregates:
+            user_aggregates[u_id] = {
+                "userId": u_id,
+                "totalXp": 0,
+                "totalScore": 0,
+                "count": 0,
+                "passedCount": 0
+            }
+        agg = user_aggregates[u_id]
+        agg["totalXp"] += r.get("xpEarned", 0)
+        agg["totalScore"] += r.get("score", 0)
+        agg["count"] += 1
+        if r.get("passed"):
+            agg["passedCount"] += 1
+
+    rows = []
+    for u_id, agg in user_aggregates.items():
+        rows.append({
+            "userId": u_id,
+            "totalXp": agg["totalXp"],
+            "averageScore": agg["totalScore"] / agg["count"] if agg["count"] > 0 else 0,
+            "quizzesCompleted": agg["count"],
+            "passedCount": agg["passedCount"]
+        })
+        
+    rows.sort(key=lambda x: (-x["totalXp"], -x["averageScore"], -x["quizzesCompleted"]))
+
+    user_ids = [row["userId"] for row in rows]
+    profile_map = {}
+    if user_ids:
+        for i in range(0, len(user_ids), 30):
+            chunk = user_ids[i:i+30]
+            p_docs = fdb.collection('profiles').where('userId', 'in', chunk).get()
+            for p_doc in p_docs:
+                p_data = p_doc.to_dict()
+                profile_map[p_data.get("userId")] = p_data
+
+    ranked = []
+    for rank, row in enumerate(rows, start=1):
+        profile = profile_map.get(row["userId"])
+        ranked.append(
+            {
+                "rank": rank,
+                "userId": row["userId"],
+                "name": (profile.get("name") or profile.get("email") if profile else None) or "Aluno",
+                "totalXp": int(row["totalXp"] or 0),
+                "averageScore": round(float(row["averageScore"] or 0), 1),
+                "quizzesCompleted": int(row["quizzesCompleted"] or 0),
+                "passedCount": int(row["passedCount"] or 0),
+                "isCurrentUser": row["userId"] == current_user_id,
+            }
+        )
+
+    return {
+        "top": ranked[:limit],
+        "currentUser": next((item for item in ranked if item["userId"] == current_user_id), None),
+        "totalParticipants": len(ranked),
+    }
 
 
 def build_dashboard_courses(user_id: str):
@@ -733,6 +906,187 @@ def list_notes(course_id: str, chapter_id: str):
     return jsonify([serialize_note({**d.to_dict(), "id": d.id}) for d in notes_docs])
 
 
+@api_bp.get("/courses/<course_id>/leaderboard")
+def course_leaderboard(course_id: str):
+    user = require_user()
+    course = Course.query.filter_by(id=course_id, isPublished=True).first()
+    if not can_access_course(user["userId"], course):
+        return text_response("Course not found", 404)
+
+    return jsonify(build_course_leaderboard(course_id, user["userId"]))
+
+
+@api_bp.get("/student/leaderboard")
+def student_leaderboard():
+    user = require_user()
+    return jsonify(build_global_leaderboard(user["userId"]))
+
+
+@api_bp.get("/student/forum")
+def student_forum_feed():
+    user = require_user()
+    purchases_docs = fdb.collection('purchases').where('userId', '==', user["userId"]).get()
+    course_ids = [p.to_dict().get("courseId") for p in purchases_docs]
+    if not course_ids:
+        return jsonify([])
+
+    posts = []
+    for i in range(0, len(course_ids), 30):
+        chunk = course_ids[i:i+30]
+        p_docs = fdb.collection('forumPosts')\
+            .where('courseId', 'in', chunk)\
+            .order_by('createdAt', direction=firestore.Query.DESCENDING)\
+            .limit(80).get()
+        for doc in p_docs:
+            posts.append({**doc.to_dict(), "id": doc.id})
+    
+    posts.sort(key=lambda x: x.get("createdAt") or datetime.utcnow().isoformat(), reverse=True)
+    posts = posts[:80]
+
+    user_ids = list({p.get("userId") for p in posts if p.get("userId")})
+    profile_map = {}
+    if user_ids:
+        for i in range(0, len(user_ids), 30):
+            chunk = user_ids[i:i+30]
+            p_docs = fdb.collection('profiles').where('userId', 'in', chunk).get()
+            for p_doc in p_docs:
+                p_data = p_doc.to_dict()
+                profile_map[p_data.get("userId")] = p_data
+
+    course_titles = {}
+    chapter_titles = {}
+    for post in posts:
+        c_id = post.get("courseId")
+        ch_id = post.get("chapterId")
+        if c_id and c_id not in course_titles:
+            c_doc = fdb.collection('courses').document(c_id).get()
+            course_titles[c_id] = c_doc.to_dict().get("title") if c_doc.exists else "Curso"
+        if ch_id and ch_id not in chapter_titles:
+            ch_doc = fdb.collection('chapters').document(ch_id).get()
+            chapter_titles[ch_id] = ch_doc.to_dict().get("title") if ch_doc.exists else "Capítulo"
+
+    feed = []
+    for post in posts:
+        profile = profile_map.get(post.get("userId"))
+        author_name = (profile.get("name") or profile.get("email")) if profile else None
+        feed.append(
+            {
+                **serialize_forum_post(post, author_name, user["userId"]),
+                "courseTitle": course_titles.get(post.get("courseId")),
+                "chapterTitle": chapter_titles.get(post.get("chapterId")),
+            }
+        )
+
+    return jsonify(feed)
+
+
+@api_bp.get("/courses/<course_id>/chapters/<chapter_id>/forum")
+def list_forum_posts(course_id: str, chapter_id: str):
+    user = require_user()
+    course_doc = fdb.collection('courses').document(course_id).get()
+    if not course_doc.exists or not course_doc.to_dict().get("isPublished"):
+        return text_response("Course not found", 404)
+    course = course_doc.to_dict()
+    course["id"] = course_id
+
+    if not can_access_course(user["userId"], course):
+        return text_response("Course not found", 404)
+
+    chapter_doc = fdb.collection('chapters').document(chapter_id).get()
+    if not chapter_doc.exists or chapter_doc.to_dict().get("courseId") != course_id or not chapter_doc.to_dict().get("isPublished"):
+        return text_response("Chapter not found", 404)
+
+    posts_docs = fdb.collection('forumPosts')\
+        .where('courseId', '==', course_id)\
+        .where('chapterId', '==', chapter_id)\
+        .order_by('createdAt', direction=firestore.Query.DESCENDING)\
+        .limit(50).get()
+    posts = [{**doc.to_dict(), "id": doc.id} for doc in posts_docs]
+
+    user_ids = list({p.get("userId") for p in posts if p.get("userId")})
+    profile_map = {}
+    if user_ids:
+        for i in range(0, len(user_ids), 30):
+            chunk = user_ids[i:i+30]
+            p_docs = fdb.collection('profiles').where('userId', 'in', chunk).get()
+            for p_doc in p_docs:
+                p_data = p_doc.to_dict()
+                profile_map[p_data.get("userId")] = p_data
+
+    serialized_posts = []
+    for post in posts:
+        profile = profile_map.get(post.get("userId"))
+        author_name = (profile.get("name") or profile.get("email")) if profile else None
+        serialized_posts.append(
+            serialize_forum_post(post, author_name, user["userId"])
+        )
+
+    return jsonify(serialized_posts)
+
+
+@api_bp.post("/courses/<course_id>/chapters/<chapter_id>/forum")
+def create_forum_post(course_id: str, chapter_id: str):
+    user = require_user()
+    course_doc = fdb.collection('courses').document(course_id).get()
+    if not course_doc.exists or not course_doc.to_dict().get("isPublished"):
+        return text_response("Course not found", 404)
+    course = course_doc.to_dict()
+    course["id"] = course_id
+
+    if not can_access_course(user["userId"], course):
+        return text_response("Course not found", 404)
+
+    chapter_doc = fdb.collection('chapters').document(chapter_id).get()
+    if not chapter_doc.exists or chapter_doc.to_dict().get("courseId") != course_id or not chapter_doc.to_dict().get("isPublished"):
+        return text_response("Chapter not found", 404)
+
+    payload = request.get_json(silent=True) or {}
+    content = str(payload.get("content") or "").strip()
+    if not content:
+        return text_response("Escreva uma mensagem para publicar", 400)
+    if len(content) > 1200:
+        return text_response("A mensagem deve ter no maximo 1200 caracteres", 400)
+
+    post_data = {
+        "userId": user["userId"],
+        "courseId": course_id,
+        "chapterId": chapter_id,
+        "content": content,
+        "createdAt": datetime.utcnow()
+    }
+    post_ref = fdb.collection('forumPosts').document()
+    post_ref.set(post_data)
+    post_data["id"] = post_ref.id
+
+    profile_doc = fdb.collection('profiles').document(user["userId"]).get()
+    profile = profile_doc.to_dict() if profile_doc.exists else {}
+    author_name = (profile.get("name") or profile.get("email")) or user.get("name") or "Aluno"
+    return jsonify(
+        serialize_forum_post(
+            post_data,
+            author_name,
+            user["userId"]
+        )
+    )
+
+
+@api_bp.delete("/courses/<course_id>/chapters/<chapter_id>/forum/<post_id>")
+def delete_forum_post(course_id: str, chapter_id: str, post_id: str):
+    user = require_user()
+    post_ref = fdb.collection('forumPosts').document(post_id)
+    post_doc = post_ref.get()
+    if not post_doc.exists:
+        return text_response("Mensagem nao encontrada", 404)
+    post = post_doc.to_dict()
+    if post.get("courseId") != course_id or post.get("chapterId") != chapter_id:
+        return text_response("Mensagem nao encontrada", 404)
+    if post.get("userId") != user["userId"]:
+        return text_response("Unauthorized", 401)
+
+    post_ref.delete()
+    return jsonify({"deleted": True})
+
+
 @api_bp.get("/courses/<course_id>/chapters/<chapter_id>/data")
 def chapter_data(course_id: str, chapter_id: str):
     user = require_user()
@@ -792,6 +1146,16 @@ def chapter_data(course_id: str, chapter_id: str):
             q_data["options"] = [{**o.to_dict(), "id": o.id} for o in o_docs]
             quiz["questions"].append(q_data)
 
+    quiz_result = None
+    if quiz:
+        quiz_res_query = fdb.collection('quizResults')\
+            .where('userId', '==', user["userId"])\
+            .where('quizId', '==', quiz["id"])\
+            .limit(1).get()
+        if quiz_res_query:
+            quiz_result = quiz_res_query[0].to_dict()
+            quiz_result["id"] = quiz_res_query[0].id
+
     return jsonify(
         {
             "course": serialize_course(course),
@@ -801,6 +1165,7 @@ def chapter_data(course_id: str, chapter_id: str):
             "nextChapter": serialize_chapter(next_chapter) if next_chapter else None,
             "userProgress": serialize_progress(user_progress),
             "quiz": serialize_quiz(quiz, include_correct=False) if quiz else None,
+            "quizResult": serialize_quiz_result(quiz_result),
         }
     )
 
@@ -878,6 +1243,24 @@ def get_chapter_quiz(course_id: str, chapter_id: str):
     return jsonify(serialize_quiz(quiz, include_correct=True))
 
 
+@api_bp.get("/courses/<course_id>/chapters/<chapter_id>/transcript")
+def get_chapter_transcript_status(course_id: str, chapter_id: str):
+    user = require_user()
+    require_course_owner(course_id, user["userId"])
+    chapter_doc = fdb.collection('chapters').document(chapter_id).get()
+    if not chapter_doc.exists or chapter_doc.to_dict().get("courseId") != course_id:
+        return text_response("Chapter not found", 404)
+    chapter = chapter_doc.to_dict()
+    chapter["id"] = chapter_doc.id
+    return jsonify(
+        transcript_status_payload(
+            chapter,
+            "TRANSCRIPTION_STATUS",
+            "Status da transcricao carregado.",
+        )
+    )
+
+
 @api_bp.post("/courses/<course_id>/chapters/<chapter_id>/quiz")
 def create_chapter_quiz(course_id: str, chapter_id: str):
     user = require_user()
@@ -887,13 +1270,18 @@ def create_chapter_quiz(course_id: str, chapter_id: str):
     if existing_query:
         return text_response("Quiz already exists", 400)
 
+    values = request.get_json(silent=True) or {}
+    max_q = max(1, min(int(values.get("maxQuestions", 5)), 10))
+    passing_s = max(0, min(int(values.get("passingScore", 70)), 100))
+
     quiz_data = {
         "chapterId": chapter_id,
-        "isPublished": False,
-        "isRequired": False,
-        "maxQuestions": 5,
-        "passingScore": 70,
-        "timeLimit": None,
+        "isPublished": bool(values.get("isPublished", False)),
+        "isRequired": bool(values.get("isRequired", False)),
+        "shuffleQuestions": bool(values.get("shuffleQuestions", False)),
+        "maxQuestions": max_q,
+        "passingScore": passing_s,
+        "timeLimit": values.get("timeLimit"),
         "createdAt": datetime.utcnow(),
         "updatedAt": datetime.utcnow()
     }
@@ -911,28 +1299,79 @@ def generate_chapter_quiz(course_id: str, chapter_id: str):
     chapter_doc = fdb.collection('chapters').document(chapter_id).get()
     if not chapter_doc.exists or chapter_doc.to_dict().get("courseId") != course_id:
         return text_response("Chapter not found", 404)
-        
     chapter = chapter_doc.to_dict()
+    chapter["id"] = chapter_doc.id
+    
     if chapter.get("transcriptStatus") == TranscriptStatusEnum.PROCESSING.value:
-        return text_response("A transcricao do video ainda esta em andamento. Tente novamente em alguns segundos.", 400)
+        return jsonify(
+            transcript_status_payload(
+                chapter,
+                "TRANSCRIPTION_PROCESSING",
+                "A transcricao do video ainda esta em andamento.",
+            )
+        ), 202
+
+    values = request.get_json(silent=True) or {}
+
+    if not chapter.get("transcript") and chapter.get("videoProvider") == VideoProviderEnum.YOUTUBE.value:
+        fdb.collection('chapters').document(chapter_id).update({
+            "transcriptStatus": TranscriptStatusEnum.PROCESSING.value,
+            "updatedAt": datetime.utcnow()
+        })
+        chapter["transcriptStatus"] = TranscriptStatusEnum.PROCESSING.value
+        start_transcription(chapter_id, chapter.get("videoProvider"), chapter.get("externalUrl"))
+        return jsonify(
+            transcript_status_payload(
+                chapter,
+                "TRANSCRIPTION_STARTED",
+                "A transcricao do video foi iniciada. As perguntas serao geradas automaticamente quando ela terminar.",
+            )
+        ), 202
+
+    transcript = (chapter.get("transcript") or "").strip()
+    if not transcript:
+        return text_response(
+            "Este capitulo ainda nao tem transcricao disponivel. Informe um link do YouTube com legenda/transcricao ou adicione conteudo antes de gerar com IA.",
+            400,
+        )
 
     quiz_query = fdb.collection('quizzes').where('chapterId', '==', chapter_id).limit(1).get()
     if not quiz_query:
+        max_q = max(1, min(int(values.get("maxQuestions", 5)), 10))
+        passing_s = max(0, min(int(values.get("passingScore", 70)), 100))
         quiz_data = {
             "chapterId": chapter_id,
-            "maxQuestions": 5,
-            "isPublished": False,
-            "isRequired": False,
-            "passingScore": 70,
+            "maxQuestions": max_q,
+            "isPublished": bool(values.get("isPublished", False)),
+            "isRequired": bool(values.get("isRequired", False)),
+            "shuffleQuestions": bool(values.get("shuffleQuestions", False)),
+            "passingScore": passing_s,
+            "timeLimit": values.get("timeLimit"),
             "createdAt": datetime.utcnow(),
             "updatedAt": datetime.utcnow()
         }
         quiz_ref = fdb.collection('quizzes').document()
         quiz_ref.set(quiz_data)
         quiz_id = quiz_ref.id
+        quiz = quiz_data
+        quiz["id"] = quiz_id
     else:
         quiz_ref = quiz_query[0].reference
         quiz_id = quiz_query[0].id
+        quiz = quiz_query[0].to_dict()
+        quiz["id"] = quiz_id
+        
+        # update fields from values
+        update_payload = {}
+        for key in ["isPublished", "isRequired", "shuffleQuestions", "maxQuestions", "timeLimit", "passingScore"]:
+            if key in values:
+                update_payload[key] = values[key]
+                quiz[key] = values[key]
+        if update_payload:
+            update_payload["updatedAt"] = datetime.utcnow()
+            quiz_ref.update(update_payload)
+
+    max_questions = max(1, min(int(quiz.get("maxQuestions", 5)), 10))
 
     context = f"""
 Titulo do Curso: {course.get('title')}
@@ -940,10 +1379,13 @@ Titulo do Capitulo: {chapter.get('title')}
 Descricao do Capitulo: {chapter.get('description') or 'Sem descricao'}
 
 CONTEUDO DO VIDEO (Transcricao):
-{chapter.get('transcript') or 'Nenhum conteudo transcrito disponivel para este video.'}
+{transcript}
 """
-    questions = generate_quiz_questions(context, 5)
-    
+    try:
+        questions = generate_quiz_questions(context, max_questions)
+    except Exception as error:
+        return text_response(f"Erro ao gerar perguntas com IA: {error}", 502)
+
     # Delete existing questions and options
     old_q_query = fdb.collection('questions').where('quizId', '==', quiz_id).get()
     for old_q in old_q_query:
@@ -957,6 +1399,9 @@ CONTEUDO DO VIDEO (Transcricao):
             "quizId": quiz_id,
             "prompt": q_payload.get("prompt"),
             "position": index,
+            "pointWeight": float(q_payload.get("pointWeight") or 1.0),
+            "isBonus": bool(q_payload.get("isBonus", False)),
+            "bonusPoints": q_payload.get("bonusPoints"),
             "createdAt": datetime.utcnow()
         }
         q_ref = fdb.collection('questions').document()
@@ -972,7 +1417,20 @@ CONTEUDO DO VIDEO (Transcricao):
             }
             fdb.collection('options').add(o_data)
 
-    return jsonify({"quizId": quiz_id, "questionsCount": len(questions)})
+    # Reload quiz with new questions and options
+    quiz_doc = fdb.collection('quizzes').document(quiz_id).get()
+    quiz = quiz_doc.to_dict()
+    quiz["id"] = quiz_id
+    q_docs = fdb.collection('questions').where('quizId', '==', quiz_id).get()
+    quiz["questions"] = []
+    for q_doc in q_docs:
+        q_data = q_doc.to_dict()
+        q_data["id"] = q_doc.id
+        o_docs = fdb.collection('options').where('questionId', '==', q_data["id"]).get()
+        q_data["options"] = [{**o.to_dict(), "id": o.id} for o in o_docs]
+        quiz["questions"].append(q_data)
+
+    return jsonify({"quiz": serialize_quiz(quiz, include_correct=True), "questionsCount": len(questions)})
 
 
 @api_bp.patch("/quiz/<quiz_id>")
@@ -995,7 +1453,7 @@ def update_quiz(quiz_id: str):
 
     values = request.get_json(silent=True) or {}
     update_payload = {}
-    for key in ["isPublished", "isRequired", "maxQuestions", "timeLimit", "passingScore"]:
+    for key in ["isPublished", "isRequired", "shuffleQuestions", "maxQuestions", "timeLimit", "passingScore"]:
         if key in values:
             update_payload[key] = values[key]
             quiz[key] = values[key]
@@ -1073,6 +1531,151 @@ def create_question(quiz_id: str):
     ref.set(question_data)
     question_data["id"] = ref.id
     return jsonify(serialize_question(question_data))
+
+
+@api_bp.post("/quiz/<quiz_id>/questions/regenerate")
+def regenerate_questions(quiz_id: str):
+    user = require_user()
+    quiz = (
+        Quiz.query.options(
+            joinedload(Quiz.chapter).joinedload(Chapter.course),
+            joinedload(Quiz.questions).joinedload(Question.options),
+        )
+        .filter_by(id=quiz_id)
+        .first()
+    )
+    if not quiz or quiz.chapter.course.userId != user["userId"]:
+        return text_response("Unauthorized", 401)
+
+    chapter = quiz.chapter
+    if chapter.transcriptStatus == TranscriptStatusEnum.PROCESSING:
+        return jsonify(
+            transcript_status_payload(
+                chapter,
+                "TRANSCRIPTION_PROCESSING",
+                "A transcricao do video ainda esta em andamento.",
+            )
+        ), 202
+
+    if not chapter.transcript and chapter.videoProvider == VideoProviderEnum.YOUTUBE:
+        chapter.transcriptStatus = TranscriptStatusEnum.PROCESSING
+        db.session.commit()
+        start_transcription(chapter.id, chapter.videoProvider, chapter.externalUrl)
+        return jsonify(
+            transcript_status_payload(
+                chapter,
+                "TRANSCRIPTION_STARTED",
+                "A transcricao do video foi iniciada. As perguntas serao geradas automaticamente quando ela terminar.",
+            )
+        ), 202
+
+    transcript = (chapter.transcript or "").strip()
+    if not transcript:
+        return text_response(
+            "Este capitulo ainda nao tem transcricao disponivel. Informe um link do YouTube com legenda/transcricao ou adicione conteudo antes de gerar com IA.",
+            400,
+        )
+
+    payload = request.get_json(silent=True) or {}
+    items = payload.get("items") or []
+    if not isinstance(items, list) or not items:
+        return text_response("Informe ao menos uma pergunta para regenerar", 400)
+
+    questions_by_id = {question.id: question for question in quiz.questions}
+    generation_requests = []
+    target_questions = []
+
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        question = questions_by_id.get(item.get("questionId"))
+        if not question:
+            continue
+
+        generation_requests.append(
+            {
+                "questionId": question.id,
+                "prompt": question.prompt,
+                "options": [
+                    {"text": option.text, "isCorrect": option.isCorrect}
+                    for option in question.options
+                ],
+                "pointWeight": question.pointWeight,
+                "isBonus": question.isBonus,
+                "bonusPoints": question.bonusPoints,
+                "suggestion": item.get("suggestion"),
+                "useDefaultConfig": bool(item.get("useDefaultConfig")),
+                "focusContentOverSuggestion": bool(item.get("focusContentOverSuggestion")),
+            }
+        )
+        target_questions.append(question)
+
+    if not generation_requests:
+        return text_response("Nenhuma pergunta valida foi enviada", 400)
+
+    context = f"""
+Titulo do Curso: {quiz.chapter.course.title}
+Titulo do Capitulo: {chapter.title}
+Descricao do Capitulo: {chapter.description or 'Sem descricao'}
+
+CONTEUDO DO VIDEO (Transcricao):
+{transcript}
+"""
+    try:
+        generated_questions = generate_replacement_questions(context, generation_requests)
+    except Exception as error:
+        db.session.rollback()
+        return text_response(f"Erro ao gerar perguntas com IA: {error}", 502)
+
+    for question_payload in generated_questions:
+        options_payload = question_payload.get("options") or []
+        correct_count = len(
+            [
+                option_payload
+                for option_payload in options_payload
+                if option_payload.get("isCorrect")
+            ]
+        )
+        if len(options_payload) != 4 or correct_count != 1:
+            return text_response(
+                "A IA retornou uma pergunta sem 4 alternativas validas ou sem uma unica alternativa correta.",
+                502,
+            )
+
+    for question, question_payload in zip(target_questions, generated_questions):
+        question.prompt = question_payload["prompt"]
+        question.pointWeight = float(question_payload.get("pointWeight") or 1.0)
+        question.isBonus = bool(question_payload.get("isBonus"))
+        question.bonusPoints = question_payload.get("bonusPoints")
+        Option.query.filter_by(questionId=question.id).delete()
+        db.session.flush()
+        for option_payload in question_payload.get("options", []):
+            db.session.add(
+                Option(
+                    questionId=question.id,
+                    text=option_payload["text"],
+                    isCorrect=bool(option_payload.get("isCorrect")),
+                )
+            )
+
+    db.session.commit()
+    db.session.expire_all()
+    refreshed = (
+        Question.query.options(selectinload(Question.options))
+        .populate_existing()
+        .filter(Question.id.in_([question.id for question in target_questions]))
+        .all()
+    )
+    refreshed_by_id = {question.id: question for question in refreshed}
+    return jsonify(
+        {
+            "questions": [
+                serialize_question(refreshed_by_id[question.id])
+                for question in target_questions
+                if question.id in refreshed_by_id
+            ]
+        }
+    )
 
 
 @api_bp.patch("/quiz/<quiz_id>/questions/<question_id>")
@@ -1171,14 +1774,28 @@ def submit_quiz(quiz_id: str):
         return text_response("Quiz not found", 404)
         
     quiz = quiz_doc.to_dict()
+    quiz["id"] = quiz_id
+
+    # Check chapter completion if quiz has chapterId
+    if quiz.get("chapterId"):
+        progress_query = fdb.collection('userProgress')\
+            .where('userId', '==', user["userId"])\
+            .where('chapterId', '==', quiz["chapterId"])\
+            .limit(1).get()
+        chapter_completed = progress_query[0].to_dict().get("isCompleted", False) if progress_query else False
+        if not chapter_completed:
+            return text_response("Conclua o capitulo antes de responder ao quiz", 403)
 
     existing_result_query = fdb.collection('quizResults')\
         .where('userId', '==', user["userId"])\
         .where('quizId', '==', quiz_id).limit(1).get()
+        
+    existing_result = None
     if existing_result_query:
-        res_data = existing_result_query[0].to_dict()
-        res_data["id"] = existing_result_query[0].id
-        return jsonify({"alreadySubmitted": True, "result": serialize_quiz_result(res_data)})
+        existing_result = existing_result_query[0].to_dict()
+        existing_result["id"] = existing_result_query[0].id
+        if existing_result.get("passed"):
+            return jsonify({"alreadySubmitted": True, "result": serialize_quiz_result(existing_result)})
 
     # Load questions and options for validation
     q_docs = fdb.collection('questions').where('quizId', '==', quiz_id).get()
@@ -1224,23 +1841,44 @@ def submit_quiz(quiz_id: str):
 
     score = calc_score(question_results)
     xp_earned = calc_quiz_xp(question_results)
-    passed = score >= quiz.get("passingScore", 70)
 
-    result_data = {
-        "userId": user["userId"],
-        "quizId": quiz_id,
-        "score": score,
-        "xpEarned": xp_earned,
-        "passed": passed,
-        "createdAt": datetime.utcnow()
-    }
-    res_ref = fdb.collection('quizResults').add(result_data)
-    result_data["id"] = res_ref[1].id
+    stored_score = max(existing_result.get("score", 0), score) if existing_result else score
+    stored_xp = max(existing_result.get("xpEarned", 0), xp_earned) if existing_result else xp_earned
+    passed = stored_score >= quiz.get("passingScore", 70)
+
+    if existing_result:
+        xp_delta = max(0, stored_xp - existing_result.get("xpEarned", 0))
+        result_ref = fdb.collection('quizResults').document(existing_result["id"])
+        result_data = {
+            "score": stored_score,
+            "xpEarned": stored_xp,
+            "passed": passed,
+            "completedAt": datetime.utcnow()
+        }
+        result_ref.update(result_data)
+        result_data["id"] = existing_result["id"]
+        result_data["userId"] = user["userId"]
+        result_data["quizId"] = quiz_id
+        result_data["createdAt"] = existing_result.get("createdAt")
+    else:
+        xp_delta = xp_earned
+        result_data = {
+            "userId": user["userId"],
+            "quizId": quiz_id,
+            "score": stored_score,
+            "xpEarned": stored_xp,
+            "passed": passed,
+            "createdAt": datetime.utcnow(),
+            "completedAt": datetime.utcnow()
+        }
+        res_ref = fdb.collection('quizResults').document()
+        res_ref.set(result_data)
+        result_data["id"] = res_ref.id
 
     # Update XP
     xp_query = fdb.collection('userXP').where('userId', '==', user["userId"]).limit(1).get()
     if not xp_query:
-        total_xp = xp_earned
+        total_xp = xp_delta
         level = calc_level(total_xp)
         fdb.collection('userXP').add({
             "userId": user["userId"],
@@ -1251,7 +1889,7 @@ def submit_quiz(quiz_id: str):
     else:
         xp_doc = xp_query[0]
         curr_xp = xp_doc.to_dict().get("totalXp", 0)
-        new_xp = curr_xp + xp_earned
+        new_xp = curr_xp + xp_delta
         new_level = calc_level(new_xp)
         xp_doc.reference.update({
             "totalXp": new_xp,
@@ -1260,9 +1898,54 @@ def submit_quiz(quiz_id: str):
         })
         total_xp = new_xp
 
+    # Next chapter unlocking logic
+    if passed and quiz.get("chapterId"):
+        chapter_doc = fdb.collection('chapters').document(quiz["chapterId"]).get()
+        if chapter_doc.exists:
+            chapter = chapter_doc.to_dict()
+            next_chapter_query = fdb.collection('chapters')\
+                .where('courseId', '==', chapter.get("courseId"))\
+                .where('isPublished', '==', True)\
+                .where('position', '>', chapter.get("position", 0))\
+                .order_by('position', direction=firestore.Query.ASCENDING)\
+                .limit(1).get()
+                
+            if next_chapter_query:
+                next_chapter = next_chapter_query[0].to_dict()
+                next_chapter_id = next_chapter_query[0].id
+                
+                # Update purchase lastChapterId
+                purchase_query = fdb.collection('purchases')\
+                    .where('userId', '==', user["userId"])\
+                    .where('courseId', '==', chapter.get("courseId"))\
+                    .limit(1).get()
+                if purchase_query:
+                    purchase_query[0].reference.update({"lastChapterId": next_chapter_id})
+                else:
+                    fdb.collection('purchases').add({
+                        "userId": user["userId"],
+                        "courseId": chapter.get("courseId"),
+                        "lastChapterId": next_chapter_id,
+                        "createdAt": datetime.utcnow()
+                    })
+
+                # Ensure next progress document exists
+                next_progress_query = fdb.collection('userProgress')\
+                    .where('userId', '==', user["userId"])\
+                    .where('chapterId', '==', next_chapter_id)\
+                    .limit(1).get()
+                if not next_progress_query:
+                    fdb.collection('userProgress').add({
+                        "userId": user["userId"],
+                        "chapterId": next_chapter_id,
+                        "isCompleted": False,
+                        "createdAt": datetime.utcnow(),
+                        "updatedAt": datetime.utcnow()
+                    })
+
     return jsonify({
         "result": serialize_quiz_result(result_data),
-        "xpEarned": xp_earned,
+        "xpEarned": xp_delta,
         "score": score,
         "passed": passed,
         "totalXp": total_xp
@@ -1501,6 +2184,7 @@ def meta_course_layout(course_id: str):
     purchase_query = fdb.collection('purchases')\
         .where('userId', '==', user["userId"])\
         .where('courseId', '==', course_id).limit(1).get()
+    purchase = purchase_query[0].to_dict() if purchase_query else None
     
     progress_count = get_progress(user["userId"], course_id)
     
@@ -1509,19 +2193,89 @@ def meta_course_layout(course_id: str):
         .where('courseId', '==', course_id)\
         .where('isPublished', '==', True)\
         .order_by('position').get()
-    
-    payload = serialize_course(course)
-    payload["chapters"] = []
+    published_chapters = []
     for d in chap_docs:
         c_data = d.to_dict()
         c_data["id"] = d.id
-        # Progress map
+        published_chapters.append(c_data)
+        
+    # UserProgress map
+    progress_map = {}
+    for chapter in published_chapters:
         prog_query = fdb.collection('userProgress')\
             .where('userId', '==', user["userId"])\
-            .where('chapterId', '==', d.id).limit(1).get()
-        c_data["userProgress"] = [prog_query[0].to_dict()] if prog_query else []
-        payload["chapters"].append(serialize_chapter(c_data, include_relations=True))
+            .where('chapterId', '==', chapter["id"])\
+            .limit(1).get()
+        progress_map[chapter["id"]] = [serialize_progress(prog_query[0].to_dict())] if prog_query else []
+
+    # Quizzes
+    quiz_ids = []
+    quizzes_map = {}
+    for chapter in published_chapters:
+        q_query = fdb.collection('quizzes')\
+            .where('chapterId', '==', chapter["id"])\
+            .where('isPublished', '==', True)\
+            .limit(1).get()
+        if q_query:
+            q_data = q_query[0].to_dict()
+            q_data["id"] = q_query[0].id
+            quizzes_map[chapter["id"]] = q_data
+            quiz_ids.append(q_data["id"])
+
+    # Quiz Results
+    quiz_result_map = {}
+    if quiz_ids:
+        res_docs = fdb.collection('quizResults')\
+            .where('userId', '==', user["userId"])\
+            .get()
+        for doc in res_docs:
+            res_data = doc.to_dict()
+            res_data["id"] = doc.id
+            if res_data.get("quizId") in quiz_ids:
+                quiz_result_map[res_data.get("quizId")] = res_data
+
+    last_unlocked_position = None
+    if purchase and purchase.get("lastChapterId"):
+        last_chapter_doc = fdb.collection('chapters').document(purchase.get("lastChapterId")).get()
+        if last_chapter_doc.exists:
+            last_unlocked_position = last_chapter_doc.to_dict().get("position")
+
+    payload = serialize_course(course)
+    payload_chapters = []
+    for index, chapter in enumerate(published_chapters):
+        chapter_payload = serialize_chapter(chapter, progress_map=progress_map)
         
+        if chapter.get("isFree"):
+            chapter_payload["isLocked"] = False
+        elif not purchase:
+            chapter_payload["isLocked"] = True
+        elif index == 0:
+            chapter_payload["isLocked"] = False
+        elif last_unlocked_position is not None and chapter.get("position", 0) <= last_unlocked_position:
+            chapter_payload["isLocked"] = False
+        else:
+            previous_chapter = published_chapters[index - 1]
+            previous_progress_list = progress_map.get(previous_chapter["id"], [])
+            previous_progress = previous_progress_list[0] if previous_progress_list else None
+            
+            previous_quiz = quizzes_map.get(previous_chapter["id"])
+            previous_quiz_result = (
+                quiz_result_map.get(previous_quiz["id"])
+                if previous_quiz
+                else None
+            )
+            previous_quiz_passed = (
+                not previous_quiz
+                or bool(previous_quiz_result and previous_quiz_result.get("passed"))
+            )
+            chapter_payload["isLocked"] = not (
+                previous_progress
+                and previous_progress.get("isCompleted")
+                and previous_quiz_passed
+            )
+        payload_chapters.append(chapter_payload)
+
+    payload["chapters"] = payload_chapters
     payload["progressCount"] = progress_count
     payload["isEnrolled"] = bool(purchase_query)
     return jsonify(payload)

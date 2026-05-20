@@ -1,3 +1,4 @@
+import json
 import re
 import threading
 from datetime import date, datetime, timedelta
@@ -22,6 +23,26 @@ LEVEL_LABELS = {
 }
 
 LEVEL_THRESHOLDS = [0, 200, 500, 1000, 2000, float("inf")]
+
+DIFFICULTY_RULES = {
+    "facil": {"pointWeight": 1.0, "isBonus": False, "bonusPoints": None},
+    "media": {"pointWeight": 1.5, "isBonus": False, "bonusPoints": None},
+    "razoavelmente_dificil": {"pointWeight": 2.0, "isBonus": False, "bonusPoints": None},
+    "dificil": {"pointWeight": 2.0, "isBonus": False, "bonusPoints": None},
+    "desafio": {"pointWeight": 2.0, "isBonus": True, "bonusPoints": 50},
+}
+
+
+def build_difficulty_plan(count: int) -> list[str]:
+    count = max(1, min(int(count or 1), 10))
+    if count == 1:
+        return ["media"]
+    if count == 2:
+        return ["facil", "media"]
+    plan = ["facil", "media", "razoavelmente_dificil", "dificil", "desafio"]
+    while len(plan) < count:
+        plan.extend(["facil", "media", "razoavelmente_dificil", "dificil", "desafio"])
+    return plan[:count]
 
 
 def calc_question_xp(result: dict, combo_count: int) -> int:
@@ -193,33 +214,278 @@ def delete_mux_asset(asset_id: str | None) -> None:
     )
 
 
+def _parse_llm_json(text: str) -> object:
+    clean = (text or "").replace("```json", "").replace("```", "").strip()
+    try:
+        return json.loads(clean)
+    except json.JSONDecodeError:
+        match = re.search(r"(\{.*\}|\[.*\])", clean, flags=re.DOTALL)
+        if not match:
+            raise
+        return json.loads(match.group(1))
+
+
+def _normalize_generated_questions(payload: object, difficulty_plan: list[str]) -> list[dict]:
+    raw_questions = payload.get("questions") if isinstance(payload, dict) else payload
+    if not isinstance(raw_questions, list):
+        raise ValueError("A IA nao retornou uma lista de questoes")
+
+    normalized = []
+    for index, item in enumerate(raw_questions[: len(difficulty_plan)]):
+        if not isinstance(item, dict):
+            continue
+
+        prompt = str(item.get("prompt") or item.get("question") or "").strip()
+        options = item.get("options") or item.get("alternatives") or []
+        if not prompt or not isinstance(options, list):
+            continue
+
+        expected_difficulty = difficulty_plan[index]
+        raw_correct = item.get("correctIndex")
+        if raw_correct is None:
+            raw_correct = item.get("correctOptionIndex")
+        if raw_correct is None:
+            raw_correct = item.get("correctAnswerIndex")
+
+        normalized_options = []
+        correct_count = 0
+        for option_index, option in enumerate(options[:4]):
+            if isinstance(option, dict):
+                text = str(option.get("text") or option.get("label") or "").strip()
+                is_correct = bool(option.get("isCorrect"))
+            else:
+                text = str(option).strip()
+                is_correct = False
+
+            if raw_correct is not None:
+                try:
+                    is_correct = int(raw_correct) == option_index
+                except (TypeError, ValueError):
+                    is_correct = False
+
+            if text:
+                correct_count += 1 if is_correct else 0
+                normalized_options.append({"text": text, "isCorrect": is_correct})
+
+        if len(normalized_options) != 4:
+            continue
+
+        if correct_count != 1:
+            for option in normalized_options:
+                option["isCorrect"] = False
+            normalized_options[0]["isCorrect"] = True
+
+        rules = DIFFICULTY_RULES[expected_difficulty]
+        normalized.append(
+            {
+                "prompt": prompt,
+                "difficulty": expected_difficulty,
+                "pointWeight": rules["pointWeight"],
+                "isBonus": rules["isBonus"],
+                "bonusPoints": rules["bonusPoints"],
+                "options": normalized_options,
+            }
+        )
+
+    if len(normalized) != len(difficulty_plan):
+        raise ValueError("A IA retornou questoes incompletas ou invalidas")
+
+    return normalized
+
+
 def generate_quiz_questions(context: str, count: int = 5) -> list[dict]:
-    import google.generativeai as genai
-
-    api_key = current_app.config.get("GEMINI_API_KEY")
-    if not api_key:
-        raise ValueError("GEMINI_API_KEY is not configured")
-
-    genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-1.5-flash")
-    prompt = f"""
+    difficulty_plan = build_difficulty_plan(count)
+    difficulty_text = ", ".join(difficulty_plan)
+    system_prompt = """
 Voce e um assistente educacional especialista em criar avaliacoes.
-Com base no conteudo abaixo, crie um quiz com {count} questoes de multipla escolha.
-
-CONTEUDO:
-{context}
-
-REGRAS:
-1. Retorne APENAS um JSON valido.
-2. Cada questao deve ter 4 alternativas.
-3. Exatamente uma alternativa deve ser a correta.
-4. Nao inclua markdown ou texto fora do JSON.
+Voce sempre responde somente JSON valido, sem markdown e sem texto antes ou depois.
 """
-    response = model.generate_content(prompt)
-    text = (response.text or "").replace("```json", "").replace("```", "").strip()
-    import json
+    user_prompt = f"""
+Crie um quiz com {len(difficulty_plan)} questoes de multipla escolha.
+A distribuicao obrigatoria de dificuldade, nesta ordem, e: {difficulty_text}.
 
-    return json.loads(text)
+Regras:
+1. Cada questao deve ter 4 alternativas.
+2. Exatamente uma alternativa deve ser a correta.
+3. Use somente fatos presentes no conteudo, no titulo ou na descricao.
+4. Cubra pontos centrais do conteudo e evite perguntas obvias ou repetidas.
+5. Varie o raciocinio conforme a dificuldade: facil testa reconhecimento, media testa compreensao, razoavelmente_dificil testa aplicacao, dificil testa relacao entre conceitos, desafio testa analise.
+6. O JSON deve seguir exatamente este formato:
+{{
+  "questions": [
+    {{
+      "prompt": "texto da pergunta",
+      "difficulty": "facil|media|razoavelmente_dificil|dificil|desafio",
+      "options": [
+        {{ "text": "alternativa A", "isCorrect": true }},
+        {{ "text": "alternativa B", "isCorrect": false }},
+        {{ "text": "alternativa C", "isCorrect": false }},
+        {{ "text": "alternativa D", "isCorrect": false }}
+      ]
+    }}
+  ]
+}}
+
+Conteudo:
+{context}
+"""
+    provider = (current_app.config.get("LLM_PROVIDER") or "local").lower()
+
+    if provider == "gemini":
+        import google.generativeai as genai
+
+        api_key = current_app.config.get("GEMINI_API_KEY")
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY is not configured")
+
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel(current_app.config.get("LLM_MODEL") or "gemini-1.5-flash")
+        response = model.generate_content(f"{system_prompt}\n{user_prompt}")
+        text = response.text or ""
+    else:
+        from llm import generate_text
+
+        text = generate_text(
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+            model=current_app.config.get("LLM_MODEL"),
+            source=provider,
+        )
+
+    return _normalize_generated_questions(_parse_llm_json(text), difficulty_plan)
+
+
+def _difficulty_from_question_config(question: dict) -> str:
+    if question.get("isBonus"):
+        return "desafio"
+
+    try:
+        point_weight = float(question.get("pointWeight") or 1.0)
+    except (TypeError, ValueError):
+        point_weight = 1.0
+
+    if point_weight >= 2:
+        return "dificil"
+    if point_weight >= 1.5:
+        return "media"
+    return "facil"
+
+
+def generate_replacement_questions(context: str, requests: list[dict]) -> list[dict]:
+    if not requests:
+        return []
+
+    difficulty_plan = [
+        item.get("difficulty") or _difficulty_from_question_config(item)
+        for item in requests
+    ]
+
+    request_lines = []
+    for index, item in enumerate(requests, start=1):
+        suggestion = str(item.get("suggestion") or "").strip()
+        use_default_config = bool(item.get("useDefaultConfig"))
+        focus_content = bool(item.get("focusContentOverSuggestion"))
+        options = item.get("options") or []
+        options_text = "\n".join(
+            f"      - {'CORRETA: ' if option.get('isCorrect') else ''}{option.get('text')}"
+            for option in options
+        )
+
+        if use_default_config:
+            guidance = (
+                "Criar uma nova pergunta usando a configuracao atual da pergunta original. "
+                "Ignore sugestoes do professor para este item."
+            )
+        elif suggestion:
+            guidance = (
+                f"Sugestao do professor: {suggestion}\n"
+                + (
+                    "Se a sugestao fugir do conteudo do video, priorize o conteudo do video e use a sugestao apenas como intencao pedagogica."
+                    if focus_content
+                    else "Tente atender a sugestao, mas nunca invente fatos fora do conteudo do video."
+                )
+            )
+        else:
+            guidance = "Criar uma nova pergunta alternativa, sem repetir a pergunta original."
+
+        request_lines.append(
+            f"""
+  Item {index}
+    Dificuldade esperada: {difficulty_plan[index - 1]}
+    Pergunta original: {item.get("prompt")}
+    Alternativas originais:
+{options_text}
+    Orientacao: {guidance}
+"""
+        )
+
+    system_prompt = """
+Voce e um assistente educacional especialista em reescrever avaliacoes.
+Voce sempre responde somente JSON valido, sem markdown e sem texto antes ou depois.
+"""
+    user_prompt = f"""
+Crie {len(requests)} novas perguntas de multipla escolha para substituir perguntas existentes.
+
+Regras:
+1. Cada pergunta deve ter 4 alternativas.
+2. Exatamente uma alternativa deve ser a correta.
+3. Use somente fatos presentes no conteudo, no titulo ou na descricao.
+4. Nao copie o enunciado original; gere uma pergunta nova com objetivo equivalente.
+5. Mantenha a ordem dos itens solicitados.
+6. O JSON deve seguir exatamente este formato:
+{{
+  "questions": [
+    {{
+      "prompt": "texto da pergunta",
+      "difficulty": "facil|media|razoavelmente_dificil|dificil|desafio",
+      "options": [
+        {{ "text": "alternativa A", "isCorrect": true }},
+        {{ "text": "alternativa B", "isCorrect": false }},
+        {{ "text": "alternativa C", "isCorrect": false }},
+        {{ "text": "alternativa D", "isCorrect": false }}
+      ]
+    }}
+  ]
+}}
+
+Itens para substituir:
+{"".join(request_lines)}
+
+Conteudo:
+{context}
+"""
+    provider = (current_app.config.get("LLM_PROVIDER") or "local").lower()
+
+    if provider == "gemini":
+        import google.generativeai as genai
+
+        api_key = current_app.config.get("GEMINI_API_KEY")
+        if not api_key:
+            raise ValueError("GEMINI_API_KEY is not configured")
+
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel(current_app.config.get("LLM_MODEL") or "gemini-1.5-flash")
+        response = model.generate_content(f"{system_prompt}\n{user_prompt}")
+        text = response.text or ""
+    else:
+        from llm import generate_text
+
+        text = generate_text(
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+            model=current_app.config.get("LLM_MODEL"),
+            source=provider,
+        )
+
+    generated = _normalize_generated_questions(_parse_llm_json(text), difficulty_plan)
+
+    for index, item in enumerate(requests):
+        if bool(item.get("useDefaultConfig")) and index < len(generated):
+            generated[index]["pointWeight"] = float(item.get("pointWeight") or 1.0)
+            generated[index]["isBonus"] = bool(item.get("isBonus"))
+            generated[index]["bonusPoints"] = item.get("bonusPoints")
+
+    return generated
 
 
 def update_user_streak(user_id: str) -> dict:

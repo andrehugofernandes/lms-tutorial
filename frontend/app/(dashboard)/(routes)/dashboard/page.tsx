@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle, Clock, Compass, Flame, Medal, PlayCircle, Trophy, GraduationCap } from "lucide-react";
+import { AlertTriangle, CheckCircle, Clock, Compass, Flame, Medal, PlayCircle, Trophy, GraduationCap } from "lucide-react";
 
 import { CoursesList } from "@/components/courses-list";
 import { InfoCard } from "./_components/info-card";
@@ -21,7 +21,31 @@ export default async function Dashboard() {
     return redirect("/");
   }
 
-  const dashboard = await serverApi<any>("/api/meta/dashboard");
+  let dashboard: any;
+  try {
+    dashboard = await serverApi<any>("/api/meta/dashboard");
+  } catch (error) {
+    console.error("[dashboard] Backend request failed", error);
+    return (
+      <div className="mx-auto flex min-h-screen max-w-3xl items-center justify-center p-6">
+        <div className="rounded-2xl border border-amber-500/30 bg-amber-500/10 p-6 text-amber-700 dark:text-amber-300">
+          <div className="flex items-start gap-4">
+            <AlertTriangle className="mt-1 h-6 w-6 shrink-0" />
+            <div>
+              <h1 className="text-xl font-bold">Backend indisponivel</h1>
+              <p className="mt-2 text-sm leading-6">
+                Nao foi possivel carregar o dashboard agora. Verifique se o backend em
+                {" "}
+                <code className="rounded bg-black/10 px-1 py-0.5">127.0.0.1:5328</code>
+                {" "}
+                esta iniciado e atualize a pagina.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (dashboard.mode === "teacher") {
     return (

@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import * as z from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,23 +9,23 @@ import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import type { Course } from "@/lib/types";
 import { Combobox } from "@/components/ui/combobox";
+import { Pencil, PlusCircle } from "lucide-react";
 
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 
 interface CategoryFormProps {
   initialData: Course;
   courseId: string;
-  options: { label: string, value: string; }[]
+  options: { label: string; value: string }[];
 }
 
 const formSchema = z.object({
@@ -40,11 +41,12 @@ export const CategoryForm = ({
   const [isCreating, setIsCreating] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [options, setOptions] = useState(initialOptions);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      categoryId: initialData?.categoryId || ""
+      categoryId: initialData?.categoryId || "",
     },
   });
 
@@ -54,63 +56,80 @@ export const CategoryForm = ({
     setIsEditing((current) => !current);
     setIsCreating(false);
   };
-  
-  const router = useRouter();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Categoria do curso atualizada!");
+      toast.success("Categoria do curso atualizada.");
       toggleEdit();
       router.refresh();
     } catch {
-      toast.error("Algo deu errado!");
+      toast.error("Algo deu errado.");
     }
-  }
+  };
 
   const onCreateCategory = async () => {
     try {
       if (!newCategoryName) return;
-      const response = await axios.post("/api/categories", { name: newCategoryName });
+      const response = await axios.post("/api/categories", {
+        name: newCategoryName,
+      });
       const newCategory = response.data;
-      
-      setOptions((prev) => [...prev, { label: newCategory.name, value: newCategory.id }].sort((a,b) => a.label.localeCompare(b.label)));
+
+      setOptions((prev) =>
+        [...prev, { label: newCategory.name, value: newCategory.id }].sort(
+          (a, b) => a.label.localeCompare(b.label)
+        )
+      );
       form.setValue("categoryId", newCategory.id);
       setIsCreating(false);
       setNewCategoryName("");
-      toast.success("Nova categoria criada!");
+      toast.success("Nova categoria criada.");
     } catch {
-      toast.error("Erro ao criar categoria");
+      toast.error("Erro ao criar categoria.");
     }
-  }
+  };
 
-  const selectedOption = options.find((option) => option.value === initialData.categoryId);
+  const selectedOption = options.find(
+    (option) => option.value === initialData.categoryId
+  );
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
-      <div className="font-medium flex items-center justify-between">
-        Categoria do curso
-        <Button onClick={toggleEdit} variant="outline">
+    <div className="p-6">
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold text-[#B5B5B5]">
+            Categoria do curso
+          </p>
+          {!isEditing && (
+            <p
+              className={cn(
+                "mt-3 text-base font-semibold text-white",
+                !initialData.categoryId && "italic text-[#7A7A7A]"
+              )}
+            >
+              {selectedOption?.label || "Sem categoria."}
+            </p>
+          )}
+        </div>
+        <Button
+          onClick={toggleEdit}
+          variant="outline"
+          className="border-[#FF9F00]/60 bg-[#111111] text-white hover:border-[#FF9F00] hover:bg-[#181818] hover:text-white"
+        >
           {isEditing ? (
-            <>Cancelar</>
+            "Cancelar"
           ) : (
             <>
-              <Pencil className="h-4 w-4 mr-2" />
+              <Pencil className="mr-2 h-4 w-4 text-[#FF9F00]" />
               Editar categoria
             </>
           )}
         </Button>
       </div>
-      {!isEditing && (
-        <p className={cn(
-          "text-sm mt-2",
-          !initialData.categoryId && "text-slate-500 italic"
-        )}>
-          {selectedOption?.label || "Sem categoria."}
-        </p>
-      )}
+
       {isEditing && (
-        <div className="space-y-4 mt-4">
+        <div className="mt-4 space-y-4">
           {!isCreating ? (
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -120,29 +139,27 @@ export const CategoryForm = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Combobox
-                          options={options}
-                          {...field}
-                        />
+                        <Combobox options={options} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <div className="flex items-center gap-x-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <Button
                     disabled={!isValid || isSubmitting}
                     type="submit"
+                    className="bg-[#FF9F00] text-black hover:bg-[#E68F00]"
                   >
-                    Salvar
+                    Salvar categoria
                   </Button>
                   <Button
                     type="button"
                     variant="ghost"
                     onClick={() => setIsCreating(true)}
-                    className="flex items-center gap-x-2"
+                    className="text-[#B5B5B5] hover:bg-[#181818] hover:text-white"
                   >
-                    <PlusCircle className="h-4 w-4" />
+                    <PlusCircle className="mr-2 h-4 w-4" />
                     Nova categoria
                   </Button>
                 </div>
@@ -151,15 +168,23 @@ export const CategoryForm = ({
           ) : (
             <div className="space-y-4">
               <Input
-                placeholder="Ex: Marketing Digital"
+                placeholder="Ex.: Marketing Digital"
                 value={newCategoryName}
-                onChange={(e) => setNewCategoryName(e.target.value)}
+                onChange={(event) => setNewCategoryName(event.target.value)}
+                className="border-[#333333] bg-black text-white placeholder:text-[#7A7A7A] focus-visible:ring-[#FF9F00]"
               />
-              <div className="flex items-center gap-x-2">
-                <Button onClick={onCreateCategory}>
-                  Criar Categoria
+              <div className="flex items-center gap-2">
+                <Button
+                  onClick={onCreateCategory}
+                  className="bg-[#FF9F00] text-black hover:bg-[#E68F00]"
+                >
+                  Criar categoria
                 </Button>
-                <Button variant="ghost" onClick={() => setIsCreating(false)}>
+                <Button
+                  variant="ghost"
+                  onClick={() => setIsCreating(false)}
+                  className="text-[#B5B5B5] hover:bg-[#181818] hover:text-white"
+                >
                   Voltar
                 </Button>
               </div>
@@ -168,7 +193,5 @@ export const CategoryForm = ({
         </div>
       )}
     </div>
-  )
-}
-
-// export default CategoryForm
+  );
+};

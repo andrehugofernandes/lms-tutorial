@@ -1,5 +1,5 @@
 E-mail: professor@lms.com
-Senha: ProfLMS@2026_Secure! (Ao logar com essa conta, como o ID dela está no 
+Senha: ProfLMS@2026_Secure! (Ao logar com essa conta, como o ID dela está no
 .env, você deverá ver no menu ou poder acessar a rota do modo Professor).
 
 

@@ -46,5 +46,9 @@ def create_app() -> Flask:
     def health():
         return jsonify({"status": "ok"})
 
+    @app.teardown_appcontext
+    def shutdown_session(exception=None):
+        db.session.remove()
+
     app.register_blueprint(api_bp)
     return app

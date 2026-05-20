@@ -3,6 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth, currentUser } from "@/lib/auth";
 import { backendBaseUrl, backendInternalToken } from "@/lib/backend";
 
+const DEFAULT_TIMEOUT_MS = 30000;
+const AI_GENERATE_TIMEOUT_MS = 180000;
+
 async function proxyRequest(
   request: NextRequest,
   props: { params: Promise<{ path: string[] }> }
@@ -39,12 +42,35 @@ async function proxyRequest(
       ? undefined
       : await request.text();
 
-  const response = await fetch(proxiedUrl, {
-    method: request.method,
-    headers,
-    body,
-    cache: "no-store",
-  });
+  const isAiGenerate = params.path.join("/").endsWith("/quiz/generate");
+  const controller = new AbortController();
+  const timeout = setTimeout(
+    () => controller.abort(),
+    isAiGenerate ? AI_GENERATE_TIMEOUT_MS : DEFAULT_TIMEOUT_MS
+  );
+
+  let response: Response;
+  try {
+    response = await fetch(proxiedUrl, {
+      method: request.method,
+      headers,
+      body,
+      cache: "no-store",
+      signal: controller.signal,
+    });
+  } catch (error) {
+    const isAbort = error instanceof Error && error.name === "AbortError";
+    const cause = error instanceof Error && "cause" in error ? error.cause : undefined;
+    const detail = cause instanceof Error ? cause.message : error instanceof Error ? error.message : String(error);
+    return new NextResponse(
+      isAbort
+        ? "O backend demorou demais para responder. Tente novamente em instantes."
+        : `Nao foi possivel conectar ao backend em ${backendBaseUrl}. Detalhe: ${detail}`,
+      { status: isAbort ? 504 : 503 }
+    );
+  } finally {
+    clearTimeout(timeout);
+  }
 
   const text = await response.text();
   const nextResponse = new NextResponse(text, {

@@ -28,6 +28,9 @@ interface VideoPlayerProps {
   title: string;
   videoSourceType?: "UPLOAD" | "EXTERNAL";
   onPlayerReady?: (player: any) => void;
+  shouldAutoNavigateOnComplete?: boolean;
+  onCompleted?: () => void;
+  showConfettiOnComplete?: boolean;
 }
 
 export const VideoPlayer = ({
@@ -43,6 +46,9 @@ export const VideoPlayer = ({
   title,
   videoSourceType = "UPLOAD",
   onPlayerReady,
+  shouldAutoNavigateOnComplete = true,
+  onCompleted,
+  showConfettiOnComplete = true,
 }: VideoPlayerProps) => {
   const [isReady, setIsReady] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -64,14 +70,15 @@ export const VideoPlayer = ({
           isCompleted: true,
         });
 
-        if (!nextChapterId) {
+        if (!nextChapterId && showConfettiOnComplete) {
           confetti.onOpen();
         }
 
         toast.success("Progresso atualizado");
+        onCompleted?.();
         router.refresh();
 
-        if (nextChapterId) {
+        if (nextChapterId && shouldAutoNavigateOnComplete) {
           router.push(`/courses/${courseId}/chapters/${nextChapterId}`);
         }
       }

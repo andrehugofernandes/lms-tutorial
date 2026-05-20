@@ -19,9 +19,9 @@ export const ZenWrapper = ({
   const isZen = searchParams.get("zen") === "true";
 
   return (
-    <div className="h-full bg-[#0a0a0a] text-slate-200">
+    <div className="course-learning-shell h-full bg-slate-50 text-slate-900 dark:bg-[#0a0a0a] dark:text-slate-200">
       <div className={cn(
-        "h-[80px] md:pl-56 md:pr-96 fixed inset-y-0 w-full z-40 transition-all duration-300 overflow-hidden bg-[#0a0a0a] border-b border-[#222]",
+        "h-[80px] md:pl-56 md:pr-96 fixed inset-y-0 w-full z-40 transition-all duration-300 overflow-hidden border-b border-slate-200 bg-white dark:border-[#222] dark:bg-[#0a0a0a]",
         isZen && "h-0 md:pl-0 md:pr-0 -translate-y-full opacity-0 pointer-events-none hidden"
       )}>
         {navbar}
@@ -29,7 +29,7 @@ export const ZenWrapper = ({
       
       {/* Global Dashboard Sidebar (Left) */}
       <div className={cn(
-        "hidden md:flex h-full w-56 flex-col fixed inset-y-0 left-0 z-50 transition-all duration-300 border-r border-[#222] bg-[#111]",
+        "hidden md:flex h-full w-56 flex-col fixed inset-y-0 left-0 z-50 transition-all duration-300 border-r border-slate-200 bg-white dark:border-[#222] dark:bg-[#111]",
         isZen && "-translate-x-full opacity-0 hidden"
       )}>
         <GlobalSidebar />
@@ -37,7 +37,7 @@ export const ZenWrapper = ({
 
       {/* Course Sidebar (Right) */}
       <div className={cn(
-        "hidden md:flex h-full w-96 flex-col fixed inset-y-0 right-0 z-50 transition-all duration-300 border-l border-[#222] bg-[#111]",
+        "hidden md:flex h-full w-96 flex-col fixed inset-y-0 right-0 z-50 transition-all duration-300 border-l border-slate-200 bg-white dark:border-[#222] dark:bg-[#111]",
         isZen && "translate-x-full opacity-0 hidden"
       )}>
         {sidebar}

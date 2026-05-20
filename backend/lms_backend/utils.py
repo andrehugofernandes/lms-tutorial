@@ -1,3 +1,4 @@
+import random
 from datetime import datetime
 from google.cloud import firestore
 
@@ -10,6 +11,7 @@ def iso(dt):
     if hasattr(dt, 'to_datetime'):
         return dt.to_datetime().isoformat()
     return str(dt)
+
 
 def serialize_profile(profile: dict | None) -> dict | None:
     if not profile:
@@ -60,7 +62,16 @@ def serialize_option(option: dict, include_correct: bool = True) -> dict:
     return payload
 
 
-def serialize_question(question: dict, include_correct: bool = True) -> dict:
+def serialize_question(
+    question: dict,
+    include_correct: bool = True,
+    shuffle_options: bool = False,
+) -> dict:
+    options = sorted(question.get("options", []), key=lambda item: item.get("createdAt") or datetime.utcnow().isoformat())
+    if shuffle_options:
+        options = options[:]
+        random.shuffle(options)
+
     return {
         "id": question.get("id"),
         "quizId": question.get("quizId"),
@@ -69,24 +80,35 @@ def serialize_question(question: dict, include_correct: bool = True) -> dict:
         "isBonus": question.get("isBonus"),
         "bonusPoints": question.get("bonusPoints"),
         "pointWeight": question.get("pointWeight"),
-        "options": [serialize_option(opt, include_correct) for opt in question.get("options", [])],
+        "options": [serialize_option(opt, include_correct) for opt in options],
     }
 
 
 def serialize_quiz(quiz: dict | None, include_correct: bool = True) -> dict | None:
     if not quiz:
         return None
+    questions = sorted(quiz.get("questions", []), key=lambda item: item.get("position", 0))
+    should_shuffle_for_student = quiz.get("shuffleQuestions", False) and not include_correct
+
     return {
         "id": quiz.get("id"),
         "chapterId": quiz.get("chapterId"),
         "isPublished": quiz.get("isPublished"),
         "isRequired": quiz.get("isRequired"),
-        "maxQuestions": quiz.get("maxQuestions"),
-        "passingScore": quiz.get("passingScore"),
+        "shuffleQuestions": quiz.get("shuffleQuestions", False),
+        "maxQuestions": quiz.get("maxQuestions", 5),
+        "passingScore": quiz.get("passingScore", 70),
         "timeLimit": quiz.get("timeLimit"),
         "createdAt": iso(quiz.get("createdAt")),
         "updatedAt": iso(quiz.get("updatedAt")),
-        "questions": [serialize_question(q, include_correct) for q in quiz.get("questions", [])],
+        "questions": [
+            serialize_question(
+                q,
+                include_correct,
+                shuffle_options=should_shuffle_for_student,
+            )
+            for q in questions
+        ],
     }
 
 
@@ -103,7 +125,12 @@ def serialize_progress(progress: dict | None) -> dict | None:
     }
 
 
-def serialize_chapter(chapter: dict, include_relations: bool = False, progress_map: dict | None = None) -> dict:
+def serialize_chapter(
+    chapter: dict,
+    include_relations: bool = False,
+    progress_map: dict | None = None,
+    include_transcript: bool = True,
+) -> dict:
     payload = {
         "id": chapter.get("id"),
         "title": chapter.get("title"),
@@ -114,7 +141,6 @@ def serialize_chapter(chapter: dict, include_relations: bool = False, progress_m
         "externalUrl": chapter.get("externalUrl"),
         "embedUrl": chapter.get("embedUrl"),
         "videoProvider": chapter.get("videoProvider"),
-        "transcript": chapter.get("transcript"),
         "transcriptStatus": chapter.get("transcriptStatus"),
         "position": chapter.get("position"),
         "isPublished": chapter.get("isPublished"),
@@ -123,6 +149,8 @@ def serialize_chapter(chapter: dict, include_relations: bool = False, progress_m
         "createdAt": iso(chapter.get("createdAt")),
         "updatedAt": iso(chapter.get("updatedAt")),
     }
+    if include_transcript:
+        payload["transcript"] = chapter.get("transcript")
     if include_relations:
         payload["muxData"] = chapter.get("muxData")
         payload["quiz"] = chapter.get("quiz")
@@ -162,6 +190,24 @@ def serialize_note(note: dict) -> dict:
         "timestamp": note.get("timestamp"),
         "createdAt": iso(note.get("createdAt")),
         "updatedAt": iso(note.get("updatedAt")),
+    }
+
+
+def serialize_forum_post(
+    post: dict,
+    author_name: str | None = None,
+    current_user_id: str | None = None,
+) -> dict:
+    return {
+        "id": post.get("id"),
+        "userId": post.get("userId"),
+        "courseId": post.get("courseId"),
+        "chapterId": post.get("chapterId"),
+        "content": post.get("content"),
+        "authorName": author_name or "Aluno",
+        "isMine": post.get("userId") == current_user_id if current_user_id else False,
+        "createdAt": iso(post.get("createdAt")),
+        "updatedAt": iso(post.get("updatedAt")),
     }
 
 

@@ -75,9 +75,9 @@ export const ChapterNotes = ({
   };
 
   return (
-    <div className="flex flex-col gap-y-4 bg-[#111] border border-[#222] rounded-xl p-6">
+    <div className="flex flex-col gap-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm dark:border-[#222] dark:bg-[#111]">
       <div className="flex flex-col gap-y-4">
-        <h3 className="text-lg font-semibold flex items-center gap-x-2 text-white">
+        <h3 className="text-lg font-semibold flex items-center gap-x-2 text-slate-950 dark:text-white">
           Minhas anotações <span className="bg-yellow-500/10 text-yellow-500 text-[10px] px-2 py-0.5 rounded uppercase tracking-wider font-bold">Privado</span>
         </h3>
         
@@ -87,7 +87,7 @@ export const ChapterNotes = ({
             value={content}
             onChange={(e) => setContent(e.target.value)}
             disabled={isLoading}
-            className="bg-[#0a0a0a] border-[#222] focus-visible:ring-yellow-500/50 text-slate-200 min-h-[120px] transition-all resize-none shadow-inner"
+            className="min-h-[120px] resize-none border-slate-200 bg-slate-50 text-slate-900 shadow-inner transition-all focus-visible:ring-yellow-500/50 dark:border-[#222] dark:bg-[#0a0a0a] dark:text-slate-200"
           />
           <div className="absolute bottom-3 right-3">
             <Button
@@ -101,13 +101,13 @@ export const ChapterNotes = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-x-2 text-xs text-slate-400">
+        <div className="flex items-center gap-x-2 text-xs text-slate-600 dark:text-slate-400">
           <Lightbulb className="h-4 w-4 text-yellow-500" />
           <span className="text-yellow-500 font-semibold">Dica:</span> anotar melhora sua retenção e acelera seu aprendizado.
         </div>
       </div>
 
-      {notes.length > 0 && <Separator className="bg-[#222] my-2" />}
+      {notes.length > 0 && <Separator className="my-2 bg-slate-200 dark:bg-[#222]" />}
 
       <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
         {isFetching ? (
@@ -116,7 +116,7 @@ export const ChapterNotes = ({
           </div>
         ) : (
           notes.map((note) => (
-            <Card key={note.id} className="p-4 bg-[#0a0a0a] border-[#222] hover:border-yellow-500/30 transition-colors group rounded-lg">
+            <Card key={note.id} className="group rounded-lg border-slate-200 bg-slate-50 p-4 transition-colors hover:border-yellow-500/40 dark:border-[#222] dark:bg-[#0a0a0a] dark:hover:border-yellow-500/30">
               <div className="flex flex-col gap-y-2">
                 <div className="flex items-center justify-between">
                   {note.timestamp !== null && (
@@ -132,7 +132,7 @@ export const ChapterNotes = ({
                     {new Date(note.createdAt).toLocaleDateString()}
                   </p>
                 </div>
-                <p className="text-sm text-slate-300 whitespace-pre-wrap">
+                <p className="text-sm text-slate-700 whitespace-pre-wrap dark:text-slate-300">
                   {note.content}
                 </p>
               </div>
