@@ -4,6 +4,11 @@ const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "demo-project";
 const databaseId = process.env.FIRESTORE_DATABASE_ID || "(default)";
 const emulatorHost = process.env.FIRESTORE_EMULATOR_HOST;
 
+declare global {
+  var globalAdminDb: admin.firestore.Firestore | undefined;
+  var globalAdminAuth: admin.auth.Auth | undefined;
+}
+
 if (!admin.apps.length) {
   try {
     // Se o emulator está ativo, usa ADC simples (emulator ignora credenciais)
@@ -22,14 +27,35 @@ if (!admin.apps.length) {
   }
 }
 
-// Aponta para o banco nomeado se FIRESTORE_DATABASE_ID estiver definido
-const firestoreInstance = admin.apps.length > 0
-  ? admin.firestore()
-  : null;
+let dbInstance: admin.firestore.Firestore | null = null;
+let authInstance: admin.auth.Auth | null = null;
 
-if (firestoreInstance && databaseId !== "(default)") {
-  firestoreInstance.settings({ databaseId });
+if (admin.apps.length > 0) {
+  if (process.env.NODE_ENV !== 'production') {
+    if (!globalThis.globalAdminDb) {
+      const firestoreInstance = admin.firestore();
+      if (databaseId !== "(default)") {
+        firestoreInstance.settings({ databaseId });
+      }
+      globalThis.globalAdminDb = firestoreInstance;
+    }
+    if (!globalThis.globalAdminAuth) {
+      globalThis.globalAdminAuth = admin.auth();
+    }
+    dbInstance = globalThis.globalAdminDb;
+    authInstance = globalThis.globalAdminAuth;
+  } else {
+    dbInstance = admin.firestore();
+    if (databaseId !== "(default)") {
+      try {
+        dbInstance.settings({ databaseId });
+      } catch (e) {
+        console.warn("Could not set database settings in production:", e);
+      }
+    }
+    authInstance = admin.auth();
+  }
 }
 
-export const adminAuth = admin.apps.length > 0 ? admin.auth() : null;
-export const adminDb = firestoreInstance;
+export const adminAuth = authInstance;
+export const adminDb = dbInstance;
