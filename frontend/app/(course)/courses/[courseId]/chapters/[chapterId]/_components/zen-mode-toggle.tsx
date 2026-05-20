@@ -28,7 +28,7 @@ export const ZenModeToggle = () => {
       variant="ghost"
       size="sm"
       className={cn(
-        "flex items-center gap-x-2 transition-all hover:bg-slate-200",
+        "flex items-center gap-x-2 text-slate-700 transition-all hover:bg-slate-200 dark:text-slate-200 dark:hover:bg-slate-800",
         isZen && "text-sky-700 bg-sky-100"
       )}
     >

@@ -14,6 +14,8 @@ interface CourseProgressButtonProps {
   courseId: string;
   isCompleted?: boolean;
   nextChapterId?: string;
+  onProgressChange?: (isCompleted: boolean) => void;
+  showConfettiOnComplete?: boolean;
 
 }
 export const CourseProgressButton = ({
@@ -21,6 +23,8 @@ export const CourseProgressButton = ({
   courseId,
   isCompleted,
   nextChapterId,
+  onProgressChange,
+  showConfettiOnComplete = true,
 }: CourseProgressButtonProps) => {
 
   const router = useRouter();
@@ -29,24 +33,26 @@ export const CourseProgressButton = ({
   const onClick = async () => {
     try {
       setIsLoading(true);
+      const nextCompleted = !isCompleted;
       await axios.put(`/api/courses/${courseId}/chapters/${chapterId}/progress`, {
-        isCompleted: !isCompleted
+        isCompleted: nextCompleted
       });
+      onProgressChange?.(nextCompleted);
 
-      if (!isCompleted && !nextChapterId) {
+      if (nextCompleted && !nextChapterId && showConfettiOnComplete) {
         confeti.onOpen();
       }
 
-      if(!isCompleted && nextChapterId) {
+      if(nextCompleted && nextChapterId) {
         router.push(`/courses/${courseId}/chapters/${nextChapterId}`)
       }
 
-      toast.success("Progress updated!");
+      toast.success("Progresso atualizado");
       router.refresh();
 
 
     } catch {
-      toast.error("Something went wrong!")
+      toast.error("Ocorreu um erro ao atualizar o progresso")
     }finally{
       setIsLoading(false);
     }
@@ -62,7 +68,7 @@ export const CourseProgressButton = ({
       variant={isCompleted ? "outline" : "success"}
       className="w-full md:w-auto"
     >
-      {isCompleted ? "Not Completed" : "Mark as completed"}
+      {isCompleted ? "Marcar como não concluída" : "Marcar como concluída"}
       <Icon className="h-4 w-4 ml-2" />
     </Button>
   )

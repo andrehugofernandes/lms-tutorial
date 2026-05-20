@@ -4,7 +4,10 @@ import inspect
 from queue import Empty, Queue
 from typing import Any, Callable, Iterator, Optional
 
-from utils_async_runner import AsyncLoopRunner
+try:
+    from .utils_async_runner import AsyncLoopRunner
+except ImportError:  # pragma: no cover - legacy direct execution
+    from utils_async_runner import AsyncLoopRunner
 
 _SENTINEL = object()
 

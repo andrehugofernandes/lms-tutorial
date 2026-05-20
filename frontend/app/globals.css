@@ -86,3 +86,55 @@ body,
 .ql-container {
   font-size: 16px !important;
 }
+
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) .bg-\[\#000000\] {
+  background-color: #f8fafc;
+}
+
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) .bg-\[\#0B0B0B\],
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) .bg-\[\#111111\],
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) .bg-\[\#181818\],
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) .bg-black {
+  background-color: #ffffff;
+}
+
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) .bg-\[\#242424\] {
+  background-color: #e2e8f0;
+}
+
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) .border-\[\#242424\],
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) .border-\[\#333333\] {
+  border-color: #e2e8f0;
+}
+
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) .text-white,
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) .text-\[\#D4D4D8\] {
+  color: #0f172a;
+}
+
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) .text-\[\#B5B5B5\],
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) .text-\[\#A1A1AA\],
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) .text-\[\#7A7A7A\] {
+  color: #475569;
+}
+
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) input.bg-black,
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) select.bg-black,
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) textarea.bg-black {
+  background-color: #ffffff;
+  color: #0f172a;
+}
+
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) .hover\:bg-\[\#111111\]:hover,
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) .hover\:bg-\[\#181818\]:hover {
+  background-color: #f8fafc;
+}
+
+html:not(.dark) :is(.teacher-chapter-page, .teacher-course-page) .hover\:text-white:hover {
+  color: #0f172a;
+}

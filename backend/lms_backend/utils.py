@@ -1,3 +1,4 @@
+import random
 from datetime import datetime
 
 from .models import (
@@ -6,6 +7,7 @@ from .models import (
     Category,
     Chapter,
     Course,
+    ForumPost,
     MuxData,
     Option,
     Profile,
@@ -71,7 +73,16 @@ def serialize_option(option: Option, include_correct: bool = True) -> dict:
     return payload
 
 
-def serialize_question(question: Question, include_correct: bool = True) -> dict:
+def serialize_question(
+    question: Question,
+    include_correct: bool = True,
+    shuffle_options: bool = False,
+) -> dict:
+    options = sorted(question.options, key=lambda item: item.createdAt or datetime.utcnow())
+    if shuffle_options:
+        options = options[:]
+        random.shuffle(options)
+
     return {
         "id": question.id,
         "quizId": question.quizId,
@@ -80,24 +91,38 @@ def serialize_question(question: Question, include_correct: bool = True) -> dict
         "isBonus": question.isBonus,
         "bonusPoints": question.bonusPoints,
         "pointWeight": question.pointWeight,
-        "options": [serialize_option(option, include_correct) for option in sorted(question.options, key=lambda item: item.createdAt or datetime.utcnow())],
+        "options": [serialize_option(option, include_correct) for option in options],
     }
 
 
 def serialize_quiz(quiz: Quiz | None, include_correct: bool = True) -> dict | None:
     if not quiz:
         return None
+    questions = sorted(quiz.questions, key=lambda item: item.position)
+    should_shuffle_for_student = quiz.shuffleQuestions and not include_correct
+    if should_shuffle_for_student:
+        questions = questions[:]
+        random.shuffle(questions)
+
     return {
         "id": quiz.id,
         "chapterId": quiz.chapterId,
         "isPublished": quiz.isPublished,
         "isRequired": quiz.isRequired,
+        "shuffleQuestions": quiz.shuffleQuestions,
         "maxQuestions": quiz.maxQuestions,
         "passingScore": quiz.passingScore,
         "timeLimit": quiz.timeLimit,
         "createdAt": iso(quiz.createdAt),
         "updatedAt": iso(quiz.updatedAt),
-        "questions": [serialize_question(question, include_correct) for question in sorted(quiz.questions, key=lambda item: item.position)],
+        "questions": [
+            serialize_question(
+                question,
+                include_correct,
+                shuffle_options=should_shuffle_for_student,
+            )
+            for question in questions
+        ],
     }
 
 
@@ -114,7 +139,12 @@ def serialize_progress(progress: UserProgress | None) -> dict | None:
     }
 
 
-def serialize_chapter(chapter: Chapter, include_relations: bool = False, progress_map: dict | None = None) -> dict:
+def serialize_chapter(
+    chapter: Chapter,
+    include_relations: bool = False,
+    progress_map: dict | None = None,
+    include_transcript: bool = True,
+) -> dict:
     payload = {
         "id": chapter.id,
         "title": chapter.title,
@@ -125,7 +155,6 @@ def serialize_chapter(chapter: Chapter, include_relations: bool = False, progres
         "externalUrl": chapter.externalUrl,
         "embedUrl": chapter.embedUrl,
         "videoProvider": chapter.videoProvider.value if chapter.videoProvider else None,
-        "transcript": chapter.transcript,
         "transcriptStatus": chapter.transcriptStatus.value if chapter.transcriptStatus else None,
         "position": chapter.position,
         "isPublished": chapter.isPublished,
@@ -134,6 +163,8 @@ def serialize_chapter(chapter: Chapter, include_relations: bool = False, progres
         "createdAt": iso(chapter.createdAt),
         "updatedAt": iso(chapter.updatedAt),
     }
+    if include_transcript:
+        payload["transcript"] = chapter.transcript
     if include_relations:
         payload["muxData"] = serialize_mux_data(chapter.muxData)
         payload["quiz"] = serialize_quiz(chapter.quiz, include_correct=True) if chapter.quiz else None
@@ -173,6 +204,24 @@ def serialize_note(note: UserNote) -> dict:
         "timestamp": note.timestamp,
         "createdAt": iso(note.createdAt),
         "updatedAt": iso(note.updatedAt),
+    }
+
+
+def serialize_forum_post(
+    post: ForumPost,
+    author_name: str | None = None,
+    current_user_id: str | None = None,
+) -> dict:
+    return {
+        "id": post.id,
+        "userId": post.userId,
+        "courseId": post.courseId,
+        "chapterId": post.chapterId,
+        "content": post.content,
+        "authorName": author_name or "Aluno",
+        "isMine": post.userId == current_user_id if current_user_id else False,
+        "createdAt": iso(post.createdAt),
+        "updatedAt": iso(post.updatedAt),
     }
 
 

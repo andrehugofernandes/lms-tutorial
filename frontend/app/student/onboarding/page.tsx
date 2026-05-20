@@ -11,6 +11,9 @@ export default async function StudentOnboardingPage() {
 
   await serverApi("/api/profiles/onboard/student", {
     method: "POST",
+    retries: 3,
+    retryDelayMs: 1500,
+    timeoutMs: 30000,
   });
 
   return redirect("/dashboard");

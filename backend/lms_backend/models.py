@@ -168,6 +168,7 @@ class Quiz(db.Model):
     createdAt = db.Column(DateTime, nullable=False, default=datetime.utcnow)
     updatedAt = db.Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
     isRequired = db.Column(Boolean, nullable=False, default=False)
+    shuffleQuestions = db.Column(Boolean, nullable=False, default=False)
     maxQuestions = db.Column(Integer, nullable=False, default=5)
     passingScore = db.Column(Integer, nullable=False, default=70)
     timeLimit = db.Column(Integer)
@@ -298,6 +299,23 @@ class UserNote(db.Model):
     __table_args__ = (Index("UserNote_chapterId_idx", "chapterId"),)
 
 
+class ForumPost(db.Model):
+    __tablename__ = "ForumPost"
+
+    id = db.Column(String, primary_key=True, default=uuid_str)
+    userId = db.Column(String, nullable=False)
+    courseId = db.Column(String, ForeignKey("Course.id", ondelete="CASCADE"), nullable=False)
+    chapterId = db.Column(String, ForeignKey("Chapter.id", ondelete="CASCADE"), nullable=False)
+    content = db.Column(Text, nullable=False)
+    createdAt = db.Column(DateTime, nullable=False, default=datetime.utcnow)
+    updatedAt = db.Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    __table_args__ = (
+        Index("ForumPost_courseId_idx", "courseId"),
+        Index("ForumPost_chapterId_idx", "chapterId"),
+    )
+
+
 class UserStreak(db.Model):
     __tablename__ = "UserStreak"
 
@@ -324,6 +342,15 @@ def ensure_schema() -> None:
         'ALTER TABLE "Chapter" ADD COLUMN IF NOT EXISTS "duration" INTEGER',
         'ALTER TABLE "Chapter" ADD COLUMN IF NOT EXISTS "transcript" TEXT',
         'ALTER TABLE "Chapter" ADD COLUMN IF NOT EXISTS "transcriptStatus" "TranscriptStatus" NOT NULL DEFAULT \'NOT_AVAILABLE\'',
+        """
+        DO $$
+        BEGIN
+          IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'Quiz') THEN
+            ALTER TABLE "Quiz" ADD COLUMN IF NOT EXISTS "shuffleQuestions" BOOLEAN NOT NULL DEFAULT false;
+          END IF;
+        END
+        $$;
+        """,
         """
         CREATE TABLE IF NOT EXISTS "Purchase" (
           "id" TEXT PRIMARY KEY,
@@ -361,6 +388,19 @@ def ensure_schema() -> None:
         )
         """,
         'CREATE INDEX IF NOT EXISTS "UserNote_chapterId_idx" ON "UserNote"("chapterId")',
+        """
+        CREATE TABLE IF NOT EXISTS "ForumPost" (
+          "id" TEXT PRIMARY KEY,
+          "userId" TEXT NOT NULL,
+          "courseId" TEXT NOT NULL REFERENCES "Course"("id") ON DELETE CASCADE,
+          "chapterId" TEXT NOT NULL REFERENCES "Chapter"("id") ON DELETE CASCADE,
+          "content" TEXT NOT NULL,
+          "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+        )
+        """,
+        'CREATE INDEX IF NOT EXISTS "ForumPost_courseId_idx" ON "ForumPost"("courseId")',
+        'CREATE INDEX IF NOT EXISTS "ForumPost_chapterId_idx" ON "ForumPost"("chapterId")',
         """
         CREATE TABLE IF NOT EXISTS "UserStreak" (
           "id" TEXT PRIMARY KEY,

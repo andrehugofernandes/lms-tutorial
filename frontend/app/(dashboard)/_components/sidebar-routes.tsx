@@ -1,5 +1,5 @@
 "use client";
-import { BarChart, BookOpen, Compass, Layout, List, Shield } from "lucide-react";
+import { BarChart, Compass, Layout, List, MessageSquare, Shield, Trophy } from "lucide-react";
 import { usePathname } from "next/navigation";
 import SidebarItem from "./sidebar-item";
 import { useEffect, useState } from "react";
@@ -15,6 +15,16 @@ const studentRoutes = [
     icon: Compass,
     label: "Catálogo",
     href: "/search",
+  },
+  {
+    icon: Trophy,
+    label: "Ranking",
+    href: "/student/ranking",
+  },
+  {
+    icon: MessageSquare,
+    label: "Fórum",
+    href: "/student/forum",
   },
 ];
 

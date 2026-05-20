@@ -11,6 +11,9 @@ export default async function TeacherOnboardingPage() {
 
   await serverApi("/api/profiles/onboard/teacher", {
     method: "POST",
+    retries: 3,
+    retryDelayMs: 1500,
+    timeoutMs: 30000,
   });
 
   redirect("/teacher/courses");

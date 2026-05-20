@@ -1,7 +1,7 @@
 "use client";
 
 import axios from "axios";
-import { Trash } from "lucide-react";
+import { Eye, EyeOff, Trash } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -14,13 +14,13 @@ interface ChapterActionsProps {
   courseId: string;
   chapterId: string;
   isPublished: boolean;
-};
+}
 
 export const ChapterActions = ({
   disabled,
   courseId,
   chapterId,
-  isPublished
+  isPublished,
 }: ChapterActionsProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -31,10 +31,10 @@ export const ChapterActions = ({
 
       if (isPublished) {
         await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}/unpublish`);
-        toast.success("Capítulo despublicado!");
+        toast.success("Capítulo despublicado.");
       } else {
         await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}/publish`);
-        toast.success("Capítulo publicado!");
+        toast.success("Capítulo publicado.");
       }
 
       router.refresh();
@@ -42,50 +42,66 @@ export const ChapterActions = ({
       const message =
         axios.isAxiosError(error) && typeof error.response?.data === "string"
           ? error.response.data
-          : "Algo deu errado";
+          : "Algo deu errado.";
 
       toast.error(message);
     } finally {
       setIsLoading(false);
     }
-  }
-  
+  };
+
   const onDelete = async () => {
     try {
       setIsLoading(true);
 
       await axios.delete(`/api/courses/${courseId}/chapters/${chapterId}`);
 
-      toast.success("Capítulo excluído!");
+      toast.success("Capítulo excluído.");
       router.refresh();
       router.push(`/teacher/courses/${courseId}`);
     } catch (error) {
       const message =
         axios.isAxiosError(error) && typeof error.response?.data === "string"
           ? error.response.data
-          : "Algo deu errado";
+          : "Algo deu errado.";
 
       toast.error(message);
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   return (
-    <div className="flex items-center gap-x-2">
+    <div className="flex items-center gap-3">
       <Button
         onClick={onClick}
         disabled={disabled || isLoading}
         variant="outline"
         size="sm"
+        className="border-[#333333] bg-transparent px-5 text-white hover:border-[#FF9F00] hover:bg-transparent hover:text-white"
       >
-        {isPublished ? "Despublicar" : "Publicar"}
+        {isPublished ? (
+          <>
+            <EyeOff className="mr-2 h-4 w-4" />
+            Despublicar
+          </>
+        ) : (
+          <>
+            <Eye className="mr-2 h-4 w-4" />
+            Publicar
+          </>
+        )}
       </Button>
       <ConfirmModal onConfirm={onDelete}>
-        <Button size="sm" disabled={isLoading}>
+        <Button
+          size="icon"
+          disabled={isLoading}
+          variant="outline"
+          className="border-[#FF4D4D]/40 bg-[#FF4D4D]/10 text-[#FF4D4D] hover:border-[#FF4D4D] hover:bg-[#FF4D4D] hover:text-white"
+        >
           <Trash className="h-4 w-4" />
         </Button>
       </ConfirmModal>
     </div>
-  )
-}
+  );
+};

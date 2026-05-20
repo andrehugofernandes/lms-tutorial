@@ -28,7 +28,7 @@ export const CourseNavbar = ({
         isEnrolled={isEnrolled}
       />
       <div className="hidden md:flex items-center ml-4">
-        <Link href="/search" className="flex items-center text-sm text-slate-400 hover:text-slate-200 transition">
+        <Link href="/search" className="flex items-center text-sm text-slate-600 transition hover:text-slate-950 dark:text-slate-400 dark:hover:text-slate-200">
           <ArrowLeft className="h-4 w-4 mr-2" />
           Voltar para meus cursos
         </Link>

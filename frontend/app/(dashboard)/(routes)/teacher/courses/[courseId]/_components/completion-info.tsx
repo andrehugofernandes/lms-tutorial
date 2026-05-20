@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Info } from "lucide-react";
 
 import {
@@ -21,13 +21,33 @@ interface CompletionInfoProps {
 export const CompletionInfo = ({
   missingFields,
   buttonLabel = "Ver campos pendentes",
-  completeTitle = "Configuracao completa",
-  completeDescription = "Tudo o que e obrigatorio ja foi preenchido.",
+  completeTitle = "Configuração completa",
+  completeDescription = "Tudo o que é obrigatório já foi preenchido.",
   incompleteTitle = "Campos pendentes",
-  incompleteDescription = "Preencha os itens abaixo para concluir esta configuracao.",
+  incompleteDescription = "Preencha os itens abaixo para concluir esta configuração.",
 }: CompletionInfoProps) => {
   const [open, setOpen] = useState(false);
   const isComplete = missingFields.length === 0;
+
+  useEffect(() => {
+    if (!open) return;
+
+    const close = () => setOpen(false);
+    const options: AddEventListenerOptions = {
+      capture: true,
+      passive: true,
+    };
+
+    window.addEventListener("scroll", close, options);
+    window.addEventListener("wheel", close, options);
+    window.addEventListener("touchmove", close, options);
+
+    return () => {
+      window.removeEventListener("scroll", close, options);
+      window.removeEventListener("wheel", close, options);
+      window.removeEventListener("touchmove", close, options);
+    };
+  }, [open]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -35,9 +55,9 @@ export const CompletionInfo = ({
         <button
           type="button"
           aria-label={buttonLabel}
-          className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-300 text-slate-600 transition hover:border-sky-400 hover:text-sky-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2"
-          onMouseEnter={() => setOpen(true)}
-          onMouseLeave={() => setOpen(false)}
+          className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-[#7A7A7A] text-[#A1A1AA] transition hover:border-[#FF9F00] hover:text-[#FF9F00] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF9F00] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+          onPointerEnter={() => setOpen(true)}
+          onPointerLeave={() => setOpen(false)}
           onFocus={() => setOpen(true)}
           onBlur={() => setOpen(false)}
         >
@@ -46,24 +66,25 @@ export const CompletionInfo = ({
       </PopoverTrigger>
       <PopoverContent
         align="start"
-        className="w-80"
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
+        sideOffset={8}
+        className="pointer-events-none w-80 border-[#242424] bg-[#0B0B0B] text-white"
+        onOpenAutoFocus={(event) => event.preventDefault()}
+        onCloseAutoFocus={(event) => event.preventDefault()}
       >
         <div className="space-y-2">
           <div>
-            <p className="text-sm font-semibold text-slate-900">
+            <p className="text-sm font-semibold text-white">
               {isComplete ? completeTitle : incompleteTitle}
             </p>
-            <p className="text-xs text-slate-600">
+            <p className="text-xs text-[#A1A1AA]">
               {isComplete ? completeDescription : incompleteDescription}
             </p>
           </div>
           {!isComplete && (
-            <ul className="space-y-1 text-sm text-slate-700">
+            <ul className="space-y-1 text-sm text-[#D4D4D8]">
               {missingFields.map((field) => (
                 <li key={field} className="flex items-start gap-2">
-                  <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500" />
+                  <span className="mt-1 h-1.5 w-1.5 rounded-full bg-[#FF9F00]" />
                   <span>{field}</span>
                 </li>
               ))}

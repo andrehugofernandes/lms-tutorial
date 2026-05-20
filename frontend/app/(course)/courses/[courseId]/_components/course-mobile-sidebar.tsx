@@ -9,6 +9,7 @@ interface CourseMobileSidebarProps {
   course: Course & {
     chapters: (Chapter & {
       userProgress: UserProgress[] | null;
+      isLocked?: boolean;
     })[];
   };
   progressCount: number;
@@ -25,7 +26,7 @@ export const CourseMobileSidebar = ({
       <SheetTrigger className="md:hidden pr-4 opacity-75 transition">
         <Menu size={32} />
       </SheetTrigger>
-      <SheetContent side="left" className="p-0 bg-white w-72">
+      <SheetContent side="left" className="w-72 border-slate-200 bg-white p-0 text-slate-900 dark:border-[#222] dark:bg-[#0a0a0a] dark:text-slate-200">
         <CourseSidebar
           course={course}
           progressCount={progressCount}
