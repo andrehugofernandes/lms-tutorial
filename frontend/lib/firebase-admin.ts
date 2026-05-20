@@ -35,7 +35,11 @@ if (admin.apps.length > 0) {
     if (!globalThis.globalAdminDb) {
       const firestoreInstance = admin.firestore();
       if (databaseId !== "(default)") {
-        firestoreInstance.settings({ databaseId });
+        try {
+          firestoreInstance.settings({ databaseId });
+        } catch (e) {
+          console.warn("Could not set database settings in development:", e);
+        }
       }
       globalThis.globalAdminDb = firestoreInstance;
     }
