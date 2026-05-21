@@ -162,7 +162,7 @@ def start_transcription(chapter_id: str, video_provider: VideoProviderEnum | Non
                     video_id,
                     languages=["pt", "pt-BR", "en"],
                 )
-                transcript_text = " ".join(chunk["text"] for chunk in transcript)
+                transcript_text = " ".join(chunk.text if hasattr(chunk, "text") else chunk["text"] for chunk in transcript)
                 
                 chapter_ref.update({
                     "transcript": transcript_text,

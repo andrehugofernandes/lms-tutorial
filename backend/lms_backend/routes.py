@@ -907,7 +907,16 @@ def list_notes(course_id: str, chapter_id: str):
 @api_bp.get("/courses/<course_id>/leaderboard")
 def course_leaderboard(course_id: str):
     user = require_user()
-    course = Course.query.filter_by(id=course_id, isPublished=True).first()
+    course_doc = fdb.collection('courses').document(course_id).get()
+    if not course_doc.exists:
+        return text_response("Course not found", 404)
+    course = course_doc.to_dict()
+    course["id"] = course_doc.id
+    
+    # Restrict to published unless the user is the course creator
+    if not course.get("isPublished") and course.get("userId") != user["userId"]:
+        return text_response("Course not found", 404)
+
     if not can_access_course(user["userId"], course):
         return text_response("Course not found", 404)
 
@@ -1533,20 +1542,27 @@ def create_question(quiz_id: str):
 
 @api_bp.post("/quiz/<quiz_id>/questions/regenerate")
 def regenerate_questions(quiz_id: str):
+    from datetime import timedelta
     user = require_user()
-    quiz = (
-        Quiz.query.options(
-            joinedload(Quiz.chapter).joinedload(Chapter.course),
-            joinedload(Quiz.questions).joinedload(Question.options),
-        )
-        .filter_by(id=quiz_id)
-        .first()
-    )
-    if not quiz or quiz.chapter.course.userId != user["userId"]:
+    quiz_doc = fdb.collection('quizzes').document(quiz_id).get()
+    if not quiz_doc.exists:
         return text_response("Unauthorized", 401)
+    quiz = quiz_doc.to_dict()
+    quiz["id"] = quiz_doc.id
 
-    chapter = quiz.chapter
-    if chapter.transcriptStatus == TranscriptStatusEnum.PROCESSING:
+    chapter_doc = fdb.collection('chapters').document(quiz["chapterId"]).get()
+    if not chapter_doc.exists:
+        return text_response("Unauthorized", 401)
+    chapter = chapter_doc.to_dict()
+    chapter["id"] = chapter_doc.id
+
+    course_doc = fdb.collection('courses').document(chapter["courseId"]).get()
+    if not course_doc.exists or course_doc.to_dict().get("userId") != user["userId"]:
+        return text_response("Unauthorized", 401)
+    course = course_doc.to_dict()
+    course["id"] = course_doc.id
+
+    if chapter.get("transcriptStatus") == TranscriptStatusEnum.PROCESSING:
         return jsonify(
             transcript_status_payload(
                 chapter,
@@ -1555,10 +1571,12 @@ def regenerate_questions(quiz_id: str):
             )
         ), 202
 
-    if not chapter.transcript and chapter.videoProvider == VideoProviderEnum.YOUTUBE:
-        chapter.transcriptStatus = TranscriptStatusEnum.PROCESSING
-        db.session.commit()
-        start_transcription(chapter.id, chapter.videoProvider, chapter.externalUrl)
+    if not chapter.get("transcript") and chapter.get("videoProvider") == VideoProviderEnum.YOUTUBE:
+        fdb.collection('chapters').document(chapter["id"]).update({
+            "transcriptStatus": TranscriptStatusEnum.PROCESSING
+        })
+        chapter["transcriptStatus"] = TranscriptStatusEnum.PROCESSING
+        start_transcription(chapter["id"], chapter.get("videoProvider"), chapter.get("externalUrl"))
         return jsonify(
             transcript_status_payload(
                 chapter,
@@ -1567,7 +1585,7 @@ def regenerate_questions(quiz_id: str):
             )
         ), 202
 
-    transcript = (chapter.transcript or "").strip()
+    transcript = (chapter.get("transcript") or "").strip()
     if not transcript:
         return text_response(
             "Este capitulo ainda nao tem transcricao disponivel. Informe um link do YouTube com legenda/transcricao ou adicione conteudo antes de gerar com IA.",
@@ -1579,7 +1597,16 @@ def regenerate_questions(quiz_id: str):
     if not isinstance(items, list) or not items:
         return text_response("Informe ao menos uma pergunta para regenerar", 400)
 
-    questions_by_id = {question.id: question for question in quiz.questions}
+    # Load existing questions and options
+    existing_questions = fdb.collection('questions').where('quizId', '==', quiz_id).get()
+    questions_by_id = {}
+    for q_doc in existing_questions:
+        q_data = q_doc.to_dict()
+        q_data["id"] = q_doc.id
+        o_docs = fdb.collection('options').where('questionId', '==', q_doc.id).get()
+        q_data["options"] = [{**o.to_dict(), "id": o.id} for o in o_docs]
+        questions_by_id[q_doc.id] = q_data
+
     generation_requests = []
     target_questions = []
 
@@ -1592,15 +1619,15 @@ def regenerate_questions(quiz_id: str):
 
         generation_requests.append(
             {
-                "questionId": question.id,
-                "prompt": question.prompt,
+                "questionId": question["id"],
+                "prompt": question.get("prompt"),
                 "options": [
-                    {"text": option.text, "isCorrect": option.isCorrect}
-                    for option in question.options
+                    {"text": option["text"], "isCorrect": option.get("isCorrect")}
+                    for option in question.get("options", [])
                 ],
-                "pointWeight": question.pointWeight,
-                "isBonus": question.isBonus,
-                "bonusPoints": question.bonusPoints,
+                "pointWeight": question.get("pointWeight"),
+                "isBonus": question.get("isBonus"),
+                "bonusPoints": question.get("bonusPoints"),
                 "suggestion": item.get("suggestion"),
                 "useDefaultConfig": bool(item.get("useDefaultConfig")),
                 "focusContentOverSuggestion": bool(item.get("focusContentOverSuggestion")),
@@ -1612,9 +1639,9 @@ def regenerate_questions(quiz_id: str):
         return text_response("Nenhuma pergunta valida foi enviada", 400)
 
     context = f"""
-Titulo do Curso: {quiz.chapter.course.title}
-Titulo do Capitulo: {chapter.title}
-Descricao do Capitulo: {chapter.description or 'Sem descricao'}
+Titulo do Curso: {course.get("title")}
+Titulo do Capitulo: {chapter.get("title")}
+Descricao do Capitulo: {chapter.get("description", "Sem descricao")}
 
 CONTEUDO DO VIDEO (Transcricao):
 {transcript}
@@ -1622,7 +1649,6 @@ CONTEUDO DO VIDEO (Transcricao):
     try:
         generated_questions = generate_replacement_questions(context, generation_requests)
     except Exception as error:
-        db.session.rollback()
         return text_response(f"Erro ao gerar perguntas com IA: {error}", 502)
 
     for question_payload in generated_questions:
@@ -1640,37 +1666,49 @@ CONTEUDO DO VIDEO (Transcricao):
                 502,
             )
 
-    for question, question_payload in zip(target_questions, generated_questions):
-        question.prompt = question_payload["prompt"]
-        question.pointWeight = float(question_payload.get("pointWeight") or 1.0)
-        question.isBonus = bool(question_payload.get("isBonus"))
-        question.bonusPoints = question_payload.get("bonusPoints")
-        Option.query.filter_by(questionId=question.id).delete()
-        db.session.flush()
-        for option_payload in question_payload.get("options", []):
-            db.session.add(
-                Option(
-                    questionId=question.id,
-                    text=option_payload["text"],
-                    isCorrect=bool(option_payload.get("isCorrect")),
-                )
-            )
+    refreshed_questions = []
+    base_time = datetime.utcnow()
+    batch = fdb.batch()
 
-    db.session.commit()
-    db.session.expire_all()
-    refreshed = (
-        Question.query.options(selectinload(Question.options))
-        .populate_existing()
-        .filter(Question.id.in_([question.id for question in target_questions]))
-        .all()
-    )
-    refreshed_by_id = {question.id: question for question in refreshed}
+    for q_idx, (question, question_payload) in enumerate(zip(target_questions, generated_questions)):
+        q_ref = fdb.collection('questions').document(question["id"])
+        updated_fields = {
+            "prompt": question_payload["prompt"],
+            "pointWeight": float(question_payload.get("pointWeight") or 1.0),
+            "isBonus": bool(question_payload.get("isBonus")),
+            "bonusPoints": question_payload.get("bonusPoints")
+        }
+        batch.update(q_ref, updated_fields)
+        question.update(updated_fields)
+
+        # Delete existing options
+        for option in question.get("options", []):
+            opt_ref = fdb.collection('options').document(option["id"])
+            batch.delete(opt_ref)
+
+        # Create new options
+        new_options = []
+        for o_idx, option_payload in enumerate(question_payload.get("options", [])):
+            opt_ref = fdb.collection('options').document()
+            opt_data = {
+                "questionId": question["id"],
+                "text": option_payload["text"],
+                "isCorrect": bool(option_payload.get("isCorrect")),
+                "createdAt": base_time + timedelta(seconds=q_idx * 10 + o_idx)
+            }
+            batch.set(opt_ref, opt_data)
+            new_options.append({**opt_data, "id": opt_ref.id})
+
+        question["options"] = new_options
+        refreshed_questions.append(question)
+
+    batch.commit()
+
     return jsonify(
         {
             "questions": [
-                serialize_question(refreshed_by_id[question.id])
-                for question in target_questions
-                if question.id in refreshed_by_id
+                serialize_question(question)
+                for question in refreshed_questions
             ]
         }
     )
@@ -2130,7 +2168,28 @@ def meta_teacher_course(course_id: str):
     
     # Load chapters
     chap_docs = fdb.collection('chapters').where('courseId', '==', course_id).order_by('position').get()
-    payload["chapters"] = [serialize_chapter({**d.to_dict(), "id": d.id}, include_relations=True) for d in chap_docs]
+    
+    # Pre-load quizzes for these chapters to set on serialized payload
+    chapter_ids = [d.id for d in chap_docs]
+    quizzes_by_chapter = {}
+    if chapter_ids:
+        chunk_size = 10
+        for i in range(0, len(chapter_ids), chunk_size):
+            chunk = chapter_ids[i:i + chunk_size]
+            quiz_docs = fdb.collection('quizzes').where('chapterId', 'in', chunk).get()
+            for q_doc in quiz_docs:
+                q_data = q_doc.to_dict()
+                q_data["id"] = q_doc.id
+                quizzes_by_chapter[q_data["chapterId"]] = q_data
+
+    chapters_list = []
+    for d in chap_docs:
+        ch_dict = d.to_dict()
+        ch_dict["id"] = d.id
+        ch_dict["quiz"] = quizzes_by_chapter.get(d.id)
+        chapters_list.append(serialize_chapter(ch_dict, include_relations=True))
+        
+    payload["chapters"] = chapters_list
     
     # Load attachments
     att_docs = fdb.collection('attachments').where('courseId', '==', course_id).order_by('createdAt', direction=firestore.Query.DESCENDING).get()
