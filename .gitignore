@@ -32,10 +32,33 @@ yarn-error.log*
 
 # vercel
 .vercel
-/backend/__pycache__/
-/backend/.venv/
 /frontend/.turbo/
+
+# Python caches and compiles
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Python virtual environments
+backend/venv/
+venv/
+.venv/
+
+# Firebase / Firestore logs and exports
+*.log
+firestore-debug.log
+/firestore-export/
+
+# Agent / Scratch files
+.agents/
+/scratch/
+skills-lock.json
+
+# Unwanted local package locks
+frontend/package-lock.json
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
