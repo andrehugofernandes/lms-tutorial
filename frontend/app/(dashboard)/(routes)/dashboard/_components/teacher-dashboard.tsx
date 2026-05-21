@@ -15,6 +15,10 @@ import {
 import Link from "next/link";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale/pt-BR";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 import { Button } from "@/components/ui/button";
 import { InfoCard } from "./info-card";
@@ -26,6 +30,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 interface TeacherDashboardProps {
   courses: any[];
@@ -41,6 +54,32 @@ export const TeacherDashboard = ({
   courses,
   stats
 }: TeacherDashboardProps) => {
+  const router = useRouter();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [categoryName, setCategoryName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleCreateCategory = async () => {
+    try {
+      setIsLoading(true);
+      if (!categoryName.trim()) {
+        toast.error("O nome da categoria não pode ser vazio.");
+        return;
+      }
+      await axios.post("/api/categories", {
+        name: categoryName.trim(),
+      });
+      toast.success("Nova categoria criada com sucesso!");
+      setCategoryName("");
+      setIsDialogOpen(false);
+      router.refresh();
+    } catch (error) {
+      toast.error("Erro ao criar categoria.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="p-6 space-y-8 max-w-[1400px] mx-auto min-h-screen">
       {/* Header Section */}
@@ -56,10 +95,49 @@ export const TeacherDashboard = ({
                Novo Curso
             </Button>
            </Link>
-           <Button variant="outline" className="rounded-full font-bold border-border text-foreground hover:bg-card">
-              <List className="h-5 w-5 mr-2" />
-              Nova Categoria
-           </Button>
+           
+           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                 <Button variant="outline" className="rounded-full font-bold border-border text-foreground hover:bg-card">
+                    <List className="h-5 w-5 mr-2" />
+                    Nova Categoria
+                 </Button>
+              </DialogTrigger>
+              <DialogContent className="bg-[#111111] border-border/50 text-white rounded-3xl max-w-md shadow-2xl">
+                 <DialogHeader>
+                    <DialogTitle className="text-2xl font-bold uppercase tracking-tight text-white">Nova Categoria</DialogTitle>
+                 </DialogHeader>
+                 <div className="space-y-4 py-4">
+                    <p className="text-muted-foreground font-medium text-sm">
+                       Crie uma nova categoria para organizar seus cursos.
+                    </p>
+                    <Input
+                       placeholder="Ex.: Desenvolvimento Web, Marketing, Design..."
+                       value={categoryName}
+                       onChange={(e) => setCategoryName(e.target.value)}
+                       className="border-[#333333] bg-black text-white placeholder:text-[#7A7A7A] focus-visible:ring-primary rounded-xl py-6"
+                       disabled={isLoading}
+                    />
+                 </div>
+                 <DialogFooter className="gap-y-2 sm:gap-y-0">
+                    <Button
+                       variant="ghost"
+                       onClick={() => setIsDialogOpen(false)}
+                       disabled={isLoading}
+                       className="text-[#B5B5B5] hover:bg-[#181818] hover:text-white rounded-full font-bold px-6"
+                    >
+                       Cancelar
+                    </Button>
+                    <Button
+                       onClick={handleCreateCategory}
+                       disabled={isLoading || !categoryName.trim()}
+                       className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-full px-6 shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+                    >
+                       Criar Categoria
+                    </Button>
+                 </DialogFooter>
+              </DialogContent>
+           </Dialog>
         </div>
       </div>
 
