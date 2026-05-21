@@ -10,6 +10,10 @@ export const registerUser = async (values: any) => {
             return { error: "Campos obrigatórios ausentes" };
         }
 
+        if (!adminDb) {
+            return { error: "Banco de dados indisponível" };
+        }
+
         const userQuery = await adminDb.collection("users").where("email", "==", email).limit(1).get();
         if (!userQuery.empty) {
             return { error: "Usuário já existe" };
