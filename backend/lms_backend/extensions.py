@@ -20,11 +20,15 @@ if not firebase_admin._apps:
         firebase_admin.initialize_app()
         print("DEBUG: firebase_admin.initialize_app called (production)")
 
+from google.cloud import firestore as gc_firestore
+
 print("DEBUG: Getting firestore client...")
 db_id = os.environ.get("FIRESTORE_DATABASE_ID", "(default)")
+project_id = os.environ.get("NEXT_PUBLIC_FIREBASE_PROJECT_ID", "demo-project")
+
 if db_id and db_id != "(default)":
     print(f"DEBUG: Using named database: {db_id}")
-    fdb = firestore.client(database=db_id)
+    fdb = gc_firestore.Client(project=project_id, database=db_id)
 else:
     fdb = firestore.client()
 print("DEBUG: firestore client obtained")
