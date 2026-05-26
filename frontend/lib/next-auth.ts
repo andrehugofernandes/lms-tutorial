@@ -6,7 +6,7 @@ import { adminDb } from "./firebase-admin";
 
 export const authOptions: NextAuthOptions = {
   // @ts-ignore
-  adapter: FirestoreAdapter(adminDb),
+  adapter: adminDb ? FirestoreAdapter(adminDb) : undefined,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
