@@ -19,6 +19,13 @@
       "indexes": "firestore.indexes.json"
     }
   ],
+  "functions": [
+    {
+      "source": "backend",
+      "codebase": "backend",
+      "runtime": "python311"
+    }
+  ],
   "apphosting": [
     {
       "backendId": "lms-frontend",
