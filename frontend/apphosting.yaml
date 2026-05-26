@@ -11,6 +11,12 @@ env:
       - BUILD
       - RUNTIME
 
+  - variable: NEXT_PUBLIC_AUTH_PROVIDER
+    value: nextauth
+    availability:
+      - BUILD
+      - RUNTIME
+
   - variable: NEXTAUTH_URL
     value: https://lms-frontend--pmjg-apps-hmol.us-east4.hosted.app
     availability:
