@@ -2,10 +2,6 @@
 # See https://firebase.google.com/docs/app-hosting/configure#cloud-run
 runConfig:
   minInstances: 0
-  # maxInstances: 100
-  # concurrency: 80
-  # cpu: 1
-  # memoryMiB: 512
 
 # Environment variables and secrets.
 env:
@@ -15,3 +11,25 @@ env:
       - BUILD
       - RUNTIME
 
+  - variable: NEXTAUTH_URL
+    value: https://lms-frontend--pmjg-apps-hmol.us-east4.hosted.app
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXTAUTH_SECRET
+    secret: NEXTAUTH_SECRET
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: pmjg-apps-hmol
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: FIRESTORE_DATABASE_ID
+    value: db-lms-project
+    availability:
+      - RUNTIME
