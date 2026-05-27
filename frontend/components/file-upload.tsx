@@ -188,7 +188,7 @@ const FileUpload = ({
               : "text-muted-foreground",
             button: hasImagePreview
               ? "hidden"
-              : "ut-ready:bg-primary ut-uploading:bg-muted bg-primary after:bg-primary/80 rounded-md px-4 py-2 text-primary-foreground font-medium min-w-[160px]",
+              : "ut-ready:bg-primary ut-ready:text-[#0e0e0e] ut-uploading:bg-muted bg-primary after:bg-primary/80 rounded-md px-4 py-2 text-[#0e0e0e] font-medium min-w-[160px]",
             label: hasImagePreview
               ? "hidden"
               : "text-primary hover:text-primary/80 font-semibold mb-2 text-center",
