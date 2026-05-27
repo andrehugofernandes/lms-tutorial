@@ -97,9 +97,9 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
   };
 
   return (
-    <div className="border-b border-[#242424] p-6">
+    <div className="border-b border-border p-6">
       <div className="mb-4 flex items-center justify-between gap-4">
-        <p className="text-sm font-semibold text-[#B5B5B5]">
+        <p className="text-sm font-semibold text-muted-foreground">
           Imagem do curso
         </p>
         {hasPersistedImage && (
@@ -107,13 +107,13 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
             onClick={toggleEdit}
             variant="outline"
             disabled={isSaving}
-            className="border-[#FF9F00]/60 bg-[#111111] text-white hover:border-[#FF9F00] hover:bg-[#181818] hover:text-white"
+            className="border-primary/50 bg-background text-foreground hover:border-primary hover:bg-muted hover:text-foreground"
           >
             {isEditing ? (
               <>Cancelar</>
             ) : (
               <>
-                <Pencil className="mr-2 h-4 w-4 text-[#FF9F00]" />
+                <Pencil className="mr-2 h-4 w-4 text-primary" />
                 Trocar capa
               </>
             )}
@@ -123,7 +123,7 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
 
       {!isEditing && hasPersistedImage ? (
         <div
-          className="relative mt-2 overflow-hidden rounded-lg border border-[#333333] bg-black"
+          className="relative mt-2 overflow-hidden rounded-lg border border-border bg-muted"
           style={{ aspectRatio: imageAspectRatio }}
         >
           <Image
@@ -163,7 +163,7 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
             }}
           />
 
-          <div className="mt-4 text-center text-xs text-[#A1A1AA]">
+          <div className="mt-4 text-center text-xs text-muted-foreground">
             {isSaving
               ? "Salvando imagem do curso..."
               : COURSE_IMAGE_RATIO_HELPER_TEXT}

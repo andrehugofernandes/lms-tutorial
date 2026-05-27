@@ -70,12 +70,12 @@ export const ChaptersList = ({
               <Draggable key={chapter.id} draggableId={chapter.id} index={index}>
                 {(provided) => (
                   <div
-                    className="mb-3 flex items-center gap-x-3 rounded-lg border border-[#333333] bg-black px-4 py-3 text-sm text-white transition hover:border-[#FF9F00]/60"
+                    className="mb-3 flex items-center gap-x-3 rounded-lg border border-border bg-background px-4 py-3 text-sm text-foreground transition hover:border-primary/60"
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                   >
                     <div
-                      className="rounded-md p-1 text-[#A1A1AA] transition hover:bg-[#181818] hover:text-white"
+                      className="rounded-md p-1 text-muted-foreground transition hover:bg-muted hover:text-foreground"
                       {...provided.dragHandleProps}
                     >
                       <Grip className="h-5 w-5" />
@@ -85,28 +85,28 @@ export const ChaptersList = ({
                     </span>
                     <div className="ml-auto flex items-center gap-x-2">
                       {chapter.isFree && (
-                        <Badge className="border-none bg-[#FF9F00] text-black hover:bg-[#FF9F00]">
+                        <Badge className="border-none bg-primary text-primary-foreground hover:bg-primary">
                           Free
                         </Badge>
                       )}
                       {(chapter as any).quiz && (
-                        <Badge className="border border-[#FF9F00]/40 bg-[#FF9F00]/10 text-[#FF9F00] hover:bg-[#FF9F00]/10">
+                        <Badge className="border border-primary/40 bg-primary/10 text-primary hover:bg-primary/10">
                           <Gamepad2 className="mr-1 h-3 w-3" />
                           Quiz
                         </Badge>
                       )}
                       <Badge
                         className={cn(
-                          "border border-[#7A7A7A]/40 bg-[#242424] text-[#B5B5B5] hover:bg-[#242424]",
+                          "border border-border bg-muted text-muted-foreground hover:bg-muted",
                           chapter.isPublished &&
-                            "border-[#0066B3]/50 bg-[#0066B3]/20 text-sky-300 hover:bg-[#0066B3]/20"
+                            "border-sky-500/50 bg-sky-500/10 text-sky-700 hover:bg-sky-500/10 dark:text-sky-300"
                         )}
                       >
                         {chapter.isPublished ? "Publicado" : "Rascunho"}
                       </Badge>
                       <Pencil
                         onClick={() => onEdit(chapter.id)}
-                        className="h-4 w-4 cursor-pointer text-[#B5B5B5] transition hover:text-[#FF9F00]"
+                        className="h-4 w-4 cursor-pointer text-muted-foreground transition hover:text-primary"
                       />
                     </div>
                   </div>

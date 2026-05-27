@@ -3,12 +3,14 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils"
 
 const bannerVariants = cva(
-  "border text-center p-4 text-sm flex items-center w-full", 
+  "flex w-full items-center border px-4 py-3 text-sm font-medium",
   {
     variants:{
       variant: {
-        warning: "bg-yellow-200/80 border-yellow-30 text-primary",
-        success: "bg-emerald-700 border-emerald-800 text-white",
+        warning:
+          "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200",
+        success:
+          "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-200",
       }
     },
     defaultVariants: {

@@ -105,7 +105,7 @@ const FileUpload = ({
           type="button"
           onClick={openFileDialog}
           disabled={disabled}
-          className="absolute -top-12 right-0 z-30 inline-flex items-center gap-2 rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 disabled:pointer-events-none disabled:opacity-50"
+          className="absolute -top-12 right-0 z-30 inline-flex items-center gap-2 rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-sm transition hover:bg-muted disabled:pointer-events-none disabled:opacity-50"
         >
           <Pencil className="h-4 w-4" />
           Escolher outra capa
@@ -119,7 +119,7 @@ const FileUpload = ({
         {hasImagePreview && (
           <NextImage
             alt="Preview da imagem selecionada"
-            className="absolute inset-0 h-full w-full rounded-lg bg-white object-contain"
+            className="absolute inset-0 h-full w-full rounded-lg bg-muted object-contain"
             fill
             src={previewUrl || ""}
             unoptimized
@@ -182,19 +182,19 @@ const FileUpload = ({
           appearance={{
             container: hasImagePreview
               ? "h-full min-h-0 w-full overflow-hidden rounded-lg border-0 bg-transparent p-0 transition cursor-pointer flex items-center justify-center shadow-none data-[state=disabled]:cursor-not-allowed data-[state=disabled]:opacity-70"
-              : "w-full min-h-[220px] border-dashed border-2 border-slate-300 rounded-lg p-6 hover:bg-slate-50 transition cursor-pointer flex flex-col items-center justify-center data-[state=uploading]:border-sky-400 data-[state=uploading]:bg-sky-50/50 data-[state=disabled]:cursor-not-allowed data-[state=disabled]:opacity-70",
+              : "w-full min-h-[220px] border-dashed border-2 border-border bg-muted/20 rounded-lg p-6 hover:bg-muted/40 transition cursor-pointer flex flex-col items-center justify-center data-[state=uploading]:border-primary data-[state=uploading]:bg-primary/10 data-[state=disabled]:cursor-not-allowed data-[state=disabled]:opacity-70",
             uploadIcon: hasImagePreview
               ? "hidden"
-              : "text-slate-400",
+              : "text-muted-foreground",
             button: hasImagePreview
               ? "hidden"
-              : "ut-ready:bg-sky-700 ut-uploading:bg-slate-500 bg-sky-700 after:bg-sky-800 rounded-md px-4 py-2 text-white font-medium min-w-[160px]",
+              : "ut-ready:bg-primary ut-uploading:bg-muted bg-primary after:bg-primary/80 rounded-md px-4 py-2 text-primary-foreground font-medium min-w-[160px]",
             label: hasImagePreview
               ? "hidden"
-              : "text-sky-700 hover:text-sky-800 font-semibold mb-2 text-center",
+              : "text-primary hover:text-primary/80 font-semibold mb-2 text-center",
             allowedContent: hasImagePreview
               ? "hidden"
-              : "text-slate-500 text-xs mb-4 text-center",
+              : "text-muted-foreground text-xs mb-4 text-center",
           }}
           content={{
             label: hasImagePreview ? "" : copy.label,
@@ -210,21 +210,21 @@ const FileUpload = ({
       </div>
 
       {selectedFileName && showStatusCard && (
-        <div className="w-full rounded-md border border-slate-200 bg-white p-3 text-left shadow-sm">
+        <div className="w-full rounded-md border border-border bg-card p-3 text-left shadow-sm">
           <div className="flex items-start gap-3">
             {status === "uploading" ? (
               <Loader2 className="mt-0.5 h-4 w-4 flex-shrink-0 animate-spin text-sky-700" />
             ) : status === "complete" ? (
               <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-600" />
             ) : (
-              <FileUp className="mt-0.5 h-4 w-4 flex-shrink-0 text-slate-500" />
+              <FileUp className="mt-0.5 h-4 w-4 flex-shrink-0 text-muted-foreground" />
             )}
 
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium text-slate-800">
+              <p className="truncate text-sm font-medium text-foreground">
                 {selectedFileName}
               </p>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-muted-foreground">
                 {status === "selected" &&
                   "Arquivo selecionado. O upload comeca automaticamente."}
                 {status === "uploading" &&
@@ -237,7 +237,7 @@ const FileUpload = ({
 
           {status === "uploading" && (
             <Progress
-              className="mt-3 h-2 bg-slate-200"
+              className="mt-3 h-2 bg-muted"
               value={uploadProgress}
             />
           )}
@@ -249,9 +249,9 @@ const FileUpload = ({
           className={`rounded-md border px-3 py-2 text-sm ${
             imageMeta.isAccepted
               ? imageMeta.isRecommended
-                ? "border-emerald-200 bg-emerald-50 text-emerald-700"
-                : "border-sky-200 bg-sky-50 text-sky-700"
-              : "border-amber-200 bg-amber-50 text-amber-700"
+                ? "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300"
+                : "border-sky-200 bg-sky-50 text-sky-700 dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-300"
+              : "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300"
           }`}
         >
           <div className="flex items-center gap-2">
@@ -260,9 +260,9 @@ const FileUpload = ({
               className={
                 imageMeta.isAccepted
                   ? imageMeta.isRecommended
-                    ? "border-emerald-300 text-emerald-700"
-                    : "border-sky-300 text-sky-700"
-                  : "border-amber-300 text-amber-700"
+                    ? "border-emerald-300 text-emerald-700 dark:text-emerald-300"
+                    : "border-sky-300 text-sky-700 dark:text-sky-300"
+                  : "border-amber-300 text-amber-700 dark:text-amber-300"
               }
             >
               {imageMeta.isAccepted

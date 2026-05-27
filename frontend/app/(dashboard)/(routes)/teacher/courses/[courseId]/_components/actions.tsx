@@ -79,7 +79,7 @@ export const Actions = ({
         disabled={disabled || isLoading}
         variant="outline"
         size="sm"
-        className="border-[#333333] bg-transparent px-5 text-white hover:border-[#FF9F00] hover:bg-transparent hover:text-white"
+        className="border-border bg-background px-5 text-foreground hover:border-primary hover:bg-muted hover:text-foreground"
       >
         {isPublished ? (
           <>
@@ -98,7 +98,7 @@ export const Actions = ({
           size="icon"
           disabled={isLoading}
           variant="outline"
-          className="border-[#FF4D4D]/40 bg-[#FF4D4D]/10 text-[#FF4D4D] hover:border-[#FF4D4D] hover:bg-[#FF4D4D] hover:text-white"
+          className="border-red-500/40 bg-red-500/10 text-red-600 hover:border-red-500 hover:bg-red-500 hover:text-white dark:text-red-400"
         >
           <Trash className="h-4 w-4" />
         </Button>

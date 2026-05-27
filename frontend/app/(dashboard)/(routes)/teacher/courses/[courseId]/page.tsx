@@ -70,25 +70,25 @@ const CourseIdPage = async (props: {
       {!course.isPublished && (
         <Banner label="Este curso não está publicado. Ele não será visível para os alunos." />
       )}
-      <div className="teacher-course-page min-h-screen bg-[#000000] px-6 py-8 text-white">
-        <div className="rounded-xl border border-[#242424] bg-[#0B0B0B] p-6 shadow-[0_20px_80px_rgba(0,0,0,0.45)]">
+      <div className="teacher-course-page min-h-screen bg-background px-6 py-8 text-foreground">
+        <div className="rounded-lg border border-border bg-card p-6">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight text-white">
+              <h1 className="text-3xl font-bold tracking-tight text-foreground">
                 {course.title}
               </h1>
-              <p className="mt-2 text-sm text-[#B5B5B5]">
+              <p className="mt-2 text-sm text-muted-foreground">
                 Complete todos os campos obrigatórios para publicar este curso.
               </p>
             </div>
 
             <div className="flex flex-col gap-5 lg:min-w-[520px] lg:flex-row lg:items-center lg:justify-between">
-              <div className="border-l border-[#242424] pl-6">
-                <p className="text-xs font-medium text-[#B5B5B5]">
+              <div className="lg:border-l lg:border-border lg:pl-6">
+                <p className="text-xs font-medium text-muted-foreground">
                   Progresso de preenchimento
                 </p>
-                <div className="mt-3 inline-flex items-center gap-3 rounded-full bg-[#00C27A]/10 px-4 py-2 text-sm font-bold text-[#00C27A]">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full border border-[#00C27A]/40 bg-[#00C27A]/10">
+                <div className="mt-3 inline-flex items-center gap-3 rounded-full bg-emerald-500/10 px-4 py-2 text-sm font-bold text-emerald-700 dark:text-emerald-300">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full border border-emerald-500/40 bg-emerald-500/10">
                     <CheckCircle2 className="h-5 w-5" />
                   </span>
                   {completedFields}/{totalFields} campos completos
@@ -113,14 +113,14 @@ const CourseIdPage = async (props: {
           <div className="space-y-6 xl:col-span-5">
             <section>
               <div className="mb-4 flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#FF9F00]/40 bg-[#FF9F00]/10 text-[#FF9F00]">
+                <span className="flex h-10 w-10 items-center justify-center rounded-md border border-primary/30 bg-primary/10 text-primary">
                   <LayoutDashboard className="h-5 w-5" />
                 </span>
-                <h2 className="text-xl font-bold text-white">
+                <h2 className="text-xl font-bold text-foreground">
                   Personalize seu curso
                 </h2>
               </div>
-              <div className="overflow-hidden rounded-xl border border-[#242424] bg-[#0B0B0B]">
+              <div className="overflow-hidden rounded-lg border border-border bg-card">
                 <TitleForm initialData={course} courseId={course.id} />
                 <DescriptionForm initialData={course} courseId={course.id} />
                 <ImageForm initialData={course} courseId={course.id} />
@@ -140,10 +140,10 @@ const CourseIdPage = async (props: {
             <section>
               <div className="mb-4 flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#FF9F00]/40 bg-[#FF9F00]/10 text-[#FF9F00]">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-md border border-primary/30 bg-primary/10 text-primary">
                     <ListChecks className="h-5 w-5" />
                   </span>
-                  <h2 className="text-xl font-bold text-white">
+                  <h2 className="text-xl font-bold text-foreground">
                     Capítulos do curso
                   </h2>
                 </div>
@@ -154,10 +154,10 @@ const CourseIdPage = async (props: {
             <section>
               <div className="mb-4 flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#FF9F00]/40 bg-[#FF9F00]/10 text-[#FF9F00]">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-md border border-primary/30 bg-primary/10 text-primary">
                     <File className="h-5 w-5" />
                   </span>
-                  <h2 className="text-xl font-bold text-white">
+                  <h2 className="text-xl font-bold text-foreground">
                     Recursos &amp; Anexos
                   </h2>
                 </div>
@@ -167,7 +167,7 @@ const CourseIdPage = async (props: {
           </div>
         </div>
 
-        <div className="mt-8 flex flex-col justify-end gap-3 border-t border-[#242424] pt-6 sm:flex-row">
+        <div className="mt-8 flex flex-col justify-end gap-3 border-t border-border pt-6 sm:flex-row">
           <ButtonLikeLink
             href={`/courses/${params.courseId}`}
             label="Visualizar como aluno"
@@ -181,7 +181,7 @@ const CourseIdPage = async (props: {
 const ButtonLikeLink = ({ href, label }: { href: string; label: string }) => (
   <Link
     href={href}
-    className="inline-flex h-11 items-center justify-center rounded-full border border-[#333333] bg-transparent px-6 text-sm font-semibold text-white transition hover:border-[#FF9F00]"
+    className="inline-flex h-11 items-center justify-center rounded-full border border-border bg-background px-6 text-sm font-semibold text-foreground transition hover:border-primary hover:text-primary"
   >
     <Eye className="mr-2 h-4 w-4" />
     {label}

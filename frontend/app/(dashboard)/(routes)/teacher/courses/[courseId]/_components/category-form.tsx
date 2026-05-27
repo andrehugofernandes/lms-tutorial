@@ -98,14 +98,14 @@ export const CategoryForm = ({
     <div className="p-6">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-[#B5B5B5]">
+          <p className="text-sm font-semibold text-muted-foreground">
             Categoria do curso
           </p>
           {!isEditing && (
             <p
               className={cn(
-                "mt-3 text-base font-semibold text-white",
-                !initialData.categoryId && "italic text-[#7A7A7A]"
+                "mt-3 text-base font-semibold text-foreground",
+                !initialData.categoryId && "italic text-muted-foreground"
               )}
             >
               {selectedOption?.label || "Sem categoria."}
@@ -115,13 +115,13 @@ export const CategoryForm = ({
         <Button
           onClick={toggleEdit}
           variant="outline"
-          className="border-[#FF9F00]/60 bg-[#111111] text-white hover:border-[#FF9F00] hover:bg-[#181818] hover:text-white"
+          className="border-primary/50 bg-background text-foreground hover:border-primary hover:bg-muted hover:text-foreground"
         >
           {isEditing ? (
             "Cancelar"
           ) : (
             <>
-              <Pencil className="mr-2 h-4 w-4 text-[#FF9F00]" />
+              <Pencil className="mr-2 h-4 w-4 text-primary" />
               Editar categoria
             </>
           )}
@@ -149,7 +149,7 @@ export const CategoryForm = ({
                   <Button
                     disabled={!isValid || isSubmitting}
                     type="submit"
-                    className="bg-[#FF9F00] text-black hover:bg-[#E68F00]"
+                    className="bg-primary text-primary-foreground hover:bg-primary/90"
                   >
                     Salvar categoria
                   </Button>
@@ -157,7 +157,7 @@ export const CategoryForm = ({
                     type="button"
                     variant="ghost"
                     onClick={() => setIsCreating(true)}
-                    className="text-[#B5B5B5] hover:bg-[#181818] hover:text-white"
+                    className="text-muted-foreground hover:bg-muted hover:text-foreground"
                   >
                     <PlusCircle className="mr-2 h-4 w-4" />
                     Nova categoria
@@ -171,19 +171,19 @@ export const CategoryForm = ({
                 placeholder="Ex.: Marketing Digital"
                 value={newCategoryName}
                 onChange={(event) => setNewCategoryName(event.target.value)}
-                className="border-[#333333] bg-black text-white placeholder:text-[#7A7A7A] focus-visible:ring-[#FF9F00]"
+                className="border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-primary"
               />
               <div className="flex items-center gap-2">
                 <Button
                   onClick={onCreateCategory}
-                  className="bg-[#FF9F00] text-black hover:bg-[#E68F00]"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90"
                 >
                   Criar categoria
                 </Button>
                 <Button
                   variant="ghost"
                   onClick={() => setIsCreating(false)}
-                  className="text-[#B5B5B5] hover:bg-[#181818] hover:text-white"
+                  className="text-muted-foreground hover:bg-muted hover:text-foreground"
                 >
                   Voltar
                 </Button>

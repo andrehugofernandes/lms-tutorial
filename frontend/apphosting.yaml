@@ -35,7 +35,83 @@ env:
       - BUILD
       - RUNTIME
 
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: AIzaSyBL65DOZSXJ2mTuQffzZGqxtjuP2PwxvRg
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: pmjg-apps-hmol.firebaseapp.com
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_APP_URL
+    value: https://lms-frontend--pmjg-apps-hmol.us-east4.hosted.app
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: NEXT_PUBLIC_TEACHER_ID
+    secret: NEXT_PUBLIC_TEACHER_ID
+    availability:
+      - BUILD
+      - RUNTIME
+
   - variable: FIRESTORE_DATABASE_ID
     value: db-lms-project
+    availability:
+      - RUNTIME
+
+  - variable: UPLOADTHING_TOKEN
+    secret: UPLOADTHING_TOKEN
+    availability:
+      - RUNTIME
+
+  - variable: UPLOADTHING_SECRET
+    secret: UPLOADTHING_SECRET
+    availability:
+      - RUNTIME
+
+  - variable: UPLOADTHING_APP_ID
+    secret: UPLOADTHING_APP_ID
+    availability:
+      - RUNTIME
+
+  - variable: DATABASE_URL
+    secret: DATABASE_URL
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: DIRECT_URL
+    secret: DIRECT_URL
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: MUX_TOKEN_ID
+    secret: MUX_TOKEN_ID
+    availability:
+      - RUNTIME
+
+  - variable: MUX_TOKEN_SECRET
+    secret: MUX_TOKEN_SECRET
+    availability:
+      - RUNTIME
+
+  - variable: STRIPE_API_KEY
+    secret: STRIPE_API_KEY
+    availability:
+      - RUNTIME
+
+  - variable: STRIPE_WEBHOOK_SECRET
+    secret: STRIPE_WEBHOOK_SECRET
+    availability:
+      - RUNTIME
+
+  - variable: GEMINI_API_KEY
+    secret: GEMINI_API_KEY
     availability:
       - RUNTIME

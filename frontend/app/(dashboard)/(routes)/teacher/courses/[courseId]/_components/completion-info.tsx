@@ -55,7 +55,7 @@ export const CompletionInfo = ({
         <button
           type="button"
           aria-label={buttonLabel}
-          className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-[#7A7A7A] text-[#A1A1AA] transition hover:border-[#FF9F00] hover:text-[#FF9F00] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF9F00] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+          className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-border text-muted-foreground transition hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           onPointerEnter={() => setOpen(true)}
           onPointerLeave={() => setOpen(false)}
           onFocus={() => setOpen(true)}
@@ -67,24 +67,24 @@ export const CompletionInfo = ({
       <PopoverContent
         align="start"
         sideOffset={8}
-        className="pointer-events-none w-80 border-[#242424] bg-[#0B0B0B] text-white"
+        className="pointer-events-none w-80 border-border bg-popover text-popover-foreground"
         onOpenAutoFocus={(event) => event.preventDefault()}
         onCloseAutoFocus={(event) => event.preventDefault()}
       >
         <div className="space-y-2">
           <div>
-            <p className="text-sm font-semibold text-white">
+            <p className="text-sm font-semibold text-popover-foreground">
               {isComplete ? completeTitle : incompleteTitle}
             </p>
-            <p className="text-xs text-[#A1A1AA]">
+            <p className="text-xs text-muted-foreground">
               {isComplete ? completeDescription : incompleteDescription}
             </p>
           </div>
           {!isComplete && (
-            <ul className="space-y-1 text-sm text-[#D4D4D8]">
+            <ul className="space-y-1 text-sm text-popover-foreground">
               {missingFields.map((field) => (
                 <li key={field} className="flex items-start gap-2">
-                  <span className="mt-1 h-1.5 w-1.5 rounded-full bg-[#FF9F00]" />
+                  <span className="mt-1 h-1.5 w-1.5 rounded-full bg-primary" />
                   <span>{field}</span>
                 </li>
               ))}

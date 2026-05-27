@@ -62,17 +62,17 @@ export const DescriptionForm = ({
   };
 
   return (
-    <div className="border-b border-[#242424] p-6">
+    <div className="border-b border-border p-6">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-[#B5B5B5]">
+          <p className="text-sm font-semibold text-muted-foreground">
             Descrição do curso
           </p>
           {!isEditing && (
             <p
               className={cn(
-                "mt-3 text-sm leading-6 text-white",
-                !initialData.description && "italic text-[#7A7A7A]"
+                "mt-3 text-sm leading-6 text-foreground",
+                !initialData.description && "italic text-muted-foreground"
               )}
             >
               {initialData.description || "Sem descrição."}
@@ -82,13 +82,13 @@ export const DescriptionForm = ({
         <Button
           onClick={toggleEdit}
           variant="outline"
-          className="border-[#FF9F00]/60 bg-[#111111] text-white hover:border-[#FF9F00] hover:bg-[#181818] hover:text-white"
+          className="border-primary/50 bg-background text-foreground hover:border-primary hover:bg-muted hover:text-foreground"
         >
           {isEditing ? (
             "Cancelar"
           ) : (
             <>
-              <Pencil className="mr-2 h-4 w-4 text-[#FF9F00]" />
+              <Pencil className="mr-2 h-4 w-4 text-primary" />
               Editar descrição
             </>
           )}
@@ -107,7 +107,7 @@ export const DescriptionForm = ({
                     <Textarea
                       disabled={isSubmitting}
                       placeholder="Ex.: Este curso é sobre..."
-                      className="min-h-[120px] border-[#333333] bg-black text-white placeholder:text-[#7A7A7A] focus-visible:ring-[#FF9F00]"
+                      className="min-h-[120px] border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-primary"
                       {...field}
                     />
                   </FormControl>
@@ -118,7 +118,7 @@ export const DescriptionForm = ({
             <Button
               disabled={!isValid || isSubmitting}
               type="submit"
-              className="bg-[#FF9F00] text-black hover:bg-[#E68F00]"
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
             >
               Salvar descrição
             </Button>
