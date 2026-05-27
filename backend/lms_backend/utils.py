@@ -1,15 +1,19 @@
+import math
 import random
-from datetime import datetime
-from google.cloud import firestore
+from datetime import datetime, timezone
 
 def iso(dt):
     if not dt:
         return None
-    if hasattr(dt, 'isoformat'):
-        return dt.isoformat()
     # Handle Firestore timestamps
     if hasattr(dt, 'to_datetime'):
-        return dt.to_datetime().isoformat()
+        dt = dt.to_datetime()
+    if isinstance(dt, datetime):
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+    if hasattr(dt, 'isoformat'):
+        return dt.isoformat()
     return str(dt)
 
 
@@ -177,7 +181,13 @@ def serialize_course(course: dict, include_relations: bool = False, progress: fl
         payload["chapters"] = course.get("chapters", [])
         payload["attachments"] = course.get("attachments", [])
     if progress is not None:
-        payload["progress"] = progress
+        try:
+            progress_value = float(progress)
+        except (TypeError, ValueError):
+            progress_value = 0
+        if not math.isfinite(progress_value):
+            progress_value = 0
+        payload["progress"] = max(0, min(progress_value, 100))
     return payload
 
 

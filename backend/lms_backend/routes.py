@@ -1,5 +1,4 @@
 from datetime import datetime
-import time
 from flask import Blueprint, jsonify, request
 from firebase_admin import firestore
 from .auth import AuthError, get_current_user, get_user_profile, require_roles
@@ -16,6 +15,7 @@ from .services import (
     calc_level,
     calc_quiz_xp,
     calc_score,
+    can_attempt_youtube_transcript_fetch,
     create_mux_asset,
     delete_mux_asset,
     ensure_student_profile,
@@ -26,6 +26,7 @@ from .services import (
     get_progress,
     promote_admin_profile,
     start_transcription,
+    store_chapter_transcript,
     update_user_streak,
 )
 from .utils import (
@@ -67,6 +68,56 @@ def transcript_status_payload(chapter: dict, status: str, message: str) -> dict:
         "transcriptStatus": chapter.get("transcriptStatus"),
         "hasTranscript": bool((chapter.get("transcript") or "").strip()),
     }
+
+
+def _transcription_unavailable_message(error: Exception | None = None) -> str:
+    detail = " ".join((str(error) if error else "").split()).lower()
+    if (
+        "cloud provider" in detail
+        or "blocked" in detail
+        or "requestblocked" in detail
+        or "403" in detail
+        or "forbidden" in detail
+        or "proxy" in detail
+        or "firebase runtime" in detail
+    ):
+        return (
+            "O YouTube bloqueou a busca automatica da legenda no Firebase. "
+            "Use uma transcricao salva para este capitulo ou configure um proxy "
+            "para YOUTUBE_TRANSCRIPT_PROXY_URL/WEBSHARE_PROXY_USERNAME."
+        )
+    return (
+        "Nao foi possivel transcrever o video. Verifique se o link possui legenda "
+        "ou transcricao disponivel."
+    )
+
+
+def ensure_transcript_for_ai(chapter_id: str, chapter: dict) -> tuple[str, str | None]:
+    transcript = (chapter.get("transcript") or "").strip()
+    if transcript:
+        if chapter.get("transcriptStatus") != TranscriptStatusEnum.COMPLETED.value:
+            fdb.collection('chapters').document(chapter_id).update({
+                "transcriptStatus": TranscriptStatusEnum.COMPLETED.value,
+                "transcriptError": None,
+                "updatedAt": datetime.utcnow(),
+            })
+            chapter["transcriptStatus"] = TranscriptStatusEnum.COMPLETED.value
+        return transcript, None
+
+    if chapter.get("videoProvider") != VideoProviderEnum.YOUTUBE.value:
+        return "", None
+    if not can_attempt_youtube_transcript_fetch():
+        return "", _transcription_unavailable_message(
+            RuntimeError("YouTube transcript fetch requires a proxy in Firebase runtime")
+        )
+
+    try:
+        transcript = store_chapter_transcript(chapter_id, chapter.get("externalUrl"))
+        chapter["transcript"] = transcript
+        chapter["transcriptStatus"] = TranscriptStatusEnum.COMPLETED.value
+        return transcript, None
+    except Exception as error:
+        return "", _transcription_unavailable_message(error)
 
 
 def require_user():
@@ -377,10 +428,13 @@ def build_dashboard_courses(user_id: str):
         course_payload = serialize_course(course, progress=progress)
         
         # Chapters
-        chapters = [c.to_dict() for c in fdb.collection('chapters')
-                    .where('courseId', '==', course_id)
-                    .where('isPublished', '==', True)
-                    .get()]
+        chapters = [
+            {**c.to_dict(), "id": c.id}
+            for c in fdb.collection('chapters')
+            .where('courseId', '==', course_id)
+            .where('isPublished', '==', True)
+            .get()
+        ]
         course_payload["chapters"] = [serialize_chapter(c) for c in sorted(chapters, key=lambda x: x.get("position", 0))]
         
         purchase = purchases_by_course.get(course_id)
@@ -410,7 +464,7 @@ def build_student_metrics(user_id: str):
             c_data = c_doc.to_dict()
             c_data["id"] = c_doc.id
             chap_docs = fdb.collection('chapters').where('courseId', '==', c_id).get()
-            c_data["chapters"] = [ch.to_dict() for ch in chap_docs]
+            c_data["chapters"] = [{**ch.to_dict(), "id": ch.id} for ch in chap_docs]
             courses_data.append(c_data)
 
     completed_progress = {
@@ -699,7 +753,7 @@ def reorder_chapters(course_id: str):
 @api_bp.patch("/courses/<course_id>/chapters/<chapter_id>")
 def update_chapter(course_id: str, chapter_id: str):
     user = require_user()
-    chapter = require_chapter_owner(course_id, chapter_id, user["userId"])
+    current_chapter = require_chapter_owner(course_id, chapter_id, user["userId"])
     values = request.get_json(silent=True) or {}
 
     update_payload = {}
@@ -713,10 +767,30 @@ def update_chapter(course_id: str, chapter_id: str):
         embed_url, provider = build_embed(values["externalUrl"])
         update_payload["embedUrl"] = embed_url
         update_payload["videoProvider"] = provider.value if provider else None
-        update_payload["transcriptStatus"] = TranscriptStatusEnum.PENDING.value
+        url_changed = values["externalUrl"] != current_chapter.get("externalUrl")
+        has_transcript = bool((current_chapter.get("transcript") or "").strip())
+
+        if provider == VideoProviderEnum.YOUTUBE:
+            update_payload["transcriptError"] = None
+            if url_changed:
+                update_payload["transcript"] = None
+            if url_changed or not has_transcript:
+                update_payload["transcriptStatus"] = TranscriptStatusEnum.PENDING.value
+            else:
+                update_payload["transcriptStatus"] = TranscriptStatusEnum.COMPLETED.value
+        else:
+            update_payload["transcript"] = None
+            update_payload["transcriptError"] = None
+            update_payload["transcriptStatus"] = TranscriptStatusEnum.NOT_AVAILABLE.value
+
         chapter_ref.update(update_payload)
-        start_transcription(chapter_id, provider, values["externalUrl"])
+        if provider == VideoProviderEnum.YOUTUBE and (url_changed or not has_transcript):
+            start_transcription(chapter_id, provider, values["externalUrl"])
     elif values.get("videoUrl") and values.get("videoSourceType") == VideoSourceTypeEnum.UPLOAD.value:
+        update_payload["transcript"] = None
+        update_payload["transcriptError"] = None
+        update_payload["transcriptStatus"] = TranscriptStatusEnum.NOT_AVAILABLE.value
+
         # Check existing MuxData
         mux_query = fdb.collection('muxData').where('chapterId', '==', chapter_id).limit(1).get()
         if mux_query:
@@ -1308,34 +1382,12 @@ def generate_chapter_quiz(course_id: str, chapter_id: str):
         return text_response("Chapter not found", 404)
     chapter = chapter_doc.to_dict()
     chapter["id"] = chapter_doc.id
-    
-    if chapter.get("transcriptStatus") == TranscriptStatusEnum.PROCESSING.value:
-        return jsonify(
-            transcript_status_payload(
-                chapter,
-                "TRANSCRIPTION_PROCESSING",
-                "A transcricao do video ainda esta em andamento.",
-            )
-        ), 202
 
     values = request.get_json(silent=True) or {}
 
-    if not chapter.get("transcript") and chapter.get("videoProvider") == VideoProviderEnum.YOUTUBE.value:
-        fdb.collection('chapters').document(chapter_id).update({
-            "transcriptStatus": TranscriptStatusEnum.PROCESSING.value,
-            "updatedAt": datetime.utcnow()
-        })
-        chapter["transcriptStatus"] = TranscriptStatusEnum.PROCESSING.value
-        start_transcription(chapter_id, chapter.get("videoProvider"), chapter.get("externalUrl"))
-        return jsonify(
-            transcript_status_payload(
-                chapter,
-                "TRANSCRIPTION_STARTED",
-                "A transcricao do video foi iniciada. As perguntas serao geradas automaticamente quando ela terminar.",
-            )
-        ), 202
-
-    transcript = (chapter.get("transcript") or "").strip()
+    transcript, transcript_error = ensure_transcript_for_ai(chapter_id, chapter)
+    if transcript_error:
+        return text_response(transcript_error, 400)
     if not transcript:
         return text_response(
             "Este capitulo ainda nao tem transcricao disponivel. Informe um link do YouTube com legenda/transcricao ou adicione conteudo antes de gerar com IA.",
@@ -1499,7 +1551,7 @@ def delete_quiz(quiz_id: str):
         q_doc.reference.delete()
         
     quiz_ref.delete()
-    return "", 204
+    return jsonify({"success": True}), 200
 
 
 @api_bp.post("/quiz/<quiz_id>/questions")
@@ -1562,30 +1614,9 @@ def regenerate_questions(quiz_id: str):
     course = course_doc.to_dict()
     course["id"] = course_doc.id
 
-    if chapter.get("transcriptStatus") == TranscriptStatusEnum.PROCESSING:
-        return jsonify(
-            transcript_status_payload(
-                chapter,
-                "TRANSCRIPTION_PROCESSING",
-                "A transcricao do video ainda esta em andamento.",
-            )
-        ), 202
-
-    if not chapter.get("transcript") and chapter.get("videoProvider") == VideoProviderEnum.YOUTUBE:
-        fdb.collection('chapters').document(chapter["id"]).update({
-            "transcriptStatus": TranscriptStatusEnum.PROCESSING
-        })
-        chapter["transcriptStatus"] = TranscriptStatusEnum.PROCESSING
-        start_transcription(chapter["id"], chapter.get("videoProvider"), chapter.get("externalUrl"))
-        return jsonify(
-            transcript_status_payload(
-                chapter,
-                "TRANSCRIPTION_STARTED",
-                "A transcricao do video foi iniciada. As perguntas serao geradas automaticamente quando ela terminar.",
-            )
-        ), 202
-
-    transcript = (chapter.get("transcript") or "").strip()
+    transcript, transcript_error = ensure_transcript_for_ai(chapter["id"], chapter)
+    if transcript_error:
+        return text_response(transcript_error, 400)
     if not transcript:
         return text_response(
             "Este capitulo ainda nao tem transcricao disponivel. Informe um link do YouTube com legenda/transcricao ou adicione conteudo antes de gerar com IA.",
@@ -1796,7 +1827,7 @@ def delete_question(quiz_id: str, question_id: str):
         o_doc.reference.delete()
         
     q_ref.delete()
-    return "", 204
+    return jsonify({"success": True}), 200
 
 
 @api_bp.post("/quiz/<quiz_id>/submit")
@@ -1947,7 +1978,7 @@ def submit_quiz(quiz_id: str):
                 .limit(1).get()
                 
             if next_chapter_query:
-                next_chapter = next_chapter_query[0].to_dict()
+                next_chapter_query[0].to_dict()
                 next_chapter_id = next_chapter_query[0].id
                 
                 # Update purchase lastChapterId

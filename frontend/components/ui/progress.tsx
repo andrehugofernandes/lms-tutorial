@@ -13,6 +13,7 @@ const progressVariants = cva(
       default: "bg-sky-600",
       success: "bg-emerald-700",
       warning: "bg-yellow-500",
+      gold: "bg-[#FF9F00]",
     },
   },
   defaultVariants: {

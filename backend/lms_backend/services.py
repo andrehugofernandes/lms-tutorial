@@ -1,4 +1,5 @@
 import json
+import os
 import re
 import threading
 from datetime import date, datetime, timedelta
@@ -10,7 +11,6 @@ from .models import (
     RoleEnum,
     TranscriptStatusEnum,
     VideoProviderEnum,
-    VideoSourceTypeEnum,
 )
 
 
@@ -31,6 +31,8 @@ DIFFICULTY_RULES = {
     "dificil": {"pointWeight": 2.0, "isBonus": False, "bonusPoints": None},
     "desafio": {"pointWeight": 2.0, "isBonus": True, "bonusPoints": 50},
 }
+
+YOUTUBE_TRANSCRIPT_LANGUAGES = ["pt", "pt-BR", "en"]
 
 
 def build_difficulty_plan(count: int) -> list[str]:
@@ -136,41 +138,164 @@ def extract_youtube_id(video_url: str | None) -> str | None:
     return match.group(1) if match else None
 
 
-def start_transcription(chapter_id: str, video_provider: VideoProviderEnum | None, external_url: str | None) -> None:
-    if video_provider != VideoProviderEnum.YOUTUBE:
+def _enum_value(value):
+    return value.value if hasattr(value, "value") else value
+
+
+def _caption_text(chunk) -> str:
+    if hasattr(chunk, "text"):
+        return chunk.text or ""
+    if isinstance(chunk, dict):
+        return chunk.get("text") or ""
+    return ""
+
+
+def _transcript_to_text(transcript) -> str:
+    text = " ".join(_caption_text(chunk).strip() for chunk in transcript).strip()
+    if not text:
+        raise ValueError("Empty YouTube transcript")
+    return text
+
+
+def _build_youtube_transcript_api():
+    from youtube_transcript_api import YouTubeTranscriptApi
+
+    if not can_attempt_youtube_transcript_fetch():
+        raise RuntimeError("YouTube transcript fetch requires a proxy in Firebase runtime")
+
+    proxy_username = os.environ.get("YOUTUBE_TRANSCRIPT_PROXY_USERNAME") or os.environ.get("WEBSHARE_PROXY_USERNAME")
+    proxy_password = os.environ.get("YOUTUBE_TRANSCRIPT_PROXY_PASSWORD") or os.environ.get("WEBSHARE_PROXY_PASSWORD")
+    if proxy_username and proxy_password:
+        from youtube_transcript_api.proxies import WebshareProxyConfig
+
+        locations = [
+            item.strip().upper()
+            for item in (os.environ.get("YOUTUBE_TRANSCRIPT_PROXY_LOCATIONS") or "br,us").split(",")
+            if item.strip()
+        ]
+        return YouTubeTranscriptApi(
+            proxy_config=WebshareProxyConfig(
+                proxy_username=proxy_username,
+                proxy_password=proxy_password,
+                filter_ip_locations=locations or None,
+            )
+        )
+
+    proxy_url = os.environ.get("YOUTUBE_TRANSCRIPT_PROXY_URL")
+    if proxy_url:
+        from youtube_transcript_api.proxies import GenericProxyConfig
+
+        return YouTubeTranscriptApi(
+            proxy_config=GenericProxyConfig(
+                http_url=proxy_url,
+                https_url=proxy_url,
+            )
+        )
+
+    return YouTubeTranscriptApi()
+
+
+def _is_firebase_runtime() -> bool:
+    return bool(os.environ.get("K_SERVICE") or os.environ.get("FUNCTION_TARGET"))
+
+
+def _youtube_transcript_proxy_configured() -> bool:
+    proxy_username = os.environ.get("YOUTUBE_TRANSCRIPT_PROXY_USERNAME") or os.environ.get("WEBSHARE_PROXY_USERNAME")
+    proxy_password = os.environ.get("YOUTUBE_TRANSCRIPT_PROXY_PASSWORD") or os.environ.get("WEBSHARE_PROXY_PASSWORD")
+    return bool(os.environ.get("YOUTUBE_TRANSCRIPT_PROXY_URL") or (proxy_username and proxy_password))
+
+
+def can_attempt_youtube_transcript_fetch() -> bool:
+    return not _is_firebase_runtime() or _youtube_transcript_proxy_configured()
+
+
+def fetch_youtube_transcript_text(external_url: str | None) -> str:
+    video_id = extract_youtube_id(external_url)
+    if not video_id:
+        raise ValueError("Invalid YouTube URL")
+
+    api = _build_youtube_transcript_api()
+    transcript_list = api.list(video_id)
+
+    for finder in (
+        transcript_list.find_transcript,
+        transcript_list.find_manually_created_transcript,
+        transcript_list.find_generated_transcript,
+    ):
+        try:
+            return _transcript_to_text(finder(YOUTUBE_TRANSCRIPT_LANGUAGES).fetch())
+        except Exception:
+            pass
+
+    transcripts = list(transcript_list)
+    for transcript in transcripts:
+        language_code = (transcript.language_code or "").lower()
+        if language_code.startswith("pt") or language_code.startswith("en"):
+            return _transcript_to_text(transcript.fetch())
+
+    for transcript in transcripts:
+        if transcript.is_translatable:
+            for language in ("pt", "en"):
+                try:
+                    return _transcript_to_text(transcript.translate(language).fetch())
+                except Exception:
+                    pass
+
+    if transcripts:
+        return _transcript_to_text(transcripts[0].fetch())
+
+    raise ValueError("No YouTube transcript available")
+
+
+def _summarize_transcript_error(error: Exception) -> str:
+    return " ".join((str(error) or error.__class__.__name__).split())[:1000]
+
+
+def store_chapter_transcript(chapter_id: str, external_url: str | None) -> str:
+    chapter_ref = fdb.collection('chapters').document(chapter_id)
+    chapter_doc = chapter_ref.get()
+    if not chapter_doc.exists:
+        raise ValueError("Chapter not found")
+
+    chapter_ref.update({
+        "transcriptStatus": TranscriptStatusEnum.PROCESSING.value,
+        "updatedAt": datetime.utcnow(),
+    })
+
+    try:
+        transcript_text = fetch_youtube_transcript_text(external_url)
+        chapter_ref.update({
+            "transcript": transcript_text,
+            "transcriptError": None,
+            "transcriptStatus": TranscriptStatusEnum.COMPLETED.value,
+            "updatedAt": datetime.utcnow(),
+        })
+        return transcript_text
+    except Exception as error:
+        error_message = _summarize_transcript_error(error)
+        print(f"Transcription error ({error.__class__.__name__}): {error_message}")
+        chapter_ref.update({
+            "transcriptError": error_message,
+            "transcriptStatus": TranscriptStatusEnum.FAILED.value,
+            "updatedAt": datetime.utcnow(),
+        })
+        raise
+
+
+def start_transcription(chapter_id: str, video_provider: VideoProviderEnum | str | None, external_url: str | None) -> None:
+    if _enum_value(video_provider) != VideoProviderEnum.YOUTUBE.value:
+        return
+    if not can_attempt_youtube_transcript_fetch():
         return
 
     app = current_app._get_current_object()
 
     def worker():
         with app.app_context():
-            chapter_ref = fdb.collection('chapters').document(chapter_id)
-            chapter_doc = chapter_ref.get()
-            if not chapter_doc.exists:
-                return
-
-            chapter_ref.update({"transcriptStatus": TranscriptStatusEnum.PROCESSING.value})
-
             try:
-                from youtube_transcript_api import YouTubeTranscriptApi
-
-                video_id = extract_youtube_id(external_url)
-                if not video_id:
-                    raise ValueError("Invalid YouTube URL")
-
-                transcript = YouTubeTranscriptApi().fetch(
-                    video_id,
-                    languages=["pt", "pt-BR", "en"],
-                )
-                transcript_text = " ".join(chunk.text if hasattr(chunk, "text") else chunk["text"] for chunk in transcript)
-                
-                chapter_ref.update({
-                    "transcript": transcript_text,
-                    "transcriptStatus": TranscriptStatusEnum.COMPLETED.value
-                })
-            except Exception as e:
-                print(f"Transcription error: {str(e)}")
-                chapter_ref.update({"transcriptStatus": TranscriptStatusEnum.FAILED.value})
+                store_chapter_transcript(chapter_id, external_url)
+            except Exception:
+                pass
 
     threading.Thread(target=worker, daemon=True).start()
 

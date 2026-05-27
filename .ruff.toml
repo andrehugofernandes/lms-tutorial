@@ -1,0 +1,9 @@
+exclude = [
+    ".agent",
+    ".agents",
+    "venv",
+    "backend/venv",
+    "node_modules",
+    ".next",
+    "dist"
+]

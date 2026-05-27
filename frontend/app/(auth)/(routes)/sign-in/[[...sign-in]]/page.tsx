@@ -103,7 +103,7 @@ export default function SignInPage() {
                     disabled={isLoading}
                     className="w-full py-6 rounded-full border-border hover:bg-muted text-foreground"
                 >
-                    <img src="https://authjs.dev/img/providers/google.svg" className="h-5 w-5 mr-2" />
+                    <img src="https://authjs.dev/img/providers/google.svg" alt="Google Logo" className="h-5 w-5 mr-2" />
                     Google
                 </Button>
             </div>

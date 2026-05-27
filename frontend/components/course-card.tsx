@@ -25,6 +25,10 @@ export const CourseCard = ({
   progress,
   category
 }: CourseCardProps) => {
+  const normalizedProgress = typeof progress === "number" && Number.isFinite(progress)
+    ? Math.min(Math.max(progress, 0), 100)
+    : 0;
+
   return (
     <Link href={`/courses/${id}`}>
       <div className="group hover:shadow-lg transition overflow-hidden border 
@@ -45,15 +49,15 @@ export const CourseCard = ({
           )}
         </div>
         <div className="flex flex-col pt-2">
-          <div className="text-lg md:text-base font-medium group-hover:text-sky-700 transition line-clamp-2">
+          <div className="text-lg md:text-base font-medium group-hover:text-[#FF9F00] transition line-clamp-2">
             {title}
           </div>
           <p className="text-xs text-muted-foreground">
             {category}
           </p>
           <div className="my-3 flex items-center gap-x-2 text-sm md:text-xs">
-            <div className="flex items-center gap-x-1 text-slate-500">
-              <IconBadge size="sm" icon={BookOpen} />
+            <div className="flex items-center gap-x-1 text-amber-700 dark:text-amber-300">
+              <IconBadge size="sm" icon={BookOpen} variant="gold" />
               <span>
                 {chaptersLength} {chaptersLength === 1 ? "Capítulo" : "Capítulos"}
               </span>
@@ -61,9 +65,9 @@ export const CourseCard = ({
           </div>
           {progress !== null ? (
             <CourseProgress
-              variant={progress === 100 ? "success" : "default"}
+              variant={normalizedProgress === 100 ? "success" : "gold"}
               size="sm"
-              value={progress}
+              value={normalizedProgress}
             />
           ) : (
             <p className="text-md md:text-sm font-medium text-slate-700">

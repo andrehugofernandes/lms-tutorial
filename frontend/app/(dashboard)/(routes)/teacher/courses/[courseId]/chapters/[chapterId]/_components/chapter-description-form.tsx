@@ -13,6 +13,7 @@ import type { Chapter } from "@/lib/types";
 import {
   Form,
   FormControl,
+  FormLabel,
   FormField,
   FormItem,
   FormMessage,

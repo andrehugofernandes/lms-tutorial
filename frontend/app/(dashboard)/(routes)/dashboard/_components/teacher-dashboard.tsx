@@ -214,7 +214,7 @@ export const TeacherDashboard = ({
                             <td className="px-6 py-4">
                                <div className="flex items-center gap-x-4">
                                   {course.imageUrl ? (
-                                    <img src={course.imageUrl} className="h-12 w-20 object-cover rounded-lg border border-border/50" />
+                                    <img src={course.imageUrl} alt={course.title} className="h-12 w-20 object-cover rounded-lg border border-border/50" />
                                   ) : (
                                     <div className="h-12 w-20 bg-background/50 rounded-lg border border-border/50 flex items-center justify-center">
                                        <Layout className="h-5 w-5 text-muted-foreground" />

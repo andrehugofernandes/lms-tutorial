@@ -170,9 +170,9 @@ export const ChapterVideoForm = ({
                 {initialData.transcriptStatus === TranscriptStatus.FAILED && (
                   <Badge
                     variant="outline"
-                    className="border-none bg-[#FF4D4D]/10 text-[#FF4D4D]"
+                    className="border-none bg-[#FF9F00]/10 text-[#FF9F00]"
                   >
-                    Erro ao transcrever legenda
+                    Legenda automatica indisponivel
                   </Badge>
                 )}
               </div>

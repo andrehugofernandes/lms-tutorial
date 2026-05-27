@@ -1,7 +1,6 @@
-import Link from "next/link";
-import { PlayCircle, Clock, BookOpen } from "lucide-react";
+import { Clock, BookOpen } from "lucide-react";
 import type { Course, Chapter } from "@/lib/types";
-import { Button } from "@/components/ui/button";
+import { DashboardNavButton } from "./dashboard-nav-button";
 
 interface CheckpointCardProps {
   course: Course & {
@@ -48,12 +47,12 @@ export const CheckpointCard = ({ course }: CheckpointCardProps) => {
           </div>
         </div>
         
-        <Link href={`/courses/${course.id}/chapters/${course.lastChapter.id}`}>
-          <Button className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold flex items-center gap-x-2 px-6">
-            <PlayCircle className="w-5 h-5 fill-current" />
-            Continuar
-          </Button>
-        </Link>
+        <DashboardNavButton
+          href={`/courses/${course.id}/chapters/${course.lastChapter.id}`}
+          label="Continuar"
+          loadingLabel="Abrindo..."
+          className="px-6 font-bold"
+        />
       </div>
     </div>
   );

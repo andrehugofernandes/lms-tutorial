@@ -14,7 +14,18 @@ class AuthError(Exception):
 
 def get_current_user(optional: bool = False) -> dict | None:
     expected_token = current_app.config.get("BACKEND_INTERNAL_TOKEN")
+    if expected_token:
+        expected_token = expected_token.strip()
     request_token = request.headers.get("X-Internal-Token")
+    if request_token:
+        request_token = request_token.strip()
+
+    print(
+        "DEBUG AUTH: "
+        f"has_expected_token={bool(expected_token)}, "
+        f"has_request_token={bool(request_token)}, "
+        f"token_matches={bool(expected_token and request_token == expected_token)}"
+    )
 
     if not expected_token or request_token != expected_token:
         raise AuthError("Invalid proxy token", 403)

@@ -7,6 +7,7 @@ import { CoursesList } from "@/components/courses-list";
 import { InfoCard } from "./_components/info-card";
 import { Button } from "@/components/ui/button";
 import { CheckpointCard } from "./_components/checkpoint-card";
+import { DashboardNavButton } from "./_components/dashboard-nav-button";
 import { TeacherDashboard } from "./_components/teacher-dashboard";
 import { serverApi } from "@/lib/server-api";
 import { ScrollReveal } from "@/components/scroll-reveal";
@@ -32,7 +33,7 @@ export default async function Dashboard() {
           <div className="flex items-start gap-4">
             <AlertTriangle className="mt-1 h-6 w-6 shrink-0" />
             <div>
-              <h1 className="text-xl font-bold">Backend indisponivel</h1>
+              <h2 className="text-xl font-bold">Backend indisponivel</h2>
               <p className="mt-2 text-sm leading-6">
                 Nao foi possivel carregar o dashboard agora. Verifique se o backend em
                 {" "}
@@ -80,12 +81,13 @@ export default async function Dashboard() {
             <p className="text-muted-foreground text-lg mb-4 font-medium">
               Seu progresso está sendo construído todos os dias.
             </p>
-            <Link href="/search">
-              <Button size="lg" className="rounded-full px-8 py-6 text-md font-bold bg-primary hover:bg-primary/90 text-primary-foreground w-fit flex items-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_30px_rgba(245,158,11,0.5)] transition-all">
-                <PlayCircle className="w-5 h-5 fill-current" />
-                Continuar estudando
-              </Button>
-            </Link>
+            <DashboardNavButton
+              href="/search"
+              label="Continuar estudando"
+              loadingLabel="Abrindo catalogo..."
+              size="lg"
+              className="w-fit px-8 py-6 text-md font-bold bg-primary hover:bg-primary/90 text-primary-foreground shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_30px_rgba(245,158,11,0.5)]"
+            />
           </div>
 
           <div className="w-full lg:w-[600px] h-[300px] md:h-[400px] relative z-10 mt-8 lg:mt-0 flex items-center justify-center">

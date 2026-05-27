@@ -442,7 +442,7 @@ export const ChapterQuizForm = ({
 
       if (nextStatus === TranscriptStatus.FAILED) {
         throw new Error(
-          "Nao foi possivel transcrever o video. Verifique se o link possui legenda ou transcricao disponivel."
+          "Nao foi possivel baixar a legenda automatica deste video no Firebase."
         );
       }
     }

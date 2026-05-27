@@ -21,18 +21,7 @@ import { ChapterVideoForm } from "./_components/chapter-video-form";
 import { ChapterQuizForm } from "./_components/chapter-quiz-form";
 import { CompletionInfo } from "../../_components/completion-info";
 import { serverApi } from "@/lib/server-api";
-
-const formatDate = (value?: string | Date | null) => {
-  if (!value) return "Não informado";
-
-  return new Intl.DateTimeFormat("pt-BR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(value));
-};
+import { LocalDateTime } from "@/components/local-date-time";
 
 const ChapterIdPage = async (props: {
   params: Promise<{ courseId: string; chapterId: string }>;
@@ -234,7 +223,7 @@ const ChapterIdPage = async (props: {
                       </span>
                     </div>
                     <p className="text-sm font-bold text-white">
-                      {formatDate(chapter.updatedAt)}
+                      <LocalDateTime value={chapter.updatedAt} />
                     </p>
                     <p className="text-xs text-[#7A7A7A]">
                       Registro salvo pelo professor.

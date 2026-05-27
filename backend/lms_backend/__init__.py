@@ -11,9 +11,15 @@ except ImportError:
 
 
 def create_app() -> Flask:
-    root_env = Path(__file__).resolve().parents[2] / ".env"
-    if root_env.exists() and load_dotenv:
-        load_dotenv(root_env)
+    if load_dotenv:
+        # Carrega do diretório raiz do workspace (local)
+        root_env = Path(__file__).resolve().parents[2] / ".env"
+        if root_env.exists():
+            load_dotenv(root_env)
+        # Carrega do diretório raiz da função (produção/GCP)
+        func_env = Path(__file__).resolve().parents[1] / ".env"
+        if func_env.exists():
+            load_dotenv(func_env)
 
     from .config import Config
 

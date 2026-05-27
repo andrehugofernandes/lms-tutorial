@@ -8,7 +8,7 @@ if not firebase_admin._apps:
     initialize_app()
 
 # Expõe a Cloud Function 'api' que delega as requisições para o Flask
-@https_fn.on_request()
+@https_fn.on_request(secrets=["NEXTAUTH_SECRET", "OPENAI_API_KEY"])
 def api(req: https_fn.Request) -> https_fn.Response:
     environ = req.environ.copy()
     path_info = environ.get("PATH_INFO", "")

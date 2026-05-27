@@ -7,7 +7,7 @@ import json
 import logging
 import os
 from pathlib import Path
-from typing import Any, AsyncGenerator, Dict, List, Optional, Tuple, Union, Generator
+from typing import Any, AsyncGenerator, Dict, List, Optional, Union, Generator
 import requests
 import httpx
 
