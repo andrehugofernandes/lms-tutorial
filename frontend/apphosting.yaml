@@ -6,7 +6,7 @@ runConfig:
 # Environment variables and secrets.
 env:
   - variable: FLASK_API_URL
-    value: https://api-74lmvxvmjq-uc.a.run.app
+    value: https://us-central1-pmjg-apps-hmol.cloudfunctions.net/api
     availability:
       - BUILD
       - RUNTIME
